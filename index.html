@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Connections – Version française</title>
+
+<style>
+:root{
+  --bg:#f6f6f6;
+  --ink:#111;
+  --card:#ffffff;
+  --border:#cccccc;
+  --accent:#2b6cb0;
+  --good:#38a169;
+  --bad:#e53e3e;
+}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+header{
+  padding:16px;
+  text-align:center;
+  font-weight:700;
+  font-size:1.4rem;
+}
+main{
+  max-width:520px;
+  margin:0 auto;
+  padding:16px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.word{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:10px;
+  padding:14px 6px;
+  text-align:center;
+  cursor:pointer;
+  user-select:none;
+  font-weight:600;
+}
+.word.selected{
+  border-color:var(--accent);
+  background:#e6f0ff;
+}
+.word.found{
+  background:var(--good);
+  color:#fff;
+  border-color:var(--good);
+  cursor:default;
+}
+.controls{
+  margin-top:16px;
+  display:flex;
+  gap:10px;
+}
+button{
+  flex:1;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  font-weight:600;
+}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.message{
+  margin-top:12px;
+  font-weight:600;
+  min-height:1.5em;
+}
+.bad{ color:var(--bad); }
+.good{ color:var(--good); }
+.categories{
+  margin-top:18px;
+}
+.category{
+  margin-bottom:8px;
+  font-size:.95rem;
+}
+</style>
+</head>
+
+<body>
+<header>Connections – version française</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+
+  <div class="controls">
+    <button id="checkBtn" disabled>Valider</button>
+    <button id="resetBtn">Réinitialiser</button>
+  </div>
+
+  <div class="message" id="message"></div>
+  <div class="categories" id="categories"></div>
+</main>
+
+<script>
+const groups = [
+  { name:"Types de vent", words:["MISTRAL","ALIZÉ","SIROCCO","TRAMONTANE"] },
+  { name:"Parties du corps", words:["MAIN","PIED","TÊTE","DOS"] },
+  { name:"Moyens de transport", words:["TRAIN","AVION","BATEAU","BUS"] },
+  { name:"Synonymes de rapide", words:["VIF","PROMPT","EXPRESS","AGILE"] }
+];
+
+let words = [];
+let selected = [];
+let found = [];
+
+groups.forEach(g => words.push(...g.words));
+words.sort(() => Math.random() - 0.5);
+
+const grid = document.getElementById("grid");
+const msg = document.getElementById("message");
+const btn = document.getElementById("checkBtn");
+const cats = document.getElementById("categories");
+
+function render(){
+  grid.innerHTML="";
+  words.forEach(w=>{
+    const d=document.createElement("div");
+    d.className="word";
+    d.textContent=w;
+    if(selected.includes(w)) d.classList.add("selected");
+    if(found.includes(w)) d.classList.add("found");
+    d.onclick=()=>toggle(w);
+    grid.appendChild(d);
+  });
+  btn.disabled = selected.length!==4;
+}
+function toggle(w){
+  if(found.includes(w)) return;
+  if(selected.includes(w)){
+    selected=selected.filter(x=>x!==w);
+  }else if(selected.length<4){
+    selected.push(w);
+  }
+  render();
+}
+btn.onclick=()=>{
+  const group = groups.find(g =>
+    g.words.every(w=>selected.includes(w))
+  );
+  if(group){
+    msg.textContent="✔ Catégorie trouvée : "+group.name;
+    msg.className="message good";
+    found.push(...group.words);
+    cats.innerHTML += `<div class="category"><strong>${group.name}</strong> : ${group.words.join(", ")}</div>`;
+  }else{
+    msg.textContent="✖ Mauvaise combinaison";
+    msg.className="message bad";
+  }
+  selected=[];
+  render();
+};
+document.getElementById("resetBtn").onclick=()=>{
+  selected=[];
+  found=[];
+  msg.textContent="";
+  cats.innerHTML="";
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
