@@ -2,1104 +2,941 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Connections FR – Batterie (6–16 ans)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Similitudes — Catégories (6–16 ans)</title>
   <style>
     :root{
-      --bg:#f6f6f6;
-      --card:#ffffff;
-      --ink:#111;
-      --muted:#666;
-      --border:#d9d9d9;
-      --accent:#2b6cb0;
-      --good:#1b7f4a;
-      --bad:#b3261e;
-      --tile:#fff;
-      --tileSel:#111;
-      --tileSelInk:#fff;
-      --tileDone:#e9f7ef;
-      --tileDoneInk:#0b3b23;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --radius:16px;
-      --tileRadius:14px;
-      --gap:12px;
-      --tileH:56px;
-      --maxW: 980px;
-      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --bg:#0b0f17;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --line:#243044;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --warn:#f59e0b;
+      --accent:#60a5fa;
+      --tile:#0b1220;
+      --tileHover:#111c33;
+      --tileSel:#1f3b7a;
+      --tileTried:#1f2937;
+      --tileSolved:#14532d;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
     }
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:var(--font);
-      background:var(--bg);
-      color:var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 30% 0%, #182444 0%, var(--bg) 55%);
+      color:var(--text);
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
     }
     header{
-      position:sticky; top:0; z-index:10;
-      background:rgba(246,246,246,.92);
-      backdrop-filter:saturate(140%) blur(10px);
-      border-bottom:1px solid var(--border);
-    }
-    .wrap{max-width:var(--maxW); margin:0 auto; padding:14px 14px;}
-    h1{margin:0; font-size:18px; font-weight:800}
-    .sub{color:var(--muted); font-size:12px; margin-top:4px}
-    .gridTop{
-      display:grid;
-      grid-template-columns: 1.25fr 1fr 1fr 1fr;
+      display:flex;
       gap:12px;
-      margin-top:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding: 10px 12px;
+      background: rgba(17,24,39,.72);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
     }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:12px;
-      min-height: 76px;
+    .title{
+      display:flex; flex-direction:column; gap:2px;
+      min-width: 220px;
     }
-    .label{font-size:12px; color:var(--muted); margin-bottom:6px}
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    input, select, button{
-      font:inherit;
+    .title h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+      font-weight: 700;
+    }
+    .title .sub{
+      margin:0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .field{
+      display:flex; flex-direction:column; gap:4px;
+      min-width: 140px;
+    }
+    .field label{
+      font-size: 11px;
+      color: var(--muted);
     }
     input[type="text"]{
-      width:100%;
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:12px;
+      height: 40px;
+      padding: 0 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,23,42,.8);
+      color: var(--text);
       outline:none;
-      background:#fff;
+      font-size: 14px;
     }
-    select{
-      width:100%;
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      background:#fff;
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,23,42,.8);
+      height: 40px;
+      user-select:none;
     }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px; border:1px solid var(--border);
-      border-radius:999px; background:#fff;
-      font-size:12px; color:var(--muted);
-    }
-    .pill strong{color:var(--ink)}
+    .toggle input{transform: scale(1.2)}
     .btn{
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      background:#fff;
+      height: 40px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(96,165,250,.18), rgba(96,165,250,.08));
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing:.2px;
       cursor:pointer;
-      font-weight:700;
-      min-height:44px;
       touch-action: manipulation;
     }
-    .btn:active{transform:translateY(1px)}
-    .btnPrimary{
-      background:var(--accent);
-      color:#fff;
-      border-color: transparent;
+    .btn.secondary{
+      background: rgba(15,23,42,.8);
+      font-weight: 650;
     }
-    .btnGood{ background:var(--good); color:#fff; border-color:transparent; }
-    .btnBad{ background:var(--bad); color:#fff; border-color:transparent; }
-    .btnGhost{ background:transparent; }
-    .btn:disabled{opacity:.5; cursor:not-allowed}
-    main .wrap{padding-top:16px}
-    .layout{
+    .btn.danger{
+      background: linear-gradient(180deg, rgba(239,68,68,.20), rgba(239,68,68,.10));
+    }
+    .btn:active{transform: translateY(1px)}
+    .main{
+      margin-top: 14px;
       display:grid;
       grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-      align-items:start;
+      gap: 14px;
     }
-    .boardCard{padding:14px}
-    .boardHead{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-      margin-bottom:10px;
+    @media (max-width: 860px){
+      .main{grid-template-columns: 1fr}
     }
-    .title2{font-weight:900; font-size:16px; margin:0}
-    .small{font-size:12px; color:var(--muted)}
-    .solvedArea{
-      display:grid;
+    .card{
+      background: rgba(17,24,39,.72);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding: 12px 12px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
       gap:10px;
-      margin-bottom:12px;
     }
-    .solvedRow{
-      display:flex; gap:10px; flex-wrap:wrap;
-      padding:10px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background: #fbfbfb;
+    .meta{
+      display:flex; flex-direction:column; gap:4px;
     }
-    .solvedBadge{
-      display:inline-flex; align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      background: var(--tileDone);
-      color: var(--tileDoneInk);
-      font-weight:800;
-      font-size:12px;
-      border:1px solid #cfe9d9;
+    .meta .line{
+      font-size: 13px;
+      color: var(--muted);
     }
-    .tileList{
-      display:flex; gap:8px; flex-wrap:wrap;
+    .meta strong{color:var(--text)}
+    .scoreRow{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:4px;
+      min-width: 180px;
     }
-    .tileMini{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--border);
-      font-weight:800;
-      font-size:12px;
+    .pillRow{
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
     }
-    .tiles{
+    .pill{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,23,42,.8);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .pill.good{border-color: rgba(34,197,94,.35); color:#bbf7d0}
+    .pill.bad{border-color: rgba(239,68,68,.35); color:#fecaca}
+    .pill.warn{border-color: rgba(245,158,11,.40); color:#fde68a}
+    .gridArea{
+      padding: 12px;
+    }
+    .grid{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: var(--gap);
+      gap: 10px;
+      user-select:none;
+      touch-action: manipulation;
     }
     .tile{
-      height: var(--tileH);
+      position:relative;
+      min-height: 74px;
+      padding: 12px 10px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.65));
       display:flex;
       align-items:center;
       justify-content:center;
       text-align:center;
-      padding:10px;
-      border-radius: var(--tileRadius);
-      border:1px solid var(--border);
-      background: var(--tile);
-      font-weight:900;
-      letter-spacing:.3px;
-      user-select:none;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .2px;
       cursor:pointer;
-      touch-action: manipulation;
+      transition: transform .06s ease, background .12s ease, border-color .12s ease;
     }
+    .tile:active{transform: scale(.99)}
+    .tile:hover{background: linear-gradient(180deg, rgba(17,28,51,.95), rgba(17,28,51,.70))}
     .tile.selected{
-      background: var(--tileSel);
-      color: var(--tileSelInk);
-      border-color: #000;
+      border-color: rgba(96,165,250,.65);
+      background: linear-gradient(180deg, rgba(31,59,122,.95), rgba(31,59,122,.65));
     }
-    .tile.disabled{
-      opacity:.55;
-      cursor:not-allowed;
+    .tile.tried::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius: 16px;
+      background: rgba(148,163,184,.18);
+      pointer-events:none;
     }
-    .tile.done{
-      background: var(--tileDone);
-      color: var(--tileDoneInk);
-      border-color:#cfe9d9;
-      cursor:not-allowed;
+    .tile.solved{
+      border-color: rgba(34,197,94,.60);
+      background: linear-gradient(180deg, rgba(20,83,45,.92), rgba(20,83,45,.62));
     }
-    .controls{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
+    .tile .tiny{
+      position:absolute;
+      top:8px; right:10px;
+      font-size: 11px;
+      color: rgba(255,255,255,.55);
+      font-weight: 700;
+    }
+    .actions{
+      display:flex;
       gap:10px;
-      margin-top:12px;
+      padding: 0 12px 12px;
     }
-    .message{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
-      color:var(--muted);
-      font-size:13px;
-      min-height:44px;
+    .actions .btn{flex:1; height: 48px; border-radius: 16px; font-size: 15px;}
+    .help{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .msg{
+      padding: 12px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,23,42,.72);
+      color: var(--muted);
+      line-height:1.35;
+      font-size: 13px;
+      min-height: 64px;
       display:flex;
       align-items:center;
+    }
+    .msg strong{color:var(--text)}
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .cat{
+      padding: 10px 10px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,23,42,.60);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
     }
-    .message.good{border-color:#bfe4cf; background:#f0fbf5; color:#0b3b23;}
-    .message.bad{border-color:#f2c1be; background:#fff3f2; color:#6a0f0a;}
-    .asideCard .kpi{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:10px;
+    .cat .name{
+      font-weight: 800;
+      font-size: 13.5px;
+      color: var(--text);
     }
-    .kpiBox{
-      border:1px solid var(--border);
-      background:#fff;
-      border-radius:14px;
-      padding:10px;
+    .cat .status{
+      font-size: 12px;
+      color: var(--muted);
     }
-    .kpiBox .k{font-size:11px; color:var(--muted)}
-    .kpiBox .v{font-size:18px; font-weight:900; margin-top:4px}
-    .log{
-      margin-top:10px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background:#fff;
-      padding:10px;
-      max-height:260px;
-      overflow:auto;
-      font-size:12px;
-      color:#222;
+    .cat.solved{
+      border-color: rgba(34,197,94,.35);
+      background: rgba(20,83,45,.30);
     }
-    .logItem{padding:6px 0; border-bottom:1px dashed #eee}
-    .logItem:last-child{border-bottom:none}
-    .muted{color:var(--muted)}
-    .modalBackdrop{
+    .cat.solved .status{color:#bbf7d0}
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.08);
+      margin: 6px 0;
+    }
+    .modalBack{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.35);
+      background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
-      padding:16px;
-      z-index:999;
+      padding: 18px;
+      z-index: 50;
     }
     .modal{
-      width:min(560px, 100%);
-      background:#fff;
-      border-radius:18px;
-      border:1px solid var(--border);
-      box-shadow:0 20px 60px rgba(0,0,0,.25);
-      padding:14px;
+      width: min(520px, 100%);
+      background: rgba(17,24,39,.92);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
-    .modal h3{margin:0 0 8px 0; font-size:16px}
-    .modal p{margin:0 0 12px 0; color:var(--muted); font-size:13px; line-height:1.35}
-    .modal .row{justify-content:flex-end}
-    @media (max-width: 920px){
-      .gridTop{grid-template-columns: 1fr; }
-      .layout{grid-template-columns: 1fr;}
-      :root{ --tileH: 60px; --gap: 10px; }
+    .modal h2{margin:0; font-size: 16px; padding: 14px 14px 8px;}
+    .modal p{margin:0; padding: 0 14px 14px; color: var(--muted); line-height:1.4; font-size: 13px;}
+    .modal .row{
+      display:flex; gap:10px; padding: 12px 14px 14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .modal .row .btn{flex:1; height: 46px;}
+    .footerNote{
+      margin-top: 12px;
+      color: rgba(255,255,255,.45);
+      font-size: 11.5px;
+      text-align:center;
     }
   </style>
 </head>
 <body>
-<header>
   <div class="wrap">
-    <h1>Connections – batterie française (6–16 ans)</h1>
-    <div class="sub">Séries d’items en difficulté croissante · Mesures automatiques · Export des données (JSON)</div>
+    <header>
+      <div class="title">
+        <h1>Similitudes — Catégories</h1>
+        <div class="sub">16 mots (4×4). Trouver 4 catégories (4 mots chacune). Tablette/tactile OK.</div>
+      </div>
 
-    <div class="gridTop">
-      <div class="card">
-        <div class="label">Sujet / Session</div>
-        <div class="row">
-          <div style="flex:1; min-width:220px">
-            <input id="subjectId" type="text" placeholder="Identifiant sujet (ex: ENF_074, ou laissez vide = auto)" />
+      <div class="controls">
+        <div class="field">
+          <label for="subjectId">ID sujet</label>
+          <input id="subjectId" type="text" placeholder="ex: HGL-001" />
+        </div>
+
+        <label class="toggle" title="En entraînement : feedback plus explicite. En test : plus neutre.">
+          <input id="trainingMode" type="checkbox" />
+          <span>Entraînement</span>
+        </label>
+
+        <button id="btnDownload" class="btn secondary" title="Télécharger les données brutes (CSV)">Télécharger CSV</button>
+        <button id="btnReset" class="btn danger" title="Réinitialiser la session">Reset</button>
+      </div>
+    </header>
+
+    <div class="main">
+      <section class="card">
+        <div class="cardHead">
+          <div class="meta">
+            <div class="line"><strong id="levelLabel">Niveau</strong> <span id="levelSpan"></span></div>
+            <div class="line">Validations grille : <strong id="attemptsSpan">0</strong>/4 · Catégories trouvées : <strong id="foundSpan">0</strong>/4</div>
           </div>
-          <button class="btn btnPrimary" id="startBtn">Démarrer / Reprendre</button>
-          <button class="btn" id="newSessionBtn">Nouvelle session</button>
+          <div class="scoreRow">
+            <div class="pillRow">
+              <div class="pill good">Points: <strong id="pointsSpan">0</strong></div>
+              <div class="pill warn">Badges: <strong id="badgesSpan">0</strong></div>
+              <div class="pill">Échecs suite: <strong id="failsSpan">0</strong>/3</div>
+            </div>
+            <div class="pillRow">
+              <div class="pill">Init: <strong id="initSpan">—</strong></div>
+              <div class="pill">Temps: <strong id="timeSpan">—</strong></div>
+            </div>
+          </div>
         </div>
-        <div class="row" style="margin-top:10px">
-          <span class="pill">Mode : <strong id="modeLabel">Entraînement</strong></span>
-          <button class="btn btnGhost" id="toggleModeBtn">Basculer entraînement / test</button>
-          <span class="pill">Item : <strong id="itemLabel">—</strong></span>
-          <span class="pill">Âge : <strong id="ageLabel">—</strong></span>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="label">Règle “tests aux limites”</div>
-        <div class="small">Après <b>3 validations erronées</b> sur un item, on propose de <b>continuer</b> (tests aux limites) ou <b>arrêter</b>.</div>
-        <div class="row" style="margin-top:10px">
-          <span class="pill">Seuil : <strong>3 erreurs</strong></span>
-          <span class="pill">Progression : <strong>linéaire</strong></span>
+        <div class="gridArea">
+          <div id="grid" class="grid"></div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="label">Export</div>
-        <div class="small">Les données restent localement (dans le navigateur). Tu peux les exporter en JSON.</div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="exportBtn">Télécharger données (JSON)</button>
-          <button class="btn" id="clearDataBtn">Effacer données locales</button>
+        <div class="actions">
+          <button id="btnValidate" class="btn">Valider (4 mots)</button>
+          <button id="btnNext" class="btn secondary">Suivant</button>
         </div>
-      </div>
+      </section>
 
-      <div class="card">
-        <div class="label">Navigation</div>
-        <div class="row">
-          <button class="btn" id="prevItemBtn">⟵ Item précédent</button>
-          <button class="btn" id="nextItemBtn">Item suivant ⟶</button>
+      <aside class="card">
+        <div class="cardHead">
+          <div class="meta">
+            <div class="line"><strong>Catégories de la grille</strong></div>
+            <div class="line">En test, elles restent cachées (sauf après réussite / en entraînement).</div>
+          </div>
         </div>
-        <div class="small" style="margin-top:10px">En mode <b>Test</b>, les intitulés de catégories restent cachés jusqu’à la fin de l’item.</div>
+
+        <div class="help">
+          <div id="message" class="msg">
+            Sélectionne <strong>exactement 4 mots</strong>, puis <strong>Valider</strong>.
+          </div>
+
+          <div class="divider"></div>
+
+          <div id="catList" class="list"></div>
+
+          <div class="divider"></div>
+
+          <div class="msg">
+            Astuce tactile : vise les cases, pas le texte 😉
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footerNote">
+      Données stockées en mémoire (dans le navigateur). Pense à “Télécharger CSV” à la fin.
+    </div>
+  </div>
+
+  <!-- Modal 3 échecs -->
+  <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>3 grilles sans badge</h2>
+      <p>
+        Le sujet n’a pas trouvé les 4 catégories sur 3 grilles consécutives.
+        Voulez-vous <strong>continuer</strong> (test aux limites) ou <strong>arrêter</strong> ?
+      </p>
+      <div class="row">
+        <button id="btnStop" class="btn danger">Arrêter</button>
+        <button id="btnContinue" class="btn">Continuer</button>
       </div>
     </div>
   </div>
-</header>
-
-<main>
-  <div class="wrap">
-    <div class="layout">
-      <div class="card boardCard">
-        <div class="boardHead">
-          <div>
-            <p class="title2" style="margin:0">Damier (4 × 4)</p>
-            <div class="small" id="hintLine">Sélectionne 4 mots, puis <b>Valider</b>.</div>
-          </div>
-          <div class="small" style="text-align:right">
-            <div>Statut : <b id="statusLabel">prêt</b></div>
-            <div>Auto-mesure : <b>ON</b></div>
-          </div>
-        </div>
-
-        <div class="solvedArea" id="solvedArea"></div>
-
-        <div class="tiles" id="tiles"></div>
-
-        <div class="controls">
-          <button class="btn btnGood" id="validateBtn" disabled>Valider (4)</button>
-          <button class="btn" id="clearSelBtn">Annuler sélection</button>
-          <button class="btn" id="shuffleBtn">Mélanger</button>
-          <button class="btn btnBad" id="giveUpBtn">Abandonner l’item</button>
-        </div>
-
-        <div class="message" id="messageBox">—</div>
-      </div>
-
-      <div class="card asideCard">
-        <div class="label">Mesures (item en cours)</div>
-        <div class="kpi">
-          <div class="kpiBox">
-            <div class="k">Délai d’initiation</div>
-            <div class="v" id="kpiInitiation">—</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Temps de complétion</div>
-            <div class="v" id="kpiCompletion">—</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Sélections</div>
-            <div class="v" id="kpiSelections">0</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Validations</div>
-            <div class="v" id="kpiValidations">0</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Erreurs</div>
-            <div class="v" id="kpiErrors">0</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Groupes trouvés</div>
-            <div class="v" id="kpiFound">0/4</div>
-          </div>
-        </div>
-
-        <div class="label" style="margin-top:12px">Journal (audit trail)</div>
-        <div class="log" id="log"></div>
-
-        <div class="label" style="margin-top:12px">Score brut (session)</div>
-        <div class="small">
-          Score = nb d’items complétés (ou franchis) + détail exporté pour étalonnage ultérieur.
-        </div>
-        <div class="kpi" style="margin-top:10px">
-          <div class="kpiBox">
-            <div class="k">Items terminés</div>
-            <div class="v" id="kpiItemsDone">0</div>
-          </div>
-          <div class="kpiBox">
-            <div class="k">Item actuel</div>
-            <div class="v" id="kpiItemIndex">—</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<div class="modalBackdrop" id="modalBackdrop">
-  <div class="modal">
-    <h3 id="modalTitle">Seuil d’erreurs atteint</h3>
-    <p id="modalText">Vous avez atteint 3 erreurs sur cet item. Souhaitez-vous continuer (tests aux limites) ou arrêter ?</p>
-    <div class="row">
-      <button class="btn" id="modalStopBtn">Arrêter</button>
-      <button class="btn btnPrimary" id="modalContinueBtn">Continuer</button>
-    </div>
-  </div>
-</div>
 
 <script>
-/* =========================================================
-   BANQUE D’ITEMS (30) – difficulté croissante (6–16 ans)
-   Chaque item = 4 catégories × 4 mots (16 mots).
-   -> Tu peux réviser les mots/catégories facilement ici.
-   ========================================================= */
+/**
+ * BANQUE DE 30 CATÉGORIES (croissance grossière de complexité).
+ * Chaque catégorie fournit exactement 4 mots "corrects" (pour construire une grille 4x4 propre).
+ * Les niveaux utilisent une fenêtre glissante : niveau 1 = cat[0..3], niveau 2 = cat[1..4], etc.
+ * => 27 niveaux au total.
+ */
+const CATEGORY_BANK = [
+  // 6–7 ans (très concret / fréquent)
+  {name:"Animaux de la ferme", words:["vache","poule","mouton","cheval"]},
+  {name:"Fruits",            words:["pomme","banane","poire","orange"]},
+  {name:"Couleurs",          words:["rouge","bleu","jaune","vert"]},
+  {name:"Vêtements",         words:["pull","pantalon","chaussure","manteau"]},
+  {name:"Meubles",           words:["table","chaise","lit","armoire"]},
+  {name:"Véhicules",         words:["voiture","bus","train","vélo"]},
+  {name:"Parties du corps",  words:["main","pied","nez","oreille"]},
+  {name:"À l’école",         words:["crayon","cahier","gomme","règle"]},
 
-const ITEMS = [
-  // 1–6 : 6–7 ans (catégories très concrètes, vocabulaire fréquent)
-  { id:"A01", age:"6–7", groups:[
-    {name:"Animaux", words:["CHAT","CHIEN","LION","OISEAU"]},
-    {name:"Fruits", words:["POMME","POIRE","BANANE","ORANGE"]},
-    {name:"Couleurs", words:["ROUGE","BLEU","VERT","JAUNE"]},
-    {name:"Vêtements", words:["PULL","CHAUSSETTE","CHAUSSURE","MANTEAU"]},
-  ]},
-  { id:"A02", age:"6–7", groups:[
-    {name:"École", words:["CAHIER","CRAYON","GOMME","RÈGLE"]},
-    {name:"Corps", words:["MAIN","PIED","NEZ","BOUCHE"]},
-    {name:"Transports", words:["BUS","TRAIN","AVION","BATEAU"]},
-    {name:"Maisons", words:["PORTE","FENÊTRE","TOIT","MUR"]},
-  ]},
-  { id:"A03", age:"6–7", groups:[
-    {name:"À manger (salé)", words:["PAIN","RIZ","PÂTES","FROMAGE"]},
-    {name:"Jouets", words:["POUPÉE","BALLON","VOITURE","PUZZLE"]},
-    {name:"Saison", words:["ÉTÉ","HIVER","PRINTEMPS","AUTOMNE"]},
-    {name:"Actions", words:["COURIR","SAUTER","LIRE","DORMIR"]},
-  ]},
-  { id:"A04", age:"6–7", groups:[
-    {name:"Animaux de ferme", words:["VACHE","MOUTON","POULE","CHEVAL"]},
-    {name:"Instruments", words:["TAMBOUR","FLÛTE","PIANO","GUITARE"]},
-    {name:"Formes", words:["ROND","CARRÉ","TRIANGLE","ÉTOILE"]},
-    {name:"Boissons", words:["EAU","LAIT","JUS","THÉ"]},
-  ]},
-  { id:"A05", age:"6–7", groups:[
-    {name:"Pièces", words:["SALON","CUISINE","CHAMBRE","SALLE DE BAIN"]},
-    {name:"Nature", words:["ARBRE","FLEUR","HERBE","FEUILLE"]},
-    {name:"Objets", words:["TABLE","CHAISE","LIVRE","LAMPE"]},
-    {name:"Émotions", words:["JOIE","PEUR","COLÈRE","TRISTESSE"]},
-  ]},
-  { id:"A06", age:"6–7", groups:[
-    {name:"Animaux de mer", words:["POISSON","BALEINE","REQUIN","CRABE"]},
-    {name:"Cuisine", words:["ASSIETTE","CUILLÈRE","FOURCHETTE","VERRE"]},
-    {name:"Jeux", words:["CACHE-CACHE","MARELLE","CARTES","DOMINOS"]},
-    {name:"Temps", words:["MATIN","MIDI","SOIR","NUIT"]},
-  ]},
+  // 8–9 ans (catégories plus “scolaires” / regroupements usuels)
+  {name:"Outils",            words:["marteau","scie","tournevis","pince"]},
+  {name:"Instruments de musique", words:["piano","guitare","violon","flûte"]},
+  {name:"Sports",            words:["football","tennis","natation","basket"]},
+  {name:"Légumes",           words:["carotte","tomate","courgette","poireau"]},
+  {name:"Animaux sauvages",  words:["lion","tigre","zèbre","girafe"]},
+  {name:"Saisons",           words:["printemps","été","automne","hiver"]},
+  {name:"Formes",            words:["cercle","carré","triangle","rectangle"]},
+  {name:"Pièces de la maison",words:["cuisine","salon","chambre","salle de bain"]},
 
-  // 7–9 : 8–9 ans (catégories un peu plus abstraites, propriétés, champs lexicaux)
-  { id:"B07", age:"8–9", groups:[
-    {name:"Animaux qui volent", words:["AIGLE","PIGEON","PAPILLON","CHAUVE-SOURIS"]},
-    {name:"Métaux", words:["OR","ARGENT","FER","CUIVRE"]},
-    {name:"Sports", words:["FOOT","TENNIS","NATATION","JUDO"]},
-    {name:"Matériel scolaire", words:["TROUSSE","STYLO","COLLE","FEUTRE"]},
-  ]},
-  { id:"B08", age:"8–9", groups:[
-    {name:"Opposés (qualités)", words:["GRAND","PETIT","CHAUD","FROID"]},
-    {name:"Meubles", words:["ARMOIRE","COMMODE","CANAPÉ","BUREAU"]},
-    {name:"Planètes", words:["MARS","VENUS","SATURNE","JUPITER"]},
-    {name:"Outils", words:["MARTEAU","SCIE","PINCE","TOURNEVIS"]},
-  ]},
-  { id:"B09", age:"8–9", groups:[
-    {name:"Synonymes de rapide", words:["VIF","AGILE","PROMPT","EXPRESS"]},
-    {name:"Vent (noms)", words:["MISTRAL","ALIZÉ","SIROCCO","TRAMONTANE"]},
-    {name:"Parties du corps", words:["DOS","TÊTE","MAIN","PIED"]},
-    {name:"Transports", words:["BUS","TRAIN","AVION","BATEAU"]},
-  ]},
-  { id:"B10", age:"8–9", groups:[
-    {name:"Contenants", words:["BOL","VERRE","BOUTEILLE","BOÎTE"]},
-    {name:"Animaux domestiques", words:["CHAT","CHIEN","LAPIN","HAMSTER"]},
-    {name:"Lecture", words:["ROMAN","BD","CONTE","POÈME"]},
-    {name:"Lieux", words:["ÉCOLE","PARC","MAGASIN","MAISON"]},
-  ]},
-  { id:"B11", age:"8–9", groups:[
-    {name:"Dans le ciel", words:["SOLEIL","LUNE","ÉTOILE","NUAGE"]},
-    {name:"Sons / musique", words:["NOTE","RÉFRain","RYTHME","MÉLODIE"]},
-    {name:"Animaux d’Afrique", words:["ZÈBRE","GIRAFE","ÉLÉPHANT","LION"]},
-    {name:"Fêtes", words:["NOËL","PÂQUES","ANNIVERSAIRE","CARNAVAL"]},
-  ]},
+  // 10–11 ans (catégories plus abstraites / critères)
+  {name:"Synonymes de “content”", words:["heureux","joyeux","ravi","satisfait"]},
+  {name:"Moyens de communication",words:["email","téléphone","lettre","message"]},
+  {name:"Mesures (unités)",   words:["mètre","litre","kilo","seconde"]},
+  {name:"Métiers de soin",    words:["médecin","infirmier","dentiste","kiné"]},
+  {name:"Verbes de mouvement",words:["courir","marcher","sauter","ramper"]},
+  {name:"Émotions",           words:["peur","colère","joie","tristesse"]},
+  {name:"Matériaux",          words:["bois","métal","verre","plastique"]},
+  {name:"Nature (éléments)",  words:["rivière","montagne","forêt","plage"]},
 
-  // 10–11 ans (catégories relationnelles, fonctions, classes)
-  { id:"C12", age:"10–11", groups:[
-    {name:"Moyens de communication", words:["TÉLÉPHONE","MAIL","LETTRE","MESSAGE"]},
-    {name:"Sciences", words:["ATOMe","ÉNERGIE","GRAVITÉ","CELLULE"]},
-    {name:"Au restaurant", words:["MENU","SERVEUR","ADDITION","TABLE"]},
-    {name:"Géométrie", words:["ANGLE","CERCLE","CÔTÉ","SOMMET"]},
-  ]},
-  { id:"C13", age:"10–11", groups:[
-    {name:"États de l’eau", words:["GLACE","VAPEUR","LIQUIDE","NEIGE"]},
-    {name:"Électricité", words:["PRISE","CÂBLE","LAMPE","BOUTON"]},
-    {name:"Carte", words:["PAYS","CAPITALE","FRONTIÈRE","CONTINENT"]},
-    {name:"Temps (mesure)", words:["SECONDE","MINUTE","HEURE","JOUR"]},
-  ]},
-  { id:"C14", age:"10–11", groups:[
-    {name:"Synonymes de dire", words:["PARLER","RACONTER","DÉCLARER","ÉNONCER"]},
-    {name:"Bois", words:["CHÊNE","PIN","HÊTRE","SAPIN"]},
-    {name:"Cuisine (actions)", words:["COUPER","MÉLANGER","CUIRE","GOÛTER"]},
-    {name:"Écriture", words:["TITRE","PHRASE","MOT","PARAGRAPHE"]},
-  ]},
-  { id:"C15", age:"10–11", groups:[
-    {name:"Symboles maths", words:["PLUS","+","MOINS","-"]},
-    {name:"Ponctuation", words:["POINT",".","VIRGULE",","]},
-    {name:"Sens", words:["VUE","OUÏE","GOÛT","TOUCHER"]},
-    {name:"Astronomie", words:["COMÈTE","ASTÉROÏDE","GALAXIE","ORBITe"]},
-  ]},
+  // 12–13 ans (relations sémantiques, fonctions)
+  {name:"Ce qui coupe",       words:["couteau","ciseaux","lame","scalpel"]},
+  {name:"Ce qui éclaire",     words:["lampe","bougie","phare","lanterne"]},
+  {name:"Ce qui protège",     words:["casque","gants","bouclier","masque"]},
+  {name:"Genres littéraires", words:["roman","poème","théâtre","conte"]},
+  {name:"Raisonnement (opérations)",words:["déduire","comparer","classer","inférer"]},
+  {name:"Connecteurs logiques",words:["donc","car","mais","pourtant"]},
 
-  // 12–13 ans (catégories plus abstraites : causes/effets, genres, figures simples)
-  { id:"D16", age:"12–13", groups:[
-    {name:"Figures de style (base)", words:["MÉTAPHORE","COMPARAISON","HYPERBOLE","PERSONNIFICATION"]},
-    {name:"Régimes politiques (mots)", words:["DÉMOCRATIE","MONARCHIE","DICTATURE","RÉPUBLIQUE"]},
-    {name:"Économie (mots)", words:["PRIX","OFFRE","DEMANDE","MARCHÉ"]},
-    {name:"Biologie", words:["ADN","ENZYME","ORGANe","TISSU"]},
-  ]},
-  { id:"D17", age:"12–13", groups:[
-    {name:"Logique (connecteurs)", words:["DONC","MAIS","CAR","POURTANT"]},
-    {name:"Météo", words:["ORAGE","BROUILLARD","TEMPÊTE","SÉCHERESSE"]},
-    {name:"Histoire (périodes)", words:["ANTIQUITÉ","MOYEN ÂGE","RENAISSANCE","MODERNE"]},
-    {name:"Émotions nuancées", words:["FIERTÉ","HONTe","ENVIE","SOULAGEMENT"]},
-  ]},
-  { id:"D18", age:"12–13", groups:[
-    {name:"Types de textes", words:["ARGUMENTATION","DESCRIPTION","NARRATION","EXPLICATION"]},
-    {name:"Chimie", words:["ACIDE","BASE","RÉACTION","MOLÉCULE"]},
-    {name:"Justice", words:["JUGE","AVOCAT","PREUVE","VERDICT"]},
-    {name:"Informatique", words:["CLAVIER","ÉCRAN","FICHIER","DOSSIER"]},
-  ]},
-
-  // 14–16 ans (catégories plus “WISC-like” : relation conceptuelle, méta-catégories)
-  { id:"E19", age:"14–16", groups:[
-    {name:"Biais cognitifs (mots)", words:["ANCRAGE","CONFIRMATION","DISPONIBILITÉ","CADRAGE"]},
-    {name:"Méthode scientifique", words:["HYPOTHÈSE","VARIABLE","PROTOCOLE","RÉSULTAT"]},
-    {name:"Rhétorique", words:["ETHOS","PATHOS","LOGOS","DIALECTIQUE"]},
-    {name:"Statistique", words:["MOYENNE","MÉDIANE","ÉCART-TYPE","CORRÉLATION"]},
-  ]},
-  { id:"E20", age:"14–16", groups:[
-    {name:"Philosophie (notions)", words:["LIBERTÉ","VÉRITÉ","JUSTICE","CONSCIENCE"]},
-    {name:"Linguistique", words:["SYNTAXE","SÉMANTIQUE","PRAGMATIQUE","MORPHOLOGIE"]},
-    {name:"Économie (macro)", words:["INFLATION","CROISSANCE","CHÔMAGE","TAUX"]},
-    {name:"Droit (termes)", words:["NORME","JURISPRUDENCE","CONTRAT","RESPONSABILITÉ"]},
-  ]},
-  { id:"E21", age:"14–16", groups:[
-    {name:"Épistémologie", words:["THÉORIE","MODÈLE","PREUVE","RÉFUTATION"]},
-    {name:"Logique formelle", words:["PRÉMISSE","CONCLUSION","VALIDITÉ","COHÉRENCE"]},
-    {name:"Psychométrie", words:["NORME","ÉTALONNAGE","FIABILITÉ","VALIDITÉ"]},
-    {name:"Neuro (mots)", words:["SYNAPSE","CORTEX","NEURONE","MYÉLINE"]},
-  ]},
-
-  // 22–30 : “difficiles” (ambiguïtés contrôlées : un mot pourrait “presque” aller ailleurs)
-  { id:"F22", age:"14–16", groups:[
-    {name:"Mesures", words:["VITESSE","DISTANCE","TEMPS","MASSE"]},
-    {name:"Unités", words:["MÈTRE","SECONDE","KILO","LITRE"]},
-    {name:"Énergie", words:["CINÉTIQUE","POTENTIELLE","THERMIQUE","ÉLECTRIQUE"]},
-    {name:"Graphiques", words:["AXE","COURBE","POINT","LÉGENDE"]},
-  ]},
-  { id:"F23", age:"14–16", groups:[
-    {name:"Argumentation", words:["THÈSE","ANTITHÈSE","EXEMPLE","CONCLUSION"]},
-    {name:"Texte", words:["PARAGRAPHE","ALINÉA","TITRE","CHAPITRE"]},
-    {name:"Musique", words:["HARMONIE","TIMBRE","RHYTHME","TEMPO"]},
-    {name:"Arts", words:["PERSPECTIVE","COMPOSITION","CONTRASTE","LUMIÈRE"]},
-  ]},
-  { id:"F24", age:"14–16", groups:[
-    {name:"Décision", words:["CHOIX","ARBITRAGE","CRITÈRE","PRIORITÉ"]},
-    {name:"Probabilité", words:["HASARD","RISQUE","CHANCE","INCERTITUDE"]},
-    {name:"Mémoire", words:["ENCODAGE","STOCKAGE","RAPPEL","INDICE"]},
-    {name:"Attention", words:["FOCUS","DISTRACTION","VIGILANCE","SÉLECTION"]},
-  ]},
-  { id:"F25", age:"14–16", groups:[
-    {name:"Éthique", words:["DEVOIR","VALEUR","DILEMME","CONSÉQUENCE"]},
-    {name:"Sociologie", words:["NORME","RÔLE","STATUT","GROUPE"]},
-    {name:"École", words:["COURS","EXAMEN","NOTe","PROGRAMME"]},
-    {name:"Travail", words:["MISSION","OBJECTIF","DÉLAI","RÉSULTAT"]},
-  ]},
-  { id:"F26", age:"14–16", groups:[
-    {name:"Langage", words:["SENS","RÉFÉRENT","SIGNIFIANT","SIGNIFIÉ"]},
-    {name:"Communication", words:["CANAL","CODE","BRUIT","MESSAGE"]},
-    {name:"Informatique", words:["RÉSEAU","SERVEUR","CLIENT","PROTOCOLE"]},
-    {name:"Sécurité", words:["CHIFFREMENT","CLÉ","AUTHENTIFICATION","PARE-FEU"]},
-  ]},
-  { id:"F27", age:"14–16", groups:[
-    {name:"Émotion / cognition", words:["PEUR","BIAIS","DOUTE","CONFIANCE"]},
-    {name:"Temps psychologique", words:["ATTENTE","URGENCE","RUMINER","PROJECTION"]},
-    {name:"Motivation", words:["BUT","ENVIE","EFFORT","PERSÉVÉRANCE"]},
-    {name:"Apprentissage", words:["RÉPÉTITION","FEEDBACK","ERREUR","MAÎTRISE"]},
-  ]},
-  { id:"F28", age:"14–16", groups:[
-    {name:"Évaluation", words:["SCORE","BARÈME","CRITÈRE","NIVEAU"]},
-    {name:"Mesure", words:["PRÉCISION","ERREUR","BIAIS","VARIANCE"]},
-    {name:"Expérimentation", words:["TÉMOIN","CONDITION","RANDOMISATION","MANIPULATION"]},
-    {name:"Résultats", words:["SIGNIFICATIF","EFFET","INTERVALLE","PUISSANCE"]},
-  ]},
-  { id:"F29", age:"14–16", groups:[
-    {name:"Raisonnement", words:["ANALOGIE","INFÉRENCE","DÉDUCTION","INDUCTION"]},
-    {name:"Métacognition", words:["STRATÉGIE","SURVEILLANCE","AJUSTEMENT","CONTRÔLE"]},
-    {name:"Langue", words:["POLYSÉMIE","CONTEXTE","IMPLICITE","AMBIGUÏTÉ"]},
-    {name:"Cognition sociale", words:["INTENTION","CROYANCE","EMPATHIE","ATTRIBUTION"]},
-  ]},
-  { id:"F30", age:"14–16", groups:[
-    {name:"Complexité", words:["SYSTÈME","ÉMERGENCE","FEEDBACK","NON-LINÉARITÉ"]},
-    {name:"Organisation", words:["RÈGLE","PROCESSUS","GOUVERNANCE","COORDINATION"]},
-    {name:"Décision", words:["HEURISTIQUE","OPTIMUM","CONTRAINTE","COMPROMIS"]},
-    {name:"Étalonnage", words:["NORME","PERCENTILE","ÉCHELLE","STANDARDISATION"]},
-  ]},
+  // 14–16 ans (catégories plus “méta”, proches du vocabulaire scolaire avancé)
+  {name:"Figures de style",   words:["métaphore","hyperbole","ironie","oxymore"]},
+  {name:"Registres de langue",words:["familier","courant","soutenu","argotique"]},
+  {name:"Types d’arguments",  words:["exemple","analogie","autorité","conséquence"]},
+  {name:"Notions de temps",   words:["durée","fréquence","simultanéité","chronologie"]},
+  {name:"Biais cognitifs",    words:["confirmation","ancrage","disponibilité","sunk cost"]},
+  {name:"Épistémologie (mots-clés)",words:["hypothèse","preuve","théorie","falsification"]}
 ];
 
-/* =========================================================
-   UTILITAIRES
-   ========================================================= */
-const $ = (id)=>document.getElementById(id);
+// Construire les niveaux (fenêtre glissante de 4 catégories)
+const LEVELS = [];
+for(let i=0;i<=CATEGORY_BANK.length-4;i++){
+  LEVELS.push({
+    idx: i+1,
+    cats: [CATEGORY_BANK[i], CATEGORY_BANK[i+1], CATEGORY_BANK[i+2], CATEGORY_BANK[i+3]]
+  });
+}
 
-function nowMs(){ return performance.now(); }
+const $ = sel => document.querySelector(sel);
+
+const gridEl = $("#grid");
+const catListEl = $("#catList");
+const msgEl = $("#message");
+const trainingEl = $("#trainingMode");
+
+const levelSpan = $("#levelSpan");
+const attemptsSpan = $("#attemptsSpan");
+const foundSpan = $("#foundSpan");
+const pointsSpan = $("#pointsSpan");
+const badgesSpan = $("#badgesSpan");
+const failsSpan = $("#failsSpan");
+const initSpan = $("#initSpan");
+const timeSpan = $("#timeSpan");
+
+const btnValidate = $("#btnValidate");
+const btnNext = $("#btnNext");
+const btnReset = $("#btnReset");
+const btnDownload = $("#btnDownload");
+
+const modalBack = $("#modalBack");
+const btnStop = $("#btnStop");
+const btnContinue = $("#btnContinue");
+
+let state = {
+  sessionId: crypto.randomUUID(),
+  startedAt: Date.now(),
+  levelIndex: 0,                // 0..LEVELS-1
+  points: 0,
+  badges: 0,
+  consecutiveFails: 0,
+
+  // niveau courant
+  gridStartAt: 0,
+  firstClickAt: null,
+  clickCount: 0,
+  validateCount: 0,
+  errorCount: 0,
+  foundCats: new Set(),         // indices 0..3 des catégories trouvées
+  triedWordSet: new Set(),      // mots essayés (pour griser)
+  selected: new Set(),          // indices des tuiles sélectionnées
+  tiles: [],                    // {word, catIndex}
+  ended: false,
+
+  // logs détaillés
+  logs: [] // {sessionId, subjectId, level, levelAbs, timestamp, event, data...}
+};
+
+function nowISO(){
+  return new Date().toISOString();
+}
+function subjectId(){
+  return ($("#subjectId").value || "").trim();
+}
+function log(event, data={}){
+  state.logs.push({
+    sessionId: state.sessionId,
+    subjectId: subjectId(),
+    ts: nowISO(),
+    level: state.levelIndex+1,
+    levelAbs: LEVELS[state.levelIndex]?.idx ?? null,
+    event,
+    ...data
+  });
+}
 
 function shuffle(arr){
   const a = arr.slice();
   for(let i=a.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
+    [a[i],a[j]] = [a[j],a[i]];
   }
   return a;
 }
-function sameSet(a,b){
-  if(a.length!==b.length) return false;
-  const sa=[...a].sort().join("|");
-  const sb=[...b].sort().join("|");
-  return sa===sb;
-}
-function safeId(){
-  return "S_" + Math.random().toString(16).slice(2,8).toUpperCase();
-}
+
 function fmtMs(ms){
   if(ms==null) return "—";
-  const s = Math.max(0, ms)/1000;
-  if(s<10) return s.toFixed(2)+"s";
-  if(s<60) return s.toFixed(1)+"s";
+  const s = Math.max(0, Math.round(ms/1000));
   const m = Math.floor(s/60);
-  const r = s - m*60;
-  return m+"m "+r.toFixed(0)+"s";
-}
-function downloadJson(obj, filename){
-  const blob = new Blob([JSON.stringify(obj,null,2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 250);
-}
-
-/* =========================================================
-   ÉTAT + PERSISTENCE (localStorage)
-   ========================================================= */
-const STORE_KEY = "connections_fr_battery_v1";
-
-function defaultState(){
-  return {
-    subjectId: "",
-    mode: "training", // "training" | "test"
-    itemIndex: 0,     // 0..ITEMS.length-1
-    itemsDone: 0,
-    // données brutes (session)
-    trials: [] // un objet par item administré
-  };
-}
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORE_KEY);
-    if(!raw) return defaultState();
-    const st = JSON.parse(raw);
-    return {...defaultState(), ...st};
-  }catch(e){
-    return defaultState();
-  }
-}
-function saveState(){
-  localStorage.setItem(STORE_KEY, JSON.stringify(state));
-}
-
-/* =========================================================
-   RUNTIME (item courant)
-   ========================================================= */
-let state = loadState();
-
-let runtime = {
-  started: false,
-  itemStartMs: null,
-  firstSelectMs: null,
-  selectionCount: 0,
-  validationCount: 0,
-  errorCount: 0,
-  failGateCount: 0, // erreurs cumulées vers le seuil “3”
-  foundGroups: [],  // array of group indices solved
-  foundWords: new Set(),
-  selected: [],
-  tileOrder: [], // array of words shuffled
-  log: [],
-  finished: false
-};
-
-function resetRuntimeForItem(){
-  runtime = {
-    started: true,
-    itemStartMs: nowMs(),
-    firstSelectMs: null,
-    selectionCount: 0,
-    validationCount: 0,
-    errorCount: 0,
-    failGateCount: 0,
-    foundGroups: [],
-    foundWords: new Set(),
-    selected: [],
-    tileOrder: [],
-    log: [],
-    finished: false
-  };
-}
-
-/* =========================================================
-   UI HELPERS
-   ========================================================= */
-function setMessage(text, kind=""){
-  const box = $("messageBox");
-  box.className = "message" + (kind ? " "+kind : "");
-  box.textContent = text;
-}
-function addLog(text){
-  runtime.log.unshift({t: new Date().toISOString(), text});
-  renderLog();
-}
-function renderLog(){
-  const el = $("log");
-  el.innerHTML = runtime.log.map(x=>{
-    const time = x.t.split("T")[1].replace("Z","");
-    return `<div class="logItem"><span class="muted">${time}</span> — ${escapeHtml(x.text)}</div>`;
-  }).join("");
-}
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, (c)=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[c]));
-}
-
-function currentItem(){
-  return ITEMS[Math.min(Math.max(state.itemIndex,0), ITEMS.length-1)];
-}
-
-/* =========================================================
-   CONSTRUIRE LE PLATEAU
-   ========================================================= */
-function buildTileOrder(){
-  const item = currentItem();
-  const words = item.groups.flatMap(g=>g.words);
-  runtime.tileOrder = shuffle(words);
-}
-
-function render(){
-  const item = currentItem();
-  $("itemLabel").textContent = item.id;
-  $("ageLabel").textContent = item.age;
-  $("modeLabel").textContent = (state.mode==="training") ? "Entraînement" : "Test";
-  $("kpiItemsDone").textContent = state.itemsDone;
-  $("kpiItemIndex").textContent = (state.itemIndex+1) + "/" + ITEMS.length;
-
-  // KPIs item
-  $("kpiSelections").textContent = runtime.selectionCount;
-  $("kpiValidations").textContent = runtime.validationCount;
-  $("kpiErrors").textContent = runtime.errorCount;
-  $("kpiFound").textContent = runtime.foundGroups.length + "/4";
-
-  const initiation = runtime.firstSelectMs ? (runtime.firstSelectMs - runtime.itemStartMs) : null;
-  $("kpiInitiation").textContent = fmtMs(initiation);
-
-  const completion = runtime.finished ? (nowMs() - runtime.itemStartMs) : null;
-  $("kpiCompletion").textContent = runtime.finished ? fmtMs(completion) : "—";
-
-  // solved area
-  const solvedArea = $("solvedArea");
-  const showNames = (state.mode==="training") || runtime.finished;
-  solvedArea.innerHTML = runtime.foundGroups.map(idx=>{
-    const g = item.groups[idx];
-    const title = showNames ? g.name : "Catégorie trouvée";
-    const words = g.words.map(w=>`<span class="tileMini">${escapeHtml(w)}</span>`).join("");
-    return `
-      <div class="solvedRow">
-        <span class="solvedBadge">✓ ${escapeHtml(title)}</span>
-        <div class="tileList">${words}</div>
-      </div>
-    `;
-  }).join("");
-
-  // tiles
-  const tiles = $("tiles");
-  tiles.innerHTML = runtime.tileOrder.map(word=>{
-    const isDone = runtime.foundWords.has(word);
-    const isSel = runtime.selected.includes(word);
-    const cls = ["tile"];
-    if(isDone) cls.push("done");
-    if(isSel) cls.push("selected");
-    return `<div class="${cls.join(" ")}" data-word="${escapeHtml(word)}">${escapeHtml(word)}</div>`;
-  }).join("");
-
-  // buttons
-  $("validateBtn").disabled = runtime.selected.length!==4 || runtime.finished;
-  $("validateBtn").textContent = `Valider (${runtime.selected.length}/4)`;
-  $("clearSelBtn").disabled = runtime.selected.length===0 || runtime.finished;
-  $("shuffleBtn").disabled = runtime.finished;
-  $("giveUpBtn").disabled = runtime.finished;
-
-  $("prevItemBtn").disabled = state.itemIndex<=0;
-  $("nextItemBtn").disabled = state.itemIndex>=ITEMS.length-1;
-
-  $("statusLabel").textContent = runtime.finished ? "terminé" : "en cours";
-  $("hintLine").textContent = runtime.finished
-    ? "Item terminé. Tu peux passer au suivant."
-    : "Sélectionne 4 mots, puis Valider.";
-}
-
-function wireTileClicks(){
-  $("tiles").addEventListener("click", (e)=>{
-    const t = e.target.closest(".tile");
-    if(!t) return;
-    const w = t.getAttribute("data-word");
-    if(runtime.finished) return;
-    if(runtime.foundWords.has(w)) return;
-
-    if(!runtime.firstSelectMs){
-      runtime.firstSelectMs = nowMs();
-      addLog("Début sélection (initiation mesurée).");
-    }
-
-    const idx = runtime.selected.indexOf(w);
-    if(idx>=0){
-      runtime.selected.splice(idx,1);
-      addLog(`Désélection : ${w}`);
-    }else{
-      if(runtime.selected.length>=4){
-        // tactile: petit feedback
-        setMessage("Tu as déjà 4 mots. Annule un mot avant.", "bad");
-        return;
-      }
-      runtime.selected.push(w);
-      runtime.selectionCount++;
-      addLog(`Sélection : ${w}`);
-    }
-    render();
-  });
-}
-
-/* =========================================================
-   VALIDATION + RÈGLE DES 3 ERREURS
-   ========================================================= */
-function validateSelection(){
-  const item = currentItem();
-  if(runtime.selected.length!==4 || runtime.finished) return;
-
-  runtime.validationCount++;
-  addLog("Validation : " + runtime.selected.join(", "));
-
-  // check match against any unsolved group
-  let matchedIndex = -1;
-  for(let i=0;i<item.groups.length;i++){
-    if(runtime.foundGroups.includes(i)) continue;
-    if(sameSet(runtime.selected, item.groups[i].words)){
-      matchedIndex = i;
-      break;
-    }
-  }
-
-  if(matchedIndex>=0){
-    // success
-    const g = item.groups[matchedIndex];
-    runtime.foundGroups.push(matchedIndex);
-    g.words.forEach(w=>runtime.foundWords.add(w));
-    const title = (state.mode==="training") ? g.name : "Catégorie trouvée";
-    setMessage("✓ " + title, "good");
-    addLog(`Groupe trouvé (${g.name})`);
-
-    // keep selection visible? -> we "freeze" found tiles in solved area,
-    // and clear selection so the board is ready for next group.
-    runtime.selected = [];
-
-    // finished item ?
-    if(runtime.foundGroups.length===4){
-      runtime.finished = true;
-      addLog("Item terminé.");
-      setMessage("Bravo ! Item terminé.", "good");
-      persistTrial("completed");
-      state.itemsDone = Math.max(state.itemsDone, countCompletedItems());
-      saveState();
-    }
-    render();
-    return;
-  }
-
-  // wrong
-  runtime.errorCount++;
-  runtime.failGateCount++;
-  setMessage("✗ Mauvaise combinaison", "bad");
-  addLog("Erreur (mauvaise combinaison).");
-  runtime.selected = [];
-  render();
-
-  if(runtime.failGateCount>=3){
-    openModal();
-  }
+  const r = s%60;
+  return (m>0) ? `${m}m${String(r).padStart(2,'0')}s` : `${r}s`;
 }
 
 function openModal(){
-  $("modalBackdrop").style.display = "flex";
-  $("modalTitle").textContent = "Seuil atteint";
-  $("modalText").textContent = "Vous avez atteint 3 validations erronées sur cet item. Continuer (tests aux limites) ou arrêter ?";
+  modalBack.style.display = "flex";
 }
 function closeModal(){
-  $("modalBackdrop").style.display = "none";
+  modalBack.style.display = "none";
 }
 
-$("modalContinueBtn").addEventListener("click", ()=>{
-  closeModal();
-  runtime.failGateCount = 0; // on repart pour un nouveau “bloc” de 3
-  addLog("Continue après seuil (tests aux limites).");
-  setMessage("Continue : nouvel essai.", "");
-});
-$("modalStopBtn").addEventListener("click", ()=>{
-  closeModal();
-  addLog("Arrêt demandé après seuil.");
-  setMessage("Arrêt de l’item.", "bad");
-  runtime.finished = true;
-  persistTrial("stopped_after_threshold");
-  saveState();
-  render();
-});
+function buildLevel(){
+  const L = LEVELS[state.levelIndex];
+  if(!L){
+    // Fin
+    msgEl.innerHTML = `Fin des niveaux. Pense à <strong>Télécharger CSV</strong>.`;
+    btnValidate.disabled = true;
+    btnNext.disabled = true;
+    gridEl.innerHTML = "";
+    catListEl.innerHTML = "";
+    return;
+  }
 
-/* =========================================================
-   EXPORT / TRIALS
-   ========================================================= */
-function countCompletedItems(){
-  // items terminés = trials avec status "completed"
-  return state.trials.filter(t=>t.status==="completed").length;
+  state.gridStartAt = Date.now();
+  state.firstClickAt = null;
+  state.clickCount = 0;
+  state.validateCount = 0;
+  state.errorCount = 0;
+  state.foundCats = new Set();
+  state.triedWordSet = new Set();
+  state.selected = new Set();
+  state.tiles = [];
+  state.ended = false;
+
+  // Construire 16 mots = 4 mots * 4 catégories (pas de doublons attendus dans nos listes)
+  const tiles = [];
+  L.cats.forEach((cat, catIndex)=>{
+    cat.words.forEach(w=>{
+      tiles.push({word:w, catIndex});
+    });
+  });
+
+  state.tiles = shuffle(tiles);
+
+  // UI
+  levelSpan.textContent = `${L.idx}/${LEVELS.length}`;
+  attemptsSpan.textContent = "0";
+  foundSpan.textContent = "0";
+  initSpan.textContent = "—";
+  timeSpan.textContent = "—";
+
+  renderGrid();
+  renderCatList();
+
+  msgEl.innerHTML = `Sélectionne <strong>4 mots</strong> puis <strong>Valider</strong>.`;
+  btnValidate.disabled = false;
+  btnNext.disabled = false;
+
+  log("level_start", {
+    categories: L.cats.map(c=>c.name),
+    words: state.tiles.map(t=>t.word)
+  });
+
+  tickTime();
 }
 
-function persistTrial(status){
-  const item = currentItem();
+function renderGrid(){
+  gridEl.innerHTML = "";
+  state.tiles.forEach((t, idx)=>{
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.setAttribute("data-idx", String(idx));
+    tile.setAttribute("role","button");
+    tile.setAttribute("tabindex","0");
+    tile.innerHTML = `<span class="tiny">${idx+1}</span>${t.word}`;
 
-  const endMs = nowMs();
-  const initiation = runtime.firstSelectMs ? (runtime.firstSelectMs - runtime.itemStartMs) : null;
-  const duration = endMs - runtime.itemStartMs;
+    // états visuels
+    if(state.selected.has(idx)) tile.classList.add("selected");
+    if(state.triedWordSet.has(t.word)) tile.classList.add("tried");
+    if(state.foundCats.has(t.catIndex)) tile.classList.add("solved");
 
-  const trial = {
-    timestamp: new Date().toISOString(),
-    subjectId: state.subjectId,
-    mode: state.mode,
-    itemId: item.id,
-    ageBand: item.age,
-    status, // completed | abandoned | stopped_after_threshold
-    initiation_ms: initiation,
-    duration_ms: duration,
-    selection_count: runtime.selectionCount,
-    validation_count: runtime.validationCount,
-    error_count: runtime.errorCount,
-    found_groups: runtime.foundGroups.map(i=>item.groups[i].name),
-    // en mode test on peut décider de ne PAS exporter les noms ; ici on exporte tout pour la recherche
-    groups: item.groups.map(g=>({name:g.name, words:g.words})),
-    // trace simplifiée
-    log: runtime.log.slice().reverse()
-  };
-
-  // remplace si même itemId+timestamp? on append (session longitudinale)
-  state.trials.push(trial);
-  saveState();
+    tile.addEventListener("click", ()=> onTileTap(idx));
+    tile.addEventListener("keydown", (e)=>{
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        onTileTap(idx);
+      }
+    });
+    gridEl.appendChild(tile);
+  });
 }
 
-/* =========================================================
-   COMMANDES
-   ========================================================= */
-function startOrResume(){
-  if(!state.subjectId || !state.subjectId.trim()){
-    state.subjectId = safeId();
-    $("subjectId").value = state.subjectId;
+function renderCatList(){
+  const L = LEVELS[state.levelIndex];
+  catListEl.innerHTML = "";
+
+  L.cats.forEach((cat, i)=>{
+    const row = document.createElement("div");
+    const solved = state.foundCats.has(i);
+
+    row.className = "cat" + (solved ? " solved" : "");
+    const showNames = trainingEl.checked || solved; // caché en test tant que non trouvé
+    const label = showNames ? cat.name : `Catégorie ${i+1}`;
+
+    row.innerHTML = `
+      <div class="name">${label}</div>
+      <div class="status">${solved ? "Trouvée ✅" : "À trouver"}</div>
+    `;
+    catListEl.appendChild(row);
+  });
+}
+
+function onTileTap(idx){
+  if(state.ended) return;
+
+  if(state.firstClickAt == null){
+    state.firstClickAt = Date.now();
+    initSpan.textContent = fmtMs(state.firstClickAt - state.gridStartAt);
+    log("first_click", {ms: state.firstClickAt - state.gridStartAt});
+  }
+
+  state.clickCount++;
+  const wasSelected = state.selected.has(idx);
+
+  if(wasSelected){
+    state.selected.delete(idx);
   }else{
-    state.subjectId = state.subjectId.trim();
+    if(state.selected.size >= 4){
+      // Limite: 4 max
+      msgEl.innerHTML = `Tu as déjà <strong>4 mots</strong>. Désélectionne-en un.`;
+      return;
+    }
+    state.selected.add(idx);
   }
-  saveState();
 
-  resetRuntimeForItem();
-  buildTileOrder();
-  setMessage("Item prêt. Sélectionne 4 mots.", "");
-  addLog(`Démarrage item ${currentItem().id} (mode=${state.mode}).`);
-  render();
+  renderGrid();
+  log("tile_toggle", {idx, word: state.tiles[idx].word, selected: !wasSelected});
 }
 
-function newSession(){
-  state = defaultState();
-  state.subjectId = safeId();
-  $("subjectId").value = state.subjectId;
-  saveState();
-  resetRuntimeForItem();
-  buildTileOrder();
-  setMessage("Nouvelle session créée.", "");
-  addLog("Nouvelle session.");
-  render();
+function selectedWords(){
+  return Array.from(state.selected).map(i=>state.tiles[i].word);
+}
+function selectedCatIndices(){
+  return Array.from(state.selected).map(i=>state.tiles[i].catIndex);
 }
 
-function goToItem(index){
-  state.itemIndex = Math.min(Math.max(index,0), ITEMS.length-1);
-  saveState();
-  startOrResume();
+function validateSelection(){
+  if(state.ended) return;
+
+  if(state.selected.size !== 4){
+    msgEl.innerHTML = `Il faut sélectionner <strong>exactement 4 mots</strong>.`;
+    return;
+  }
+
+  const L = LEVELS[state.levelIndex];
+  const words = selectedWords();
+  const cats = selectedCatIndices();
+
+  // Marquer ces mots "essayés" -> grisés (mais réutilisables)
+  words.forEach(w=>state.triedWordSet.add(w));
+
+  // Vérifier si les 4 mots appartiennent à une même catégorie
+  const uniqueCats = new Set(cats);
+  let correct = false;
+  let solvedCatIndex = null;
+
+  if(uniqueCats.size === 1){
+    const ci = cats[0];
+    const targetSet = new Set(L.cats[ci].words);
+    const ok = words.every(w=>targetSet.has(w));
+    if(ok){
+      correct = true;
+      solvedCatIndex = ci;
+    }
+  }
+
+  state.validateCount++;
+
+  if(correct){
+    if(!state.foundCats.has(solvedCatIndex)){
+      state.foundCats.add(solvedCatIndex);
+      state.points += 1;
+      pointsSpan.textContent = String(state.points);
+    }
+    msgEl.innerHTML = trainingEl.checked
+      ? `✅ Bonne catégorie : <strong>${L.cats[solvedCatIndex].name}</strong>.`
+      : `✅ Correct.`;
+    log("validate", {result:"correct", words, catIndex: solvedCatIndex, catName: L.cats[solvedCatIndex].name});
+
+  }else{
+    state.errorCount++;
+    msgEl.innerHTML = trainingEl.checked
+      ? `❌ Pas une catégorie. Essaie autrement.`
+      : `❌ Incorrect.`;
+    log("validate", {result:"wrong", words});
+  }
+
+  // Mise à jour UI
+  attemptsSpan.textContent = String(state.validateCount);
+  foundSpan.textContent = String(state.foundCats.size);
+  failsSpan.textContent = String(state.consecutiveFails);
+
+  // Désélectionner après validation (mais conserver le grisé)
+  state.selected.clear();
+
+  renderGrid();
+  renderCatList();
+
+  // Fin de grille si 4 validations OU badge (4 catégories trouvées)
+  const badgeNow = (state.foundCats.size === 4);
+  if(badgeNow || state.validateCount >= 4){
+    endGrid(badgeNow);
+  }
 }
 
-function abandonItem(){
-  if(runtime.finished) return;
-  runtime.finished = true;
-  setMessage("Item abandonné.", "bad");
-  addLog("Abandon item.");
-  persistTrial("abandoned");
-  saveState();
-  render();
+function endGrid(badgeNow){
+  if(state.ended) return;
+  state.ended = true;
+
+  const elapsed = Date.now() - state.gridStartAt;
+  timeSpan.textContent = fmtMs(elapsed);
+
+  const L = LEVELS[state.levelIndex];
+
+  if(badgeNow){
+    state.badges += 1;
+    state.consecutiveFails = 0;
+    badgesSpan.textContent = String(state.badges);
+    msgEl.innerHTML = `🏅 Badge ! Les <strong>4 catégories</strong> ont été trouvées. (Suivant automatique)`;
+  }else{
+    state.consecutiveFails += 1;
+    msgEl.innerHTML = `Grille terminée. Catégories trouvées : <strong>${state.foundCats.size}/4</strong>. (Suivant automatique)`;
+  }
+  failsSpan.textContent = String(state.consecutiveFails);
+
+  log("level_end", {
+    badge: badgeNow,
+    found: state.foundCats.size,
+    validateCount: state.validateCount,
+    errors: state.errorCount,
+    clicks: state.clickCount,
+    initMs: state.firstClickAt ? (state.firstClickAt - state.gridStartAt) : null,
+    totalMs: elapsed,
+    categories: L.cats.map(c=>c.name)
+  });
+
+  // Règle 3 échecs
+  if(state.consecutiveFails >= 3){
+    openModal();
+    return;
+  }
+
+  // auto next
+  setTimeout(()=> nextLevel(), 900);
 }
 
-function clearSelection(){
-  if(runtime.finished) return;
-  runtime.selected = [];
-  setMessage("Sélection annulée.", "");
-  addLog("Sélection annulée.");
-  render();
+function nextLevel(){
+  closeModal();
+  if(state.levelIndex < LEVELS.length-1){
+    state.levelIndex++;
+    buildLevel();
+  }else{
+    // fin
+    state.levelIndex++;
+    buildLevel();
+  }
 }
 
-function shuffleBoard(){
-  if(runtime.finished) return;
-  runtime.tileOrder = shuffle(runtime.tileOrder);
-  setMessage("Damier mélangé.", "");
-  addLog("Mélange du damier.");
-  render();
+function tickTime(){
+  if(!LEVELS[state.levelIndex]) return;
+  if(!state.gridStartAt) return;
+  const elapsed = Date.now() - state.gridStartAt;
+  timeSpan.textContent = fmtMs(elapsed);
+  requestAnimationFrame(tickTime);
 }
 
-/* =========================================================
-   BINDINGS
-   ========================================================= */
-$("startBtn").addEventListener("click", ()=>{
-  state.subjectId = $("subjectId").value || state.subjectId;
-  startOrResume();
-});
-
-$("newSessionBtn").addEventListener("click", ()=>{
-  newSession();
-});
-
-$("toggleModeBtn").addEventListener("click", ()=>{
-  state.mode = (state.mode==="training") ? "test" : "training";
-  saveState();
-  setMessage("Mode : " + (state.mode==="training" ? "Entraînement" : "Test"), "");
-  render();
-});
-
-$("validateBtn").addEventListener("click", validateSelection);
-$("clearSelBtn").addEventListener("click", clearSelection);
-$("shuffleBtn").addEventListener("click", shuffleBoard);
-$("giveUpBtn").addEventListener("click", abandonItem);
-
-$("prevItemBtn").addEventListener("click", ()=>goToItem(state.itemIndex-1));
-$("nextItemBtn").addEventListener("click", ()=>goToItem(state.itemIndex+1));
-
-$("exportBtn").addEventListener("click", ()=>{
-  const payload = {
-    exported_at: new Date().toISOString(),
-    subjectId: state.subjectId,
-    mode: state.mode,
-    itemIndex: state.itemIndex,
-    itemsDone: countCompletedItems(),
-    trials: state.trials
+function resetAll(){
+  if(!confirm("Réinitialiser la session ? (les données en mémoire seront perdues si non téléchargées)")) return;
+  state = {
+    sessionId: crypto.randomUUID(),
+    startedAt: Date.now(),
+    levelIndex: 0,
+    points: 0,
+    badges: 0,
+    consecutiveFails: 0,
+    gridStartAt: 0,
+    firstClickAt: null,
+    clickCount: 0,
+    validateCount: 0,
+    errorCount: 0,
+    foundCats: new Set(),
+    triedWordSet: new Set(),
+    selected: new Set(),
+    tiles: [],
+    ended: false,
+    logs: []
   };
-  downloadJson(payload, `connections_battery_${state.subjectId || "session"}.json`);
-});
-
-$("clearDataBtn").addEventListener("click", ()=>{
-  if(confirm("Effacer toutes les données locales (trials) ?")){
-    localStorage.removeItem(STORE_KEY);
-    state = defaultState();
-    $("subjectId").value = "";
-    resetRuntimeForItem();
-    buildTileOrder();
-    setMessage("Données locales effacées.", "");
-    render();
-  }
-});
-
-/* =========================================================
-   INIT
-   ========================================================= */
-function init(){
-  $("subjectId").value = state.subjectId || "";
-  resetRuntimeForItem();
-  buildTileOrder();
-  wireTileClicks();
-  setMessage("Prêt. Clique “Démarrer / Reprendre”.", "");
-  render();
+  pointsSpan.textContent = "0";
+  badgesSpan.textContent = "0";
+  failsSpan.textContent = "0";
+  log("session_reset");
+  buildLevel();
 }
-init();
+
+function downloadCSV(){
+  // CSV simple : logs détaillés (événements)
+  const rows = state.logs.slice();
+  if(rows.length === 0){
+    alert("Aucune donnée à télécharger pour l’instant.");
+    return;
+  }
+
+  // En-têtes = union des clés
+  const keys = new Set();
+  rows.forEach(r => Object.keys(r).forEach(k => keys.add(k)));
+  const header = Array.from(keys);
+
+  function esc(v){
+    if(v === null || v === undefined) return "";
+    if(Array.isArray(v)) v = JSON.stringify(v);
+    if(typeof v === "object") v = JSON.stringify(v);
+    const s = String(v);
+    if(/[",\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
+    return s;
+  }
+
+  const csv = [
+    header.join(","),
+    ...rows.map(r => header.map(k => esc(r[k])).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const sid = (subjectId() || "sujet").replace(/[^a-zA-Z0-9_-]/g,"_");
+  a.download = `similitudes_${sid}_${state.sessionId.slice(0,8)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+}
+
+btnValidate.addEventListener("click", validateSelection);
+btnNext.addEventListener("click", ()=>{
+  // Permet d’avancer même si la grille n’est pas “terminée”
+  log("manual_next");
+  nextLevel();
+});
+btnReset.addEventListener("click", resetAll);
+btnDownload.addEventListener("click", downloadCSV);
+
+trainingEl.addEventListener("change", ()=>{
+  renderCatList();
+  log("training_toggle", {training: trainingEl.checked});
+});
+
+// Modal: stop/continue
+btnStop.addEventListener("click", ()=>{
+  closeModal();
+  log("stop_after_3fails");
+  msgEl.innerHTML = `Arrêt. Pense à <strong>Télécharger CSV</strong>.`;
+  btnValidate.disabled = true;
+  btnNext.disabled = true;
+});
+btnContinue.addEventListener("click", ()=>{
+  closeModal();
+  log("continue_after_3fails");
+  state.consecutiveFails = 0;
+  failsSpan.textContent = "0";
+  setTimeout(()=> nextLevel(), 200);
+});
+
+// Init
+log("session_start");
+buildLevel();
 </script>
 </body>
 </html>
