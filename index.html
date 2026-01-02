@@ -1,728 +1,134 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Connexions – multi-items (FR)</title>
-  <style>
-    :root{
-      --bg:#f6f6f6;
-      --card:#ffffff;
-      --ink:#111;
-      --muted:#666;
-      --border:#d9d9d9;
-      --good:#1b7f3a;
-      --bad:#b3261e;
-      --accent:#0b57d0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeu des catégories – 6/7 ans</title>
 
-      --tile-bg:#fff;
-      --tile-bg-sel:#111;
-      --tile-ink:#111;
-      --tile-ink-sel:#fff;
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
 
-      --radius:14px;
-      --shadow:0 6px 18px rgba(0,0,0,.08);
-    }
+h1 {
+  font-size: 1.8em;
+}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--ink);
-      padding:18px;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+}
 
-    .wrap{max-width:980px;margin:0 auto;}
-    header{
-      display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    h1{margin:0;font-size:22px;}
-    .sub{color:var(--muted);font-size:13px;margin-top:4px;}
-    .panel{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:14px;
-    }
+.word {
+  background: white;
+  padding: 18px;
+  font-size: 1.2em;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid #ccc;
+}
 
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    label{font-size:13px;color:var(--muted);}
-    input, select{
-      padding:8px 10px;
-      border:1px solid var(--border);
-      border-radius:10px;
-      font-size:14px;
-      background:#fff;
-    }
+.word.selected {
+  background: #cce5ff;
+  border-color: #007bff;
+}
 
-    .topbar{
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
-      margin-top:10px;
-    }
-    .status{
-      display:flex;gap:12px;flex-wrap:wrap;align-items:center;
-      color:var(--muted);font-size:13px;
-    }
-    .pill{
-      border:1px solid var(--border);
-      border-radius:999px;
-      padding:6px 10px;
-      background:#fff;
-    }
+button {
+  font-size: 1.2em;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(120px, 1fr));
-      gap:10px;
-      margin-top:14px;
-    }
-    @media (max-width:680px){
-      .grid{grid-template-columns:repeat(2, 1fr);}
-    }
+button:disabled {
+  background: #aaa;
+}
 
-    .tile{
-      border:1px solid var(--border);
-      background:var(--tile-bg);
-      color:var(--tile-ink);
-      border-radius:12px;
-      padding:12px 10px;
-      text-align:center;
-      font-weight:700;
-      letter-spacing:.3px;
-      cursor:pointer;
-      user-select:none;
-      transition:transform .05s ease, background .12s ease, color .12s ease, border-color .12s ease;
-    }
-    .tile:active{transform:scale(.99);}
-    .tile.sel{
-      background:var(--tile-bg-sel);
-      color:var(--tile-ink-sel);
-      border-color:#111;
-    }
-    .tile.done{
-      opacity:.55;
-      cursor:default;
-    }
-
-    .actions{
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
-      margin-top:14px;
-    }
-    button{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:#fff;
-      cursor:pointer;
-      font-weight:650;
-    }
-    button.primary{
-      background:var(--accent);
-      border-color:var(--accent);
-      color:#fff;
-    }
-    button:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-    }
-
-    .msg{
-      margin-top:10px;
-      font-weight:650;
-      min-height:22px;
-    }
-    .msg.good{color:var(--good);}
-    .msg.bad{color:var(--bad);}
-
-    .found{
-      margin-top:14px;
-      display:grid;
-      gap:10px;
-    }
-    .cat{
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-    }
-    .cat strong{display:block;}
-    .cat .words{color:var(--muted);margin-top:4px;font-size:13px;}
-
-    details{
-      margin-top:14px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-    }
-    summary{cursor:pointer;font-weight:700;}
-    .small{font-size:12px;color:var(--muted);margin-top:8px;}
-
-    .footer-actions{
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px;
-    }
-
-    .hr{height:1px;background:var(--border);margin:14px 0;}
-    code{background:#f1f1f1;padding:1px 6px;border-radius:6px;}
-  </style>
+#message {
+  margin-top: 15px;
+  font-size: 1.2em;
+}
+</style>
 </head>
+
 <body>
-<div class="wrap">
 
-  <header>
-    <div>
-      <h1>Connexions – version française (multi-items)</h1>
-      <div class="sub">But : regrouper 16 mots en 4 catégories de 4 mots.</div>
-    </div>
-    <div class="panel" style="min-width:290px">
-      <div class="row">
-        <div>
-          <label>ID (pseudonyme)</label><br/>
-          <input id="pid" placeholder="ex : E_024" />
-        </div>
-        <div>
-          <label>Âge</label><br/>
-          <input id="age" type="number" min="3" max="18" placeholder="ex : 9" style="width:90px"/>
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label>Mode</label><br/>
-          <select id="mode">
-            <option value="training">Entraînement (affiche catégories)</option>
-            <option value="test">Test (catégories cachées)</option>
-          </select>
-        </div>
-        <div>
-          <label>Ordre</label><br/>
-          <select id="order">
-            <option value="random">Aléatoire</option>
-            <option value="fixed">Fixe</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </header>
+<h1>Trouve les 4 mots qui vont ensemble</h1>
 
-  <div class="panel">
-    <div class="topbar">
-      <div class="status">
-        <span class="pill">Item : <strong id="itemIdx">1</strong>/<span id="itemTotal">1</span></span>
-        <span class="pill">Erreurs : <strong id="errors">0</strong>/4</span>
-        <span class="pill">Temps : <strong id="time">0</strong>s</span>
-      </div>
-      <div class="status">
-        <span class="pill">Sélection : <strong id="selCount">0</strong>/4</span>
-        <span class="pill">Catégories trouvées : <strong id="foundCount">0</strong>/4</span>
-      </div>
-    </div>
+<div class="grid" id="grid"></div>
 
-    <div class="grid" id="grid"></div>
+<button id="validate" disabled>Valider</button>
 
-    <div class="actions">
-      <button id="validateBtn" class="primary" disabled>Valider</button>
-      <button id="clearBtn">Désélectionner</button>
-      <button id="resetItemBtn">Recommencer l’item</button>
-      <button id="nextBtn" disabled>Item suivant</button>
-    </div>
-
-    <div class="msg" id="msg"></div>
-
-    <div class="found" id="found"></div>
-
-    <details id="revealBox" style="display:none">
-      <summary>Voir les catégories (mode entraînement)</summary>
-      <div id="reveal"></div>
-      <div class="small">En mode <strong>Test</strong>, cette section reste cachée.</div>
-    </details>
-
-    <div class="hr"></div>
-
-    <details>
-      <summary>Données & export</summary>
-      <div class="small">
-        Les données sont sauvegardées dans le navigateur (LocalStorage).  
-        Vous pouvez exporter un CSV (une ligne par tentative + un résumé par item).
-      </div>
-      <div class="footer-actions">
-        <button id="exportBtn">Exporter CSV</button>
-        <button id="wipeBtn">Effacer les données locales</button>
-      </div>
-      <div class="small" id="dataInfo"></div>
-    </details>
-
-  </div>
-
-</div>
+<div id="message"></div>
 
 <script>
-/* =========================
-   1) BANQUE D’ITEMS
-   =========================
-   - Chaque item = 4 groupes (catégorie + 4 mots)
-   - Les 16 mots doivent être uniques DANS l’item.
-   - Vous pouvez en ajouter autant que vous voulez.
-*/
-const ITEMS = [
-  {
-    id: "A1",
-    title: "Transports / Vents / Rapide / Parties du corps",
-    groups: [
-      { name: "Transports", words: ["AVION","BUS","TRAIN","BATEAU"] },
-      { name: "Vents", words: ["MISTRAL","SIROCCO","TRAMONTANE","ALIZÉ"] },
-      { name: "Rapide", words: ["VIF","AGILE","PROMPT","EXPRESS"] },
-      { name: "Parties du corps", words: ["TÊTE","MAIN","PIED","DOS"] }
-    ]
-  },
-  {
-    id: "A2",
-    title: "Instruments / Fruits / Couleurs / Métiers",
-    groups: [
-      { name: "Instruments", words: ["PIANO","TAMBOUR","FLÛTE","VIOLON"] },
-      { name: "Fruits", words: ["POIRE","POMME","CERISE","PRUNE"] },
-      { name: "Couleurs", words: ["BLEU","ROUGE","VERT","NOIR"] },
-      { name: "Métiers", words: ["BOULANGER","DENTISTE","PILOTE","JARDINIER"] }
-    ]
-  }
+const categories = [
+  { name: "Animaux", words: ["chien", "chat", "cheval", "lapin"] },
+  { name: "Fruits", words: ["pomme", "banane", "orange", "poire"] },
+  { name: "Vêtements", words: ["pantalon", "pull", "robe", "chaussette"] },
+  { name: "Transports", words: ["voiture", "bus", "train", "vélo"] }
 ];
 
-/* =========================
-   2) OUTILS
-   ========================= */
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
-function nowMs(){ return Date.now(); }
+// Mélange simple
+let allWords = categories.flatMap(c => c.words)
+  .sort(() => Math.random() - 0.5);
 
-function csvEscape(s){
-  const str = String(s ?? "");
-  if(/[,"\n]/.test(str)) return `"${str.replace(/"/g,'""')}"`;
-  return str;
-}
-function downloadText(filename, text){
-  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
+const grid = document.getElementById("grid");
+const validateBtn = document.getElementById("validate");
+const message = document.getElementById("message");
 
-/* =========================
-   3) ÉTAT GLOBAL
-   ========================= */
-const LS_KEY = "connections_fr_data_v1";
+let selected = [];
 
-let orderMode = "random";
-let mode = "training";
+allWords.forEach(word => {
+  const div = document.createElement("div");
+  div.className = "word";
+  div.textContent = word;
 
-let itemOrder = [];
-let itemPtr = 0;
-
-let startTimeMs = 0;
-let timer = null;
-
-let tiles = [];        // mots affichés (dans l’ordre)
-let selected = [];     // mots sélectionnés
-let foundWords = new Set(); // mots déjà validés (catégories trouvées)
-let foundCats = [];    // {name, words}
-let errors = 0;
-let attemptsThisItem = 0;
-
-let currentItem = null;
-
-/* =========================
-   4) DONNÉES (LOCAL)
-   ========================= */
-function loadData(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if(!raw) return { sessions: [] };
-    return JSON.parse(raw);
-  }catch(e){
-    return { sessions: [] };
-  }
-}
-function saveData(data){
-  localStorage.setItem(LS_KEY, JSON.stringify(data));
-}
-function getSessionMeta(){
-  return {
-    pid: document.getElementById("pid").value.trim(),
-    age: document.getElementById("age").value.trim(),
-    mode,
-    orderMode
-  };
-}
-function updateDataInfo(){
-  const data = loadData();
-  const nSess = data.sessions.length;
-  let nRows = 0;
-  for(const s of data.sessions){
-    nRows += (s.events?.length || 0);
-  }
-  document.getElementById("dataInfo").textContent =
-    `Sessions enregistrées : ${nSess} • Événements (tentatives/clics) : ${nRows}`;
-}
-
-/* =========================
-   5) UI
-   ========================= */
-const gridEl = document.getElementById("grid");
-const msgEl = document.getElementById("msg");
-const foundEl = document.getElementById("found");
-const validateBtn = document.getElementById("validateBtn");
-const clearBtn = document.getElementById("clearBtn");
-const resetItemBtn = document.getElementById("resetItemBtn");
-const nextBtn = document.getElementById("nextBtn");
-
-function setMsg(text, kind){
-  msgEl.textContent = text || "";
-  msgEl.className = "msg" + (kind ? (" " + kind) : "");
-}
-
-function render(){
-  // stats
-  document.getElementById("itemIdx").textContent = (itemPtr+1);
-  document.getElementById("itemTotal").textContent = itemOrder.length;
-  document.getElementById("errors").textContent = errors;
-  document.getElementById("selCount").textContent = selected.length;
-  document.getElementById("foundCount").textContent = foundCats.length;
-
-  // boutons
-  validateBtn.disabled = (selected.length !== 4);
-  nextBtn.disabled = (foundCats.length !== 4);
-
-  // grille
-  gridEl.innerHTML = "";
-  for(const w of tiles){
-    const btn = document.createElement("div");
-    btn.className = "tile";
-    btn.textContent = w;
-
-    const isDone = foundWords.has(w);
-    if(isDone) btn.classList.add("done");
-
-    const isSel = selected.includes(w);
-    if(isSel) btn.classList.add("sel");
-
-    btn.onclick = () => {
-      if(isDone) return;
-
-      if(selected.includes(w)){
-        selected = selected.filter(x => x !== w);
-      }else{
-        if(selected.length >= 4) return;
-        selected = selected.concat([w]);
+  div.onclick = () => {
+    if (div.classList.contains("selected")) {
+      div.classList.remove("selected");
+      selected = selected.filter(w => w !== word);
+    } else {
+      if (selected.length < 4) {
+        div.classList.add("selected");
+        selected.push(word);
       }
-      logEvent("select", { word: w, selected: selected.slice() });
-      render();
-    };
+    }
+    validateBtn.disabled = selected.length !== 4;
+  };
 
-    gridEl.appendChild(btn);
-  }
-
-  // catégories trouvées
-  foundEl.innerHTML = "";
-  for(const c of foundCats){
-    const box = document.createElement("div");
-    box.className = "cat";
-    box.innerHTML = `<strong>${c.name}</strong><div class="words">${c.words.join(" • ")}</div>`;
-    foundEl.appendChild(box);
-  }
-
-  // reveal (training)
-  const revealBox = document.getElementById("revealBox");
-  const reveal = document.getElementById("reveal");
-  if(mode === "training"){
-    revealBox.style.display = "";
-    reveal.innerHTML = currentItem.groups
-      .map(g => `<div class="cat"><strong>${g.name}</strong><div class="words">${g.words.join(" • ")}</div></div>`)
-      .join("");
-  }else{
-    revealBox.style.display = "none";
-  }
-}
-
-function setTimer(on){
-  if(timer){ clearInterval(timer); timer = null; }
-  if(!on) return;
-  timer = setInterval(()=>{
-    const t = Math.floor((nowMs()-startTimeMs)/1000);
-    document.getElementById("time").textContent = t;
-  }, 250);
-}
-
-/* =========================
-   6) LOGIQUE JEU
-   ========================= */
-function buildItemOrder(){
-  const idxs = [...ITEMS.keys()];
-  if(orderMode === "random") return shuffle(idxs);
-  return idxs;
-}
-
-function initItem(){
-  currentItem = ITEMS[itemOrder[itemPtr]];
-
-  errors = 0;
-  attemptsThisItem = 0;
-  selected = [];
-  foundWords = new Set();
-  foundCats = [];
-  setMsg("", "");
-
-  // fabriquer les 16 mots
-  const all = [];
-  for(const g of currentItem.groups) all.push(...g.words);
-  tiles = shuffle(all);
-
-  startTimeMs = nowMs();
-  document.getElementById("time").textContent = 0;
-  setTimer(true);
-
-  logEvent("item_start", {
-    itemId: currentItem.id,
-    itemTitle: currentItem.title,
-    tiles: tiles.slice()
-  });
-
-  render();
-}
-
-function sameSet(a,b){
-  if(a.length !== b.length) return false;
-  const s = new Set(a);
-  for(const x of b) if(!s.has(x)) return false;
-  return true;
-}
-
-function findGroupForSelection(sel){
-  for(const g of currentItem.groups){
-    if(sameSet(sel, g.words)) return g;
-  }
-  return null;
-}
-
-function lockFoundGroup(g){
-  for(const w of g.words) foundWords.add(w);
-  foundCats.push({ name: g.name, words: g.words.slice() });
-}
-
-function endItemIfDone(){
-  if(foundCats.length === 4){
-    setTimer(false);
-    const t = Math.floor((nowMs()-startTimeMs)/1000);
-    setMsg(`✅ Item terminé en ${t}s.`, "good");
-    logEvent("item_done", {
-      itemId: currentItem.id,
-      timeSec: t,
-      errors,
-      attemptsThisItem
-    });
-  }
-}
+  grid.appendChild(div);
+});
 
 validateBtn.onclick = () => {
-  if(selected.length !== 4) return;
-  attemptsThisItem++;
+  const found = categories.find(cat =>
+    cat.words.every(w => selected.includes(w))
+  );
 
-  const sel = selected.slice().sort();
-  const g = findGroupForSelection(sel);
-
-  if(g){
-    lockFoundGroup(g);
-    setMsg(`✅ Catégorie trouvée : ${g.name}`, "good");
-    logEvent("validate_ok", {
-      itemId: currentItem.id,
-      category: g.name,
-      selection: sel
-    });
-  }else{
-    errors++;
-    setMsg("❌ Mauvaise combinaison", "bad");
-    logEvent("validate_bad", {
-      itemId: currentItem.id,
-      selection: sel
-    });
-    if(errors >= 4){
-      setTimer(false);
-      const t = Math.floor((nowMs()-startTimeMs)/1000);
-      setMsg(`⛔ 4 erreurs : item arrêté (${t}s).`, "bad");
-      logEvent("item_fail", {
-        itemId: currentItem.id,
-        timeSec: t,
-        errors,
-        attemptsThisItem
-      });
-      // On autorise quand même "Item suivant" pour avancer
-      nextBtn.disabled = false;
-    }
+  if (found) {
+    message.textContent = "✅ Bravo ! Ce sont des " + found.name;
+    message.style.color = "green";
+  } else {
+    message.textContent = "❌ Essaie encore";
+    message.style.color = "red";
   }
 
   selected = [];
-  render();
-  endItemIfDone();
+  document.querySelectorAll(".word").forEach(w => w.classList.remove("selected"));
+  validateBtn.disabled = true;
 };
-
-clearBtn.onclick = () => {
-  selected = [];
-  setMsg("", "");
-  logEvent("clear", {});
-  render();
-};
-
-resetItemBtn.onclick = () => {
-  logEvent("item_reset", { itemId: currentItem.id });
-  initItem();
-};
-
-nextBtn.onclick = () => {
-  // fin de session item
-  setTimer(false);
-
-  if(itemPtr < itemOrder.length - 1){
-    itemPtr++;
-    initItem();
-  }else{
-    setMsg("🎉 Fin de la série d’items.", "good");
-    logEvent("session_done", {});
-    render();
-    nextBtn.disabled = true;
-  }
-};
-
-/* =========================
-   7) LOGGING (BRUT)
-   ========================= */
-let sessionId = null;
-
-function startSession(){
-  const data = loadData();
-  sessionId = "S_" + Math.random().toString(36).slice(2,10) + "_" + Date.now();
-
-  data.sessions.push({
-    sessionId,
-    startedAt: new Date().toISOString(),
-    meta: getSessionMeta(),
-    events: []
-  });
-  saveData(data);
-  updateDataInfo();
-}
-
-function getSession(data){
-  return data.sessions.find(s => s.sessionId === sessionId);
-}
-
-function logEvent(type, payload){
-  const data = loadData();
-  if(!sessionId){
-    startSession();
-  }
-  const s = getSession(data);
-  if(!s) return;
-
-  const tSec = startTimeMs ? Math.floor((nowMs()-startTimeMs)/1000) : null;
-
-  s.events.push({
-    at: new Date().toISOString(),
-    type,
-    itemPtr,
-    itemId: currentItem?.id ?? null,
-    tSec,
-    errors,
-    selectedCount: selected.length,
-    payload: payload || {}
-  });
-
-  // maj meta à la volée (si l’utilisateur renseigne l’ID après coup)
-  s.meta = getSessionMeta();
-
-  saveData(data);
-  updateDataInfo();
-}
-
-/* =========================
-   8) EXPORT CSV
-   ========================= */
-document.getElementById("exportBtn").onclick = () => {
-  const data = loadData();
-  const rows = [];
-  rows.push([
-    "sessionId","startedAt","pid","age","mode","orderMode",
-    "eventAt","eventType","itemPtr","itemId","tSec","errors","selectedCount",
-    "payload"
-  ].map(csvEscape).join(","));
-
-  for(const s of data.sessions){
-    const pid = s.meta?.pid ?? "";
-    const age = s.meta?.age ?? "";
-    const modeS = s.meta?.mode ?? "";
-    const ord = s.meta?.orderMode ?? "";
-    const startedAt = s.startedAt ?? "";
-
-    for(const e of (s.events || [])){
-      rows.push([
-        s.sessionId, startedAt, pid, age, modeS, ord,
-        e.at, e.type, e.itemPtr, e.itemId, e.tSec, e.errors, e.selectedCount,
-        JSON.stringify(e.payload || {})
-      ].map(csvEscape).join(","));
-    }
-  }
-
-  const filename = `connections_fr_export_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
-  downloadText(filename, rows.join("\n"));
-};
-
-document.getElementById("wipeBtn").onclick = () => {
-  if(confirm("Effacer toutes les données locales enregistrées sur cet appareil ?")){
-    localStorage.removeItem(LS_KEY);
-    updateDataInfo();
-    alert("Données locales effacées.");
-  }
-};
-
-/* =========================
-   9) INIT
-   ========================= */
-document.getElementById("mode").onchange = (e) => {
-  mode = e.target.value;
-  logEvent("mode_change", { mode });
-  render();
-};
-document.getElementById("order").onchange = (e) => {
-  orderMode = e.target.value;
-  logEvent("order_change", { orderMode });
-  // Rebuild order + restart series
-  itemOrder = buildItemOrder();
-  itemPtr = 0;
-  initItem();
-};
-
-// démarrage
-function boot(){
-  updateDataInfo();
-  mode = document.getElementById("mode").value;
-  orderMode = document.getElementById("order").value;
-
-  itemOrder = buildItemOrder();
-  itemPtr = 0;
-  startSession();
-  initItem();
-}
-boot();
 </script>
+
 </body>
 </html>
