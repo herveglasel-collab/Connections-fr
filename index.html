@@ -1,134 +1,692 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jeu des catégories – 6/7 ans</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Similitudes+ (6–7 ans) — Catégories</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#111a2e;
+      --panel2:#0f172a;
+      --text:#e9eefc;
+      --muted:#a9b4d6;
+      --accent:#7dd3fc;
+      --good:#34d399;
+      --bad:#fb7185;
+      --warn:#fbbf24;
+      --tile:#172340;
+      --tile2:#1b2a4f;
+      --sel:#2c467f;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  margin: 0;
-  padding: 20px;
-  text-align: center;
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 20% 10%, #1b2a4f 0%, var(--bg) 55%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      min-height:100dvh;
+      padding: 16px;
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size: 13px;
+    }
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+    }
+    .pill b{color:var(--text); font-weight:700}
+    .btn{
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(125,211,252,.25), rgba(125,211,252,.12));
+      color: var(--text);
+      font-weight: 700;
+      cursor:pointer;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(125,211,252,.35);
+      touch-action: manipulation;
+      font-size: 14px;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      font-weight: 650;
+    }
+    .btn.danger{
+      background: linear-gradient(180deg, rgba(251,113,133,.25), rgba(251,113,133,.12));
+      border: 1px solid rgba(251,113,133,.35);
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .tile{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: 14px 10px;
+      text-align:center;
+      font-size: clamp(14px, 2.2vw, 18px);
+      font-weight: 800;
+      letter-spacing:.2px;
+      user-select:none;
+      cursor:pointer;
+      min-height: 64px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      touch-action: manipulation;
+    }
+    .tile:hover{background: rgba(255,255,255,.07)}
+    .tile.selected{
+      background: linear-gradient(180deg, rgba(125,211,252,.28), rgba(125,211,252,.12));
+      border-color: rgba(125,211,252,.55);
+      box-shadow: 0 0 0 2px rgba(125,211,252,.18) inset;
+    }
+    .tile.locked{
+      opacity:.52;
+      pointer-events:none;
+      filter:saturate(.8);
+    }
+    .tile.solved{
+      background: linear-gradient(180deg, rgba(52,211,153,.22), rgba(52,211,153,.10));
+      border-color: rgba(52,211,153,.45);
+      opacity:1;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .leftControls, .rightControls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+      margin-top: 8px;
+    }
+    .msg{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-size: 14px;
+      min-height: 42px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .msg.good{border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.10)}
+    .msg.bad{border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.10)}
+    .small{
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .footerRow{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .tog{
+      display:flex; gap:8px; align-items:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 10px 12px;
+      border-radius: 14px;
+      user-select:none;
+    }
+    input[type="checkbox"]{
+      width: 18px; height: 18px;
+      accent-color: #7dd3fc;
+    }
 
-h1 {
-  font-size: 1.8em;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: 600px;
-  margin: 20px auto;
-}
-
-.word {
-  background: white;
-  padding: 18px;
-  font-size: 1.2em;
-  border-radius: 12px;
-  cursor: pointer;
-  user-select: none;
-  border: 2px solid #ccc;
-}
-
-.word.selected {
-  background: #cce5ff;
-  border-color: #007bff;
-}
-
-button {
-  font-size: 1.2em;
-  padding: 12px 20px;
-  border-radius: 10px;
-  border: none;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-button:disabled {
-  background: #aaa;
-}
-
-#message {
-  margin-top: 15px;
-  font-size: 1.2em;
-}
-</style>
+    /* tablette / mobile */
+    @media (max-width: 560px){
+      body{padding: 12px}
+      .grid{gap:8px}
+      .tile{min-height: 58px; border-radius: 14px}
+      .btn{flex:1}
+      .controls{gap:8px}
+      .leftControls, .rightControls{width:100%}
+      .rightControls{justify-content:flex-end}
+    }
+  </style>
 </head>
-
 <body>
+<div class="wrap">
 
-<h1>Trouve les 4 mots qui vont ensemble</h1>
+  <header>
+    <div class="title">
+      <h1>Similitudes+ — Niveau 6–7 ans</h1>
+      <div class="sub">Trouve 4 groupes de 4 mots (catégories simples). Touch-friendly pour tablette.</div>
+    </div>
+    <div class="topbar">
+      <div class="pill">Puzzle <b id="puzzleIndex">1</b>/<span id="puzzleTotal">?</span></div>
+      <div class="pill">Trouvés <b id="solvedCount">0</b>/4</div>
+      <div class="pill">Erreurs <b id="mistakes">0</b>/4</div>
+      <div class="pill">Temps <b id="time">0:00</b></div>
+    </div>
+  </header>
 
-<div class="grid" id="grid"></div>
+  <div class="panel">
+    <div class="hint">
+      👉 Sélectionne <b>4 mots</b>, puis appuie sur <b>Valider</b>.  
+      Quand un groupe est trouvé, il reste en vert.  
+      (Pour l’évaluation : tu peux exporter les réponses en CSV/JSON.)
+    </div>
 
-<button id="validate" disabled>Valider</button>
+    <div class="grid" id="grid"></div>
 
-<div id="message"></div>
+    <div class="controls">
+      <div class="leftControls">
+        <button class="btn secondary" id="clearBtn">Effacer sélection</button>
+        <button class="btn" id="checkBtn">Valider (4 mots)</button>
+      </div>
+      <div class="rightControls">
+        <button class="btn secondary" id="skipBtn">Passer</button>
+        <button class="btn danger" id="restartBtn">Recommencer</button>
+      </div>
+    </div>
+
+    <div class="msg" id="msg">
+      <span>Choisis 4 mots qui vont ensemble.</span>
+      <span class="small" id="msgSmall"></span>
+    </div>
+
+    <div class="footerRow">
+      <div class="tog">
+        <input type="checkbox" id="showCats" />
+        <label for="showCats">Afficher la catégorie après réussite</label>
+      </div>
+      <div class="rightControls">
+        <button class="btn secondary" id="exportCsvBtn">Exporter CSV</button>
+        <button class="btn secondary" id="exportJsonBtn">Exporter JSON</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
-const categories = [
-  { name: "Animaux", words: ["chien", "chat", "cheval", "lapin"] },
-  { name: "Fruits", words: ["pomme", "banane", "orange", "poire"] },
-  { name: "Vêtements", words: ["pantalon", "pull", "robe", "chaussette"] },
-  { name: "Transports", words: ["voiture", "bus", "train", "vélo"] }
+/** =========================
+ *  BANQUE D’ITEMS 6–7 ANS
+ *  Chaque puzzle = 4 catégories x 4 mots
+ *  On mélange l'ordre des puzzles + la position des mots
+ *  ========================= */
+const ITEM_BANK_6_7 = [
+  {
+    id: "6-7-A1",
+    groups: [
+      { cat: "Animaux de la ferme", words: ["VACHE","CHEVAL","MOUTON","POULE"] },
+      { cat: "Fruits",             words: ["POMME","POIRE","BANANE","ORANGE"] },
+      { cat: "Vêtements",          words: ["PULL","PANTALON","CHAUSSETTE","MANTEAU"] },
+      { cat: "Couleurs",           words: ["ROUGE","BLEU","VERT","JAUNE"] }
+    ]
+  },
+  {
+    id: "6-7-A2",
+    groups: [
+      { cat: "Moyens de transport", words: ["BUS","TRAIN","VOITURE","VELO"] },
+      { cat: "École",              words: ["CRAYON","GOMME","CAHIER","REGLE"] },
+      { cat: "Parties du corps",    words: ["MAIN","PIED","NEZ","OREILLE"] },
+      { cat: "Boissons",           words: ["EAU","LAIT","JUS","THE"] }
+    ]
+  },
+  {
+    id: "6-7-A3",
+    groups: [
+      { cat: "Instruments (simples)", words: ["TAMBOUR","FLUTE","PIANO","GUITARE"] },
+      { cat: "Légumes",               words: ["CAROTTE","TOMATE","SALADE","POIREAU"] },
+      { cat: "Dans la salle de bain", words: ["SAVON","BROSSE","DENTIFRICE","SERVIETTE"] },
+      { cat: "Formes",                words: ["ROND","CARRE","TRIANGLE","ETOILE"] }
+    ]
+  },
+  {
+    id: "6-7-A4",
+    groups: [
+      { cat: "Animaux qui nagent", words: ["POISSON","DAUPHIN","BALEINE","TORTUE"] },
+      { cat: "À la maison",        words: ["TABLE","CHAISE","LIT","LAMPE"] },
+      { cat: "Goûters",            words: ["BISCUIT","YAOURT","COMPOTE","CHOCOLAT"] },
+      { cat: "Météo",              words: ["PLUIE","SOLEIL","VENT","NEIGE"] }
+    ]
+  },
+  {
+    id: "6-7-A5",
+    groups: [
+      { cat: "Animaux qui volent", words: ["OISEAU","PAPILLON","ABEILLE","CHAUVE-SOURIS"] },
+      { cat: "Jeux",               words: ["PUZZLE","BALLON","CARTES","LEGOS"] },
+      { cat: "Cuisine",            words: ["ASSIETTE","CUILLERE","VERRE","FOURCHETTE"] },
+      { cat: "Jours de la semaine",words: ["LUNDI","MARDI","JEUDI","SAMEDI"] }
+    ]
+  },
+  {
+    id: "6-7-A6",
+    groups: [
+      { cat: "Animaux de la forêt", words: ["RENARD","LAPIN","CERF","ECUREUIL"] },
+      { cat: "Desserts",            words: ["GLACE","GATEAU","CREPE","MOUSSE"] },
+      { cat: "Objets qui s'ouvrent",words: ["PORTE","FENETRE","LIVRE","BOITE"] },
+      { cat: "Contraires (concept simple)", words: ["GRAND","PETIT","CHAUD","FROID"] }
+    ]
+  }
 ];
 
-// Mélange simple
-let allWords = categories.flatMap(c => c.words)
-  .sort(() => Math.random() - 0.5);
+/** =========================
+ *  OUTILS
+ *  ========================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function nowISO(){ return new Date().toISOString(); }
+function mmss(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
-const grid = document.getElementById("grid");
-const validateBtn = document.getElementById("validate");
-const message = document.getElementById("message");
+/** =========================
+ *  ÉTAT
+ *  ========================= */
+let sessionId = crypto?.randomUUID?.() || ("sess-" + Math.random().toString(16).slice(2));
+let puzzles = [];
+let puzzlePos = 0;
 
-let selected = [];
+let tiles = [];           // {word, groupIndex, solved}
+let selected = new Set(); // indexes of tiles
+let solvedGroups = new Set();
 
-allWords.forEach(word => {
-  const div = document.createElement("div");
-  div.className = "word";
-  div.textContent = word;
+let mistakes = 0;
+let startTs = null;
+let timerHandle = null;
+let elapsedSec = 0;
 
-  div.onclick = () => {
-    if (div.classList.contains("selected")) {
-      div.classList.remove("selected");
-      selected = selected.filter(w => w !== word);
-    } else {
-      if (selected.length < 4) {
-        div.classList.add("selected");
-        selected.push(word);
-      }
+let log = []; // données brutes (pour normage)
+/*
+  Chaque entrée:
+  {
+    sessionId, puzzleId, puzzleIndex, ts,
+    action: "select"|"unselect"|"check"|"solve"|"mistake"|"skip"|"restart",
+    selectionWords: [...],
+    result: "ok"|"no",
+    solvedGroupsCount, mistakes, elapsedSec
+  }
+*/
+
+/** =========================
+ *  DOM
+ *  ========================= */
+const gridEl = document.getElementById("grid");
+const puzzleIndexEl = document.getElementById("puzzleIndex");
+const puzzleTotalEl = document.getElementById("puzzleTotal");
+const solvedCountEl = document.getElementById("solvedCount");
+const mistakesEl = document.getElementById("mistakes");
+const timeEl = document.getElementById("time");
+const msgEl = document.getElementById("msg");
+const msgSmallEl = document.getElementById("msgSmall");
+const showCatsEl = document.getElementById("showCats");
+
+document.getElementById("clearBtn").addEventListener("click", clearSelection);
+document.getElementById("checkBtn").addEventListener("click", checkSelection);
+document.getElementById("skipBtn").addEventListener("click", skipPuzzle);
+document.getElementById("restartBtn").addEventListener("click", restartAll);
+document.getElementById("exportCsvBtn").addEventListener("click", exportCSV);
+document.getElementById("exportJsonBtn").addEventListener("click", exportJSON);
+
+/** =========================
+ *  INIT
+ *  ========================= */
+function init(){
+  puzzles = shuffle(ITEM_BANK_6_7);
+  puzzleTotalEl.textContent = puzzles.length;
+  puzzlePos = 0;
+  mistakes = 0;
+  elapsedSec = 0;
+  log = [];
+  startTimer();
+  loadPuzzle(puzzlePos);
+  updateHUD();
+  setMsg("Choisis 4 mots qui vont ensemble.", "");
+}
+
+function startTimer(){
+  if(timerHandle) clearInterval(timerHandle);
+  startTs = Date.now();
+  timerHandle = setInterval(()=>{
+    elapsedSec = Math.floor((Date.now()-startTs)/1000);
+    timeEl.textContent = mmss(elapsedSec);
+  }, 250);
+}
+
+function loadPuzzle(index){
+  const puzzle = puzzles[index];
+  puzzleIndexEl.textContent = (index+1);
+
+  solvedGroups = new Set();
+  selected = new Set();
+
+  // construire 16 tuiles avec l'info du groupe
+  const allTiles = [];
+  puzzle.groups.forEach((g, gi)=>{
+    g.words.forEach(w=>{
+      allTiles.push({ word: w, groupIndex: gi, solved:false });
+    });
+  });
+
+  tiles = shuffle(allTiles);
+  renderGrid();
+
+  // log
+  pushLog("puzzle_load", { result:"ok" });
+  updateHUD();
+}
+
+function renderGrid(){
+  gridEl.innerHTML = "";
+  tiles.forEach((t, idx)=>{
+    const div = document.createElement("div");
+    div.className = "tile";
+    div.textContent = t.word;
+
+    div.addEventListener("click", ()=>toggleTile(idx));
+    div.addEventListener("touchstart", (e)=>{ /* améliore réactivité tactile */ e.preventDefault(); toggleTile(idx); }, {passive:false});
+
+    gridEl.appendChild(div);
+  });
+  refreshTileStyles();
+}
+
+function refreshTileStyles(){
+  const children = Array.from(gridEl.children);
+  children.forEach((el, idx)=>{
+    const t = tiles[idx];
+    el.classList.toggle("selected", selected.has(idx));
+    el.classList.toggle("locked", t.solved && !el.classList.contains("solved"));
+    el.classList.toggle("solved", t.solved);
+  });
+}
+
+function toggleTile(idx){
+  if(tiles[idx].solved) return;
+
+  if(selected.has(idx)){
+    selected.delete(idx);
+    pushLog("unselect");
+  }else{
+    if(selected.size >= 4){
+      nudge("Sélectionne au maximum 4 mots.", "warn");
+      return;
     }
-    validateBtn.disabled = selected.length !== 4;
-  };
+    selected.add(idx);
+    pushLog("select");
+  }
+  refreshTileStyles();
+}
 
-  grid.appendChild(div);
-});
+/** =========================
+ *  GAMEPLAY
+ *  ========================= */
+function clearSelection(){
+  selected.clear();
+  pushLog("clear");
+  refreshTileStyles();
+  setMsg("Sélection effacée.", "");
+}
 
-validateBtn.onclick = () => {
-  const found = categories.find(cat =>
-    cat.words.every(w => selected.includes(w))
-  );
-
-  if (found) {
-    message.textContent = "✅ Bravo ! Ce sont des " + found.name;
-    message.style.color = "green";
-  } else {
-    message.textContent = "❌ Essaie encore";
-    message.style.color = "red";
+function checkSelection(){
+  if(selected.size !== 4){
+    nudge("Il faut choisir exactement 4 mots.", "warn");
+    return;
   }
 
-  selected = [];
-  document.querySelectorAll(".word").forEach(w => w.classList.remove("selected"));
-  validateBtn.disabled = true;
-};
-</script>
+  const idxs = Array.from(selected);
+  const picked = idxs.map(i=>tiles[i]);
+  const groupIdx = picked[0].groupIndex;
+  const ok = picked.every(t=>t.groupIndex === groupIdx);
 
+  pushLog("check", { result: ok ? "ok":"no" });
+
+  if(ok){
+    // marquer ce groupe comme résolu
+    idxs.forEach(i=> tiles[i].solved = true);
+    solvedGroups.add(groupIdx);
+    selected.clear();
+
+    const catName = puzzles[puzzlePos].groups[groupIdx].cat;
+    const catMsg = showCatsEl.checked ? `Catégorie : ${catName}` : "";
+    setMsg("✅ Bravo ! Groupe trouvé.", catMsg, "good");
+    pushLog("solve", { result:"ok", extra:{cat:catName} });
+
+    // si fini
+    if(solvedGroups.size === 4){
+      setMsg("🎉 Puzzle terminé ! On passe au suivant.", "", "good");
+      setTimeout(nextPuzzle, 650);
+    }
+  }else{
+    mistakes += 1;
+    // petite vibration si dispo
+    if(navigator.vibrate) navigator.vibrate(60);
+
+    setMsg("❌ Pas tout à fait… essaie encore.", `Erreurs restantes : ${Math.max(0, 4-mistakes)}`, "bad");
+    pushLog("mistake", { result:"no" });
+    // garder sélection, mais on peut aussi la vider
+    // selected.clear();
+  }
+
+  if(mistakes >= 4){
+    setMsg("⛔ 4 erreurs. On passe au puzzle suivant.", "", "bad");
+    setTimeout(nextPuzzle, 700);
+  }
+
+  updateHUD();
+  refreshTileStyles();
+}
+
+function nextPuzzle(){
+  if(puzzlePos < puzzles.length-1){
+    puzzlePos += 1;
+    loadPuzzle(puzzlePos);
+  }else{
+    finishSession();
+  }
+}
+
+function skipPuzzle(){
+  pushLog("skip", { result:"ok" });
+  setMsg("Puzzle passé.", "", "");
+  nextPuzzle();
+}
+
+function restartAll(){
+  pushLog("restart", { result:"ok" });
+  sessionId = crypto?.randomUUID?.() || ("sess-" + Math.random().toString(16).slice(2));
+  init();
+}
+
+function finishSession(){
+  if(timerHandle) clearInterval(timerHandle);
+  setMsg("✅ Terminé ! Tu peux exporter les données (CSV/JSON).", "", "good");
+  pushLog("finish", { result:"ok" });
+}
+
+function updateHUD(){
+  solvedCountEl.textContent = solvedGroups.size;
+  mistakesEl.textContent = mistakes;
+  timeEl.textContent = mmss(elapsedSec);
+}
+
+function setMsg(text, small="", kind=""){
+  msgEl.classList.remove("good","bad");
+  if(kind==="good") msgEl.classList.add("good");
+  if(kind==="bad") msgEl.classList.add("bad");
+  msgEl.firstElementChild.textContent = text;
+  msgSmallEl.textContent = small;
+}
+
+function nudge(text, kind="warn"){
+  if(kind==="warn"){
+    setMsg("⚠️ " + text, "", "");
+  }else{
+    setMsg(text, "", "");
+  }
+}
+
+/** =========================
+ *  LOG / EXPORT
+ *  ========================= */
+function pushLog(action, opts={}){
+  const puzzle = puzzles[puzzlePos];
+  const selectionWords = Array.from(selected).map(i=>tiles[i]?.word).filter(Boolean);
+
+  log.push({
+    sessionId,
+    ts: nowISO(),
+    puzzleId: puzzle?.id || null,
+    puzzleIndex: puzzlePos+1,
+    action,
+    selectionWords,
+    result: opts.result || null,
+    solvedGroupsCount: solvedGroups.size,
+    mistakes,
+    elapsedSec,
+    extra: opts.extra || null
+  });
+}
+
+function exportJSON(){
+  const payload = {
+    meta:{
+      sessionId,
+      createdAt: nowISO(),
+      level: "6-7",
+      puzzlesOrder: puzzles.map(p=>p.id)
+    },
+    log
+  };
+  downloadText(`similitudes_6-7_${sessionId}.json`, JSON.stringify(payload, null, 2));
+}
+
+function exportCSV(){
+  // CSV simple (une ligne par log)
+  const headers = [
+    "sessionId","ts","level","puzzleId","puzzleIndex","action",
+    "selectionWords","result","solvedGroupsCount","mistakes","elapsedSec","extra"
+  ];
+  const level = "6-7";
+  const rows = log.map(r=>[
+    r.sessionId,
+    r.ts,
+    level,
+    r.puzzleId ?? "",
+    r.puzzleIndex ?? "",
+    r.action ?? "",
+    (r.selectionWords || []).join("|"),
+    r.result ?? "",
+    r.solvedGroupsCount ?? 0,
+    r.mistakes ?? 0,
+    r.elapsedSec ?? 0,
+    r.extra ? JSON.stringify(r.extra).replaceAll('"','""') : ""
+  ]);
+
+  const csv = [
+    headers.join(","),
+    ...rows.map(cols => cols.map(c=>{
+      const s = String(c ?? "");
+      // échapper si virgule/retour/quotes
+      if(/[",\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
+      return s;
+    }).join(","))
+  ].join("\n");
+
+  downloadText(`similitudes_6-7_${sessionId}.csv`, csv);
+}
+
+/** =========================
+ *  START
+ *  ========================= */
+init();
+</script>
 </body>
 </html>
