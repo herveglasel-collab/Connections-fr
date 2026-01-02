@@ -3,961 +3,1103 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Connections FR — multi-items + mesures</title>
+  <title>Connections FR – Batterie (6–16 ans)</title>
   <style>
     :root{
       --bg:#f6f6f6;
       --card:#ffffff;
       --ink:#111;
       --muted:#666;
-      --border:#d8d8d8;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --radius: 16px;
-      --tileRadius: 14px;
-
-      --accent:#0b57d0;
-      --good:#1b7f3a;
+      --border:#d9d9d9;
+      --accent:#2b6cb0;
+      --good:#1b7f4a;
       --bad:#b3261e;
-      --warn:#b26a00;
-
-      --sel:#111;
-      --selText:#fff;
-
-      --lockedBg:#eaf3ff;
-      --lockedBorder:#b8d5ff;
-
-      --focus:#000;
+      --tile:#fff;
+      --tileSel:#111;
+      --tileSelInk:#fff;
+      --tileDone:#e9f7ef;
+      --tileDoneInk:#0b3b23;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius:16px;
+      --tileRadius:14px;
+      --gap:12px;
+      --tileH:56px;
+      --maxW: 980px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg:#0f0f10;
-        --card:#161617;
-        --ink:#f2f2f2;
-        --muted:#b5b5b5;
-        --border:#2b2b2d;
-        --shadow: 0 10px 30px rgba(0,0,0,.35);
-
-        --sel:#f2f2f2;
-        --selText:#111;
-
-        --lockedBg:#0f2035;
-        --lockedBorder:#254a7a;
-
-        --focus:#fff;
-      }
-    }
-
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:var(--font);
       background:var(--bg);
       color:var(--ink);
     }
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 18px 14px 28px;
-    }
     header{
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom: 14px;
+      position:sticky; top:0; z-index:10;
+      background:rgba(246,246,246,.92);
+      backdrop-filter:saturate(140%) blur(10px);
+      border-bottom:1px solid var(--border);
     }
-    h1{
-      margin:0;
-      font-size: 22px;
-      line-height:1.2;
+    .wrap{max-width:var(--maxW); margin:0 auto; padding:14px 14px;}
+    h1{margin:0; font-size:18px; font-weight:800}
+    .sub{color:var(--muted); font-size:12px; margin-top:4px}
+    .gridTop{
+      display:grid;
+      grid-template-columns: 1.25fr 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
     }
-    .sub{
-      margin-top:6px;
-      color:var(--muted);
-      font-size: 13px;
-    }
-
-    .panel{
+    .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:12px;
+      min-height: 76px;
     }
-
-    .topgrid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 12px;
+    .label{font-size:12px; color:var(--muted); margin-bottom:6px}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    input, select, button{
+      font:inherit;
     }
-    @media (max-width: 860px){
-      .topgrid{ grid-template-columns: 1fr; }
-    }
-
-    .controls{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:end;
-    }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-width: 160px;
-    }
-    label{
-      font-size: 12px;
-      color: var(--muted);
-    }
-    input, select{
+    input[type="text"]{
+      width:100%;
+      padding:10px 12px;
       border:1px solid var(--border);
-      background:transparent;
-      color:var(--ink);
-      border-radius: 12px;
-      padding: 10px 10px;
-      font-size: 14px;
+      border-radius:12px;
       outline:none;
+      background:#fff;
     }
-    input:focus, select:focus{
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
-      border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
-    }
-
-    .btnrow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    button{
+    select{
+      width:100%;
+      padding:10px 12px;
       border:1px solid var(--border);
-      background:transparent;
-      color:var(--ink);
-      padding: 10px 12px;
-      border-radius: 14px;
-      font-weight: 600;
-      cursor:pointer;
-      user-select:none;
-      touch-action: manipulation;
-    }
-    button.primary{
-      background: var(--accent);
-      color: #fff;
-      border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
-    }
-    button:disabled{
-      opacity:.5;
-      cursor:not-allowed;
-    }
-
-    .status{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
+      border-radius:12px;
+      background:#fff;
     }
     .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border:1px solid var(--border);
+      border-radius:999px; background:#fff;
+      font-size:12px; color:var(--muted);
+    }
+    .pill strong{color:var(--ink)}
+    .btn{
+      padding:10px 12px;
       border:1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: color-mix(in srgb, var(--card) 75%, var(--bg));
-    }
-    .msg{
+      border-radius:12px;
+      background:#fff;
+      cursor:pointer;
       font-weight:700;
-      color: var(--ink);
+      min-height:44px;
+      touch-action: manipulation;
     }
-    .msg.good{ color: var(--good); }
-    .msg.bad{ color: var(--bad); }
-    .msg.warn{ color: var(--warn); }
-
-    .game{
-      margin-top: 12px;
+    .btn:active{transform:translateY(1px)}
+    .btnPrimary{
+      background:var(--accent);
+      color:#fff;
+      border-color: transparent;
+    }
+    .btnGood{ background:var(--good); color:#fff; border-color:transparent; }
+    .btnBad{ background:var(--bad); color:#fff; border-color:transparent; }
+    .btnGhost{ background:transparent; }
+    .btn:disabled{opacity:.5; cursor:not-allowed}
+    main .wrap{padding-top:16px}
+    .layout{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
-      gap: 12px;
+      gap:14px;
       align-items:start;
     }
-    @media (max-width: 860px){
-      .game{ grid-template-columns: 1fr; }
+    .boardCard{padding:14px}
+    .boardHead{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      margin-bottom:10px;
     }
-
-    .board{
-      padding: 14px;
-    }
-    .grid{
+    .title2{font-weight:900; font-size:16px; margin:0}
+    .small{font-size:12px; color:var(--muted)}
+    .solvedArea{
       display:grid;
-      grid-template-columns: repeat(4, minmax(110px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      gap:10px;
+      margin-bottom:12px;
     }
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: repeat(2, 1fr); }
+    .solvedRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background: #fbfbfb;
+    }
+    .solvedBadge{
+      display:inline-flex; align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background: var(--tileDone);
+      color: var(--tileDoneInk);
+      font-weight:800;
+      font-size:12px;
+      border:1px solid #cfe9d9;
+    }
+    .tileList{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .tileMini{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--border);
+      font-weight:800;
+      font-size:12px;
+    }
+    .tiles{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
     }
     .tile{
-      border:1px solid var(--border);
-      background: transparent;
-      border-radius: var(--tileRadius);
-      padding: 14px 10px;
-      font-weight: 800;
-      letter-spacing: .3px;
-      text-transform: uppercase;
-      text-align:center;
-      line-height:1.1;
-      min-height: 54px;
+      height: var(--tileH);
       display:flex;
       align-items:center;
       justify-content:center;
-      cursor:pointer;
+      text-align:center;
+      padding:10px;
+      border-radius: var(--tileRadius);
+      border:1px solid var(--border);
+      background: var(--tile);
+      font-weight:900;
+      letter-spacing:.3px;
       user-select:none;
+      cursor:pointer;
       touch-action: manipulation;
-      transition: transform .05s ease, background .12s ease, border-color .12s ease;
     }
-    .tile:active{ transform: scale(.99); }
     .tile.selected{
-      background: var(--sel);
-      color: var(--selText);
-      border-color: color-mix(in srgb, var(--sel) 40%, var(--border));
+      background: var(--tileSel);
+      color: var(--tileSelInk);
+      border-color: #000;
     }
-    .tile.locked{
-      background: var(--lockedBg);
-      border-color: var(--lockedBorder);
-      cursor:default;
-      opacity: .98;
+    .tile.disabled{
+      opacity:.55;
+      cursor:not-allowed;
     }
-    .tile.locked.selected{ /* sécurité */
-      background: var(--lockedBg);
-      color: var(--ink);
+    .tile.done{
+      background: var(--tileDone);
+      color: var(--tileDoneInk);
+      border-color:#cfe9d9;
+      cursor:not-allowed;
     }
-    .tile:focus{
-      outline:none;
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 20%, transparent);
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
     }
-
-    .side{
-      padding: 14px;
-    }
-    .sectionTitle{
-      margin: 0 0 10px 0;
-      font-size: 14px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .12em;
-    }
-    .foundList{
+    .message{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--muted);
+      font-size:13px;
+      min-height:44px;
       display:flex;
-      flex-direction:column;
+      align-items:center;
       gap:10px;
     }
-    .catCard{
-      border:1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 10px;
-      background: color-mix(in srgb, var(--card) 86%, var(--bg));
-    }
-    .catName{
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-    .catWords{
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .metrics{
-      margin-top: 14px;
+    .message.good{border-color:#bfe4cf; background:#f0fbf5; color:#0b3b23;}
+    .message.bad{border-color:#f2c1be; background:#fff3f2; color:#6a0f0a;}
+    .asideCard .kpi{
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
     }
-    @media (max-width: 520px){
-      .metrics{ grid-template-columns: 1fr; }
-    }
-    .metric{
+    .kpiBox{
       border:1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 10px;
-      background: color-mix(in srgb, var(--card) 86%, var(--bg));
+      background:#fff;
+      border-radius:14px;
+      padding:10px;
     }
-    .metric .k{
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .metric .v{
-      margin-top: 4px;
-      font-weight: 900;
-      font-size: 16px;
-    }
-
-    details{
-      margin-top: 14px;
-      border:1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 10px;
-      background: color-mix(in srgb, var(--card) 86%, var(--bg));
-    }
-    summary{
-      cursor:pointer;
-      font-weight: 800;
-    }
+    .kpiBox .k{font-size:11px; color:var(--muted)}
+    .kpiBox .v{font-size:18px; font-weight:900; margin-top:4px}
     .log{
-      margin-top: 10px;
-      max-height: 210px;
-      overflow:auto;
-      font-size: 12px;
-      color: var(--muted);
-      white-space: pre-wrap;
-    }
-    .tiny{
-      font-size:12px;
-      color:var(--muted);
-      margin-top: 8px;
-      line-height: 1.35;
-    }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin-top:10px;
       border:1px solid var(--border);
-      border-bottom-width: 2px;
-      padding: 1px 6px;
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--card) 90%, var(--bg));
-      color: var(--ink);
+      border-radius:14px;
+      background:#fff;
+      padding:10px;
+      max-height:260px;
+      overflow:auto;
+      font-size:12px;
+      color:#222;
+    }
+    .logItem{padding:6px 0; border-bottom:1px dashed #eee}
+    .logItem:last-child{border-bottom:none}
+    .muted{color:var(--muted)}
+    .modalBackdrop{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:999;
+    }
+    .modal{
+      width:min(560px, 100%);
+      background:#fff;
+      border-radius:18px;
+      border:1px solid var(--border);
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      padding:14px;
+    }
+    .modal h3{margin:0 0 8px 0; font-size:16px}
+    .modal p{margin:0 0 12px 0; color:var(--muted); font-size:13px; line-height:1.35}
+    .modal .row{justify-content:flex-end}
+    @media (max-width: 920px){
+      .gridTop{grid-template-columns: 1fr; }
+      .layout{grid-template-columns: 1fr;}
+      :root{ --tileH: 60px; --gap: 10px; }
     }
   </style>
 </head>
-
 <body>
+<header>
   <div class="wrap">
-    <header>
-      <div>
-        <h1>Connections — version française (multi-items + mesures)</h1>
-        <div class="sub">Sélectionnez 4 mots qui vont ensemble, puis validez. Trouvez les 4 catégories.</div>
-      </div>
-    </header>
+    <h1>Connections – batterie française (6–16 ans)</h1>
+    <div class="sub">Séries d’items en difficulté croissante · Mesures automatiques · Export des données (JSON)</div>
 
-    <div class="panel topgrid">
-      <div>
-        <div class="controls">
-          <div class="field">
-            <label for="subjectId">ID du sujet (obligatoire en mode test)</label>
-            <input id="subjectId" placeholder="ex : HGL-001" />
+    <div class="gridTop">
+      <div class="card">
+        <div class="label">Sujet / Session</div>
+        <div class="row">
+          <div style="flex:1; min-width:220px">
+            <input id="subjectId" type="text" placeholder="Identifiant sujet (ex: ENF_074, ou laissez vide = auto)" />
           </div>
-          <div class="field">
-            <label for="age">Âge (optionnel)</label>
-            <input id="age" placeholder="ex : 7" inputmode="numeric" />
-          </div>
-          <div class="field">
-            <label for="mode">Mode</label>
-            <select id="mode">
-              <option value="train">Entraînement (feedback + correction)</option>
-              <option value="test">Test (feedback minimal)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="level">Niveau</label>
-            <select id="level">
-              <option value="6-7">6–7 ans</option>
-              <option value="8-9">8–9 ans</option>
-              <option value="10-11">10–11 ans</option>
-              <option value="12-13">12–13 ans</option>
-              <option value="14-16">14–16 ans</option>
-            </select>
-          </div>
+          <button class="btn btnPrimary" id="startBtn">Démarrer / Reprendre</button>
+          <button class="btn" id="newSessionBtn">Nouvelle session</button>
         </div>
-
-        <div class="btnrow" style="margin-top:12px">
-          <button class="primary" id="startBtn">Démarrer</button>
-          <button id="newBtn" disabled>Nouvelle série</button>
-          <button id="resetBtn" disabled>Réinitialiser la série</button>
-          <button id="exportBtn">Exporter CSV</button>
-        </div>
-
-        <div class="status">
-          <span class="pill"><span class="msg" id="msg">Prêt.</span></span>
-          <span class="pill">Série : <strong id="seriesIdx">—</strong></span>
-          <span class="pill">Trouvées : <strong id="foundCount">0</strong>/4</span>
-          <span class="pill">Erreurs : <strong id="errCount">0</strong></span>
-        </div>
-
-        <div class="tiny">
-          Astuce : sur ordinateur, <span class="kbd">Entrée</span> valide quand 4 mots sont sélectionnés.
+        <div class="row" style="margin-top:10px">
+          <span class="pill">Mode : <strong id="modeLabel">Entraînement</strong></span>
+          <button class="btn btnGhost" id="toggleModeBtn">Basculer entraînement / test</button>
+          <span class="pill">Item : <strong id="itemLabel">—</strong></span>
+          <span class="pill">Âge : <strong id="ageLabel">—</strong></span>
         </div>
       </div>
 
-      <div class="panel" style="padding:14px;">
-        <div class="sectionTitle">Mesures (série en cours)</div>
-        <div class="metrics">
-          <div class="metric">
-            <div class="k">Délai d’initiation</div>
-            <div class="v" id="mInitiation">—</div>
-          </div>
-          <div class="metric">
-            <div class="k">Temps total</div>
-            <div class="v" id="mTotal">—</div>
-          </div>
-          <div class="metric">
-            <div class="k">Nombre de clics</div>
-            <div class="v" id="mClicks">0</div>
-          </div>
-          <div class="metric">
-            <div class="k">Validations</div>
-            <div class="v" id="mSubmits">0</div>
-          </div>
-        </div>
-
-        <details>
-          <summary>Journal des essais (local)</summary>
-          <div class="log" id="log"></div>
-        </details>
-      </div>
-    </div>
-
-    <div class="game">
-      <div class="panel board">
-        <div class="sectionTitle">Grille 4×4</div>
-        <div class="grid" id="grid"></div>
-
-        <div class="btnrow" style="margin-top:12px">
-          <button class="primary" id="validateBtn" disabled>Valider (4)</button>
-          <button id="clearSelBtn" disabled>Effacer sélection</button>
-          <button id="revealBtn" disabled>Afficher correction</button>
+      <div class="card">
+        <div class="label">Règle “tests aux limites”</div>
+        <div class="small">Après <b>3 validations erronées</b> sur un item, on propose de <b>continuer</b> (tests aux limites) ou <b>arrêter</b>.</div>
+        <div class="row" style="margin-top:10px">
+          <span class="pill">Seuil : <strong>3 erreurs</strong></span>
+          <span class="pill">Progression : <strong>linéaire</strong></span>
         </div>
       </div>
 
-      <div class="panel side">
-        <div class="sectionTitle">Catégories trouvées</div>
-        <div class="foundList" id="foundList"></div>
+      <div class="card">
+        <div class="label">Export</div>
+        <div class="small">Les données restent localement (dans le navigateur). Tu peux les exporter en JSON.</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="exportBtn">Télécharger données (JSON)</button>
+          <button class="btn" id="clearDataBtn">Effacer données locales</button>
+        </div>
+      </div>
 
-        <div class="sectionTitle" style="margin-top:16px">Catégories (si correction)</div>
-        <div class="tiny" id="answerHint">—</div>
+      <div class="card">
+        <div class="label">Navigation</div>
+        <div class="row">
+          <button class="btn" id="prevItemBtn">⟵ Item précédent</button>
+          <button class="btn" id="nextItemBtn">Item suivant ⟶</button>
+        </div>
+        <div class="small" style="margin-top:10px">En mode <b>Test</b>, les intitulés de catégories restent cachés jusqu’à la fin de l’item.</div>
       </div>
     </div>
   </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="layout">
+      <div class="card boardCard">
+        <div class="boardHead">
+          <div>
+            <p class="title2" style="margin:0">Damier (4 × 4)</p>
+            <div class="small" id="hintLine">Sélectionne 4 mots, puis <b>Valider</b>.</div>
+          </div>
+          <div class="small" style="text-align:right">
+            <div>Statut : <b id="statusLabel">prêt</b></div>
+            <div>Auto-mesure : <b>ON</b></div>
+          </div>
+        </div>
+
+        <div class="solvedArea" id="solvedArea"></div>
+
+        <div class="tiles" id="tiles"></div>
+
+        <div class="controls">
+          <button class="btn btnGood" id="validateBtn" disabled>Valider (4)</button>
+          <button class="btn" id="clearSelBtn">Annuler sélection</button>
+          <button class="btn" id="shuffleBtn">Mélanger</button>
+          <button class="btn btnBad" id="giveUpBtn">Abandonner l’item</button>
+        </div>
+
+        <div class="message" id="messageBox">—</div>
+      </div>
+
+      <div class="card asideCard">
+        <div class="label">Mesures (item en cours)</div>
+        <div class="kpi">
+          <div class="kpiBox">
+            <div class="k">Délai d’initiation</div>
+            <div class="v" id="kpiInitiation">—</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Temps de complétion</div>
+            <div class="v" id="kpiCompletion">—</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Sélections</div>
+            <div class="v" id="kpiSelections">0</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Validations</div>
+            <div class="v" id="kpiValidations">0</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Erreurs</div>
+            <div class="v" id="kpiErrors">0</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Groupes trouvés</div>
+            <div class="v" id="kpiFound">0/4</div>
+          </div>
+        </div>
+
+        <div class="label" style="margin-top:12px">Journal (audit trail)</div>
+        <div class="log" id="log"></div>
+
+        <div class="label" style="margin-top:12px">Score brut (session)</div>
+        <div class="small">
+          Score = nb d’items complétés (ou franchis) + détail exporté pour étalonnage ultérieur.
+        </div>
+        <div class="kpi" style="margin-top:10px">
+          <div class="kpiBox">
+            <div class="k">Items terminés</div>
+            <div class="v" id="kpiItemsDone">0</div>
+          </div>
+          <div class="kpiBox">
+            <div class="k">Item actuel</div>
+            <div class="v" id="kpiItemIndex">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modalBackdrop" id="modalBackdrop">
+  <div class="modal">
+    <h3 id="modalTitle">Seuil d’erreurs atteint</h3>
+    <p id="modalText">Vous avez atteint 3 erreurs sur cet item. Souhaitez-vous continuer (tests aux limites) ou arrêter ?</p>
+    <div class="row">
+      <button class="btn" id="modalStopBtn">Arrêter</button>
+      <button class="btn btnPrimary" id="modalContinueBtn">Continuer</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/** =========================
- *  BANQUE D'ITEMS (exemples)
- *  =========================
- * Chaque item = 4 catégories * 4 mots = 16 mots.
- * Pour "générer à chaque essai", on pioche aléatoirement dans une banque
- * et on mélange l'ordre des 16 tuiles.
- *
- * IMPORTANT : pour le 6–7 ans, on garde des catégories simples et des mots fréquents.
- */
-const ITEM_BANK = {
-  "6-7": [
-    {
-      id: "6-7-A",
-      groups: [
-        { name: "ANIMAUX", words: ["CHAT", "CHIEN", "LAPIN", "POISSON"] },
-        { name: "COULEURS", words: ["ROUGE", "BLEU", "VERT", "JAUNE"] },
-        { name: "FRUITS",   words: ["POMME", "POIRE", "BANANE", "ORANGE"] },
-        { name: "VÊTEMENTS",words: ["PULL", "PANTALON", "CHAUSSETTE", "CHAUSSURE"] }
-      ]
-    },
-    {
-      id: "6-7-B",
-      groups: [
-        { name: "ÉCOLE",   words: ["CRAYON", "GOMME", "CAHIER", "RÈGLE"] },
-        { name: "MAISON",  words: ["PORTE", "FENÊTRE", "TABLE", "CHAISE"] },
-        { name: "PARTIES DU CORPS", words: ["MAIN", "PIED", "TÊTE", "DOS"] },
-        { name: "TRANSPORT", words: ["BUS", "TRAIN", "AVION", "BATEAU"] }
-      ]
-    },
-    {
-      id: "6-7-C",
-      groups: [
-        { name: "FERME", words: ["VACHE", "MOUTON", "POULE", "CHEVAL"] },
-        { name: "JOUETS", words: ["POUPÉE", "BALLON", "PUZZLE", "TROTTINETTE"] },
-        { name: "BOISSONS", words: ["EAU", "LAIT", "JUS", "CHOCOLAT"] },
-        { name: "FORMES", words: ["ROND", "CARRÉ", "TRIANGLE", "ÉTOILE"] }
-      ]
-    },
-  ],
+/* =========================================================
+   BANQUE D’ITEMS (30) – difficulté croissante (6–16 ans)
+   Chaque item = 4 catégories × 4 mots (16 mots).
+   -> Tu peux réviser les mots/catégories facilement ici.
+   ========================================================= */
 
-  "8-9": [
-    {
-      id: "8-9-A",
-      groups: [
-        { name:"INSTRUMENTS", words:["PIANO","TAMBOUR","FLÛTE","GUITARE"] },
-        { name:"MÉTÉO", words:["PLUIE","NEIGE","VENT","SOLEIL"] },
-        { name:"SPORTS", words:["FOOT","TENNIS","NATATION","JUDO"] },
-        { name:"CONTAINERS", words:["BOL","VERRE","ASSIETTE","BOUTEILLE"] }
-      ]
-    }
-  ],
+const ITEMS = [
+  // 1–6 : 6–7 ans (catégories très concrètes, vocabulaire fréquent)
+  { id:"A01", age:"6–7", groups:[
+    {name:"Animaux", words:["CHAT","CHIEN","LION","OISEAU"]},
+    {name:"Fruits", words:["POMME","POIRE","BANANE","ORANGE"]},
+    {name:"Couleurs", words:["ROUGE","BLEU","VERT","JAUNE"]},
+    {name:"Vêtements", words:["PULL","CHAUSSETTE","CHAUSSURE","MANTEAU"]},
+  ]},
+  { id:"A02", age:"6–7", groups:[
+    {name:"École", words:["CAHIER","CRAYON","GOMME","RÈGLE"]},
+    {name:"Corps", words:["MAIN","PIED","NEZ","BOUCHE"]},
+    {name:"Transports", words:["BUS","TRAIN","AVION","BATEAU"]},
+    {name:"Maisons", words:["PORTE","FENÊTRE","TOIT","MUR"]},
+  ]},
+  { id:"A03", age:"6–7", groups:[
+    {name:"À manger (salé)", words:["PAIN","RIZ","PÂTES","FROMAGE"]},
+    {name:"Jouets", words:["POUPÉE","BALLON","VOITURE","PUZZLE"]},
+    {name:"Saison", words:["ÉTÉ","HIVER","PRINTEMPS","AUTOMNE"]},
+    {name:"Actions", words:["COURIR","SAUTER","LIRE","DORMIR"]},
+  ]},
+  { id:"A04", age:"6–7", groups:[
+    {name:"Animaux de ferme", words:["VACHE","MOUTON","POULE","CHEVAL"]},
+    {name:"Instruments", words:["TAMBOUR","FLÛTE","PIANO","GUITARE"]},
+    {name:"Formes", words:["ROND","CARRÉ","TRIANGLE","ÉTOILE"]},
+    {name:"Boissons", words:["EAU","LAIT","JUS","THÉ"]},
+  ]},
+  { id:"A05", age:"6–7", groups:[
+    {name:"Pièces", words:["SALON","CUISINE","CHAMBRE","SALLE DE BAIN"]},
+    {name:"Nature", words:["ARBRE","FLEUR","HERBE","FEUILLE"]},
+    {name:"Objets", words:["TABLE","CHAISE","LIVRE","LAMPE"]},
+    {name:"Émotions", words:["JOIE","PEUR","COLÈRE","TRISTESSE"]},
+  ]},
+  { id:"A06", age:"6–7", groups:[
+    {name:"Animaux de mer", words:["POISSON","BALEINE","REQUIN","CRABE"]},
+    {name:"Cuisine", words:["ASSIETTE","CUILLÈRE","FOURCHETTE","VERRE"]},
+    {name:"Jeux", words:["CACHE-CACHE","MARELLE","CARTES","DOMINOS"]},
+    {name:"Temps", words:["MATIN","MIDI","SOIR","NUIT"]},
+  ]},
 
-  "10-11": [
-    {
-      id:"10-11-A",
-      groups: [
-        { name:"SYNONYMES DE RAPIDE", words:["VIF","AGILE","PROMPT","EXPRESS"] },
-        { name:"VENTS", words:["MISTRAL","SIROCCO","ALIZÉ","TRAMONTANE"] },
-        { name:"TRANSPORTS", words:["BUS","TRAIN","AVION","BATEAU"] },
-        { name:"PARTIES DU CORPS", words:["TÊTE","MAIN","PIED","DOS"] }
-      ]
-    }
-  ],
+  // 7–9 : 8–9 ans (catégories un peu plus abstraites, propriétés, champs lexicaux)
+  { id:"B07", age:"8–9", groups:[
+    {name:"Animaux qui volent", words:["AIGLE","PIGEON","PAPILLON","CHAUVE-SOURIS"]},
+    {name:"Métaux", words:["OR","ARGENT","FER","CUIVRE"]},
+    {name:"Sports", words:["FOOT","TENNIS","NATATION","JUDO"]},
+    {name:"Matériel scolaire", words:["TROUSSE","STYLO","COLLE","FEUTRE"]},
+  ]},
+  { id:"B08", age:"8–9", groups:[
+    {name:"Opposés (qualités)", words:["GRAND","PETIT","CHAUD","FROID"]},
+    {name:"Meubles", words:["ARMOIRE","COMMODE","CANAPÉ","BUREAU"]},
+    {name:"Planètes", words:["MARS","VENUS","SATURNE","JUPITER"]},
+    {name:"Outils", words:["MARTEAU","SCIE","PINCE","TOURNEVIS"]},
+  ]},
+  { id:"B09", age:"8–9", groups:[
+    {name:"Synonymes de rapide", words:["VIF","AGILE","PROMPT","EXPRESS"]},
+    {name:"Vent (noms)", words:["MISTRAL","ALIZÉ","SIROCCO","TRAMONTANE"]},
+    {name:"Parties du corps", words:["DOS","TÊTE","MAIN","PIED"]},
+    {name:"Transports", words:["BUS","TRAIN","AVION","BATEAU"]},
+  ]},
+  { id:"B10", age:"8–9", groups:[
+    {name:"Contenants", words:["BOL","VERRE","BOUTEILLE","BOÎTE"]},
+    {name:"Animaux domestiques", words:["CHAT","CHIEN","LAPIN","HAMSTER"]},
+    {name:"Lecture", words:["ROMAN","BD","CONTE","POÈME"]},
+    {name:"Lieux", words:["ÉCOLE","PARC","MAGASIN","MAISON"]},
+  ]},
+  { id:"B11", age:"8–9", groups:[
+    {name:"Dans le ciel", words:["SOLEIL","LUNE","ÉTOILE","NUAGE"]},
+    {name:"Sons / musique", words:["NOTE","RÉFRain","RYTHME","MÉLODIE"]},
+    {name:"Animaux d’Afrique", words:["ZÈBRE","GIRAFE","ÉLÉPHANT","LION"]},
+    {name:"Fêtes", words:["NOËL","PÂQUES","ANNIVERSAIRE","CARNAVAL"]},
+  ]},
 
-  "12-13": [],
-  "14-16": []
-};
+  // 10–11 ans (catégories relationnelles, fonctions, classes)
+  { id:"C12", age:"10–11", groups:[
+    {name:"Moyens de communication", words:["TÉLÉPHONE","MAIL","LETTRE","MESSAGE"]},
+    {name:"Sciences", words:["ATOMe","ÉNERGIE","GRAVITÉ","CELLULE"]},
+    {name:"Au restaurant", words:["MENU","SERVEUR","ADDITION","TABLE"]},
+    {name:"Géométrie", words:["ANGLE","CERCLE","CÔTÉ","SOMMET"]},
+  ]},
+  { id:"C13", age:"10–11", groups:[
+    {name:"États de l’eau", words:["GLACE","VAPEUR","LIQUIDE","NEIGE"]},
+    {name:"Électricité", words:["PRISE","CÂBLE","LAMPE","BOUTON"]},
+    {name:"Carte", words:["PAYS","CAPITALE","FRONTIÈRE","CONTINENT"]},
+    {name:"Temps (mesure)", words:["SECONDE","MINUTE","HEURE","JOUR"]},
+  ]},
+  { id:"C14", age:"10–11", groups:[
+    {name:"Synonymes de dire", words:["PARLER","RACONTER","DÉCLARER","ÉNONCER"]},
+    {name:"Bois", words:["CHÊNE","PIN","HÊTRE","SAPIN"]},
+    {name:"Cuisine (actions)", words:["COUPER","MÉLANGER","CUIRE","GOÛTER"]},
+    {name:"Écriture", words:["TITRE","PHRASE","MOT","PARAGRAPHE"]},
+  ]},
+  { id:"C15", age:"10–11", groups:[
+    {name:"Symboles maths", words:["PLUS","+","MOINS","-"]},
+    {name:"Ponctuation", words:["POINT",".","VIRGULE",","]},
+    {name:"Sens", words:["VUE","OUÏE","GOÛT","TOUCHER"]},
+    {name:"Astronomie", words:["COMÈTE","ASTÉROÏDE","GALAXIE","ORBITe"]},
+  ]},
 
-/** =========================
- *  ÉTAT & MESURES
- *  ========================= */
-const state = {
-  running:false,
-  mode:"train",
-  level:"6-7",
-  currentItem:null,
-  seriesNumber:0,
+  // 12–13 ans (catégories plus abstraites : causes/effets, genres, figures simples)
+  { id:"D16", age:"12–13", groups:[
+    {name:"Figures de style (base)", words:["MÉTAPHORE","COMPARAISON","HYPERBOLE","PERSONNIFICATION"]},
+    {name:"Régimes politiques (mots)", words:["DÉMOCRATIE","MONARCHIE","DICTATURE","RÉPUBLIQUE"]},
+    {name:"Économie (mots)", words:["PRIX","OFFRE","DEMANDE","MARCHÉ"]},
+    {name:"Biologie", words:["ADN","ENZYME","ORGANe","TISSU"]},
+  ]},
+  { id:"D17", age:"12–13", groups:[
+    {name:"Logique (connecteurs)", words:["DONC","MAIS","CAR","POURTANT"]},
+    {name:"Météo", words:["ORAGE","BROUILLARD","TEMPÊTE","SÉCHERESSE"]},
+    {name:"Histoire (périodes)", words:["ANTIQUITÉ","MOYEN ÂGE","RENAISSANCE","MODERNE"]},
+    {name:"Émotions nuancées", words:["FIERTÉ","HONTe","ENVIE","SOULAGEMENT"]},
+  ]},
+  { id:"D18", age:"12–13", groups:[
+    {name:"Types de textes", words:["ARGUMENTATION","DESCRIPTION","NARRATION","EXPLICATION"]},
+    {name:"Chimie", words:["ACIDE","BASE","RÉACTION","MOLÉCULE"]},
+    {name:"Justice", words:["JUGE","AVOCAT","PREUVE","VERDICT"]},
+    {name:"Informatique", words:["CLAVIER","ÉCRAN","FICHIER","DOSSIER"]},
+  ]},
 
-  // tuiles
-  tiles:[],       // {word, groupIdx, locked:boolean}
-  selected:new Set(), // indices
-  foundGroups:[], // indices groupes trouvés
+  // 14–16 ans (catégories plus “WISC-like” : relation conceptuelle, méta-catégories)
+  { id:"E19", age:"14–16", groups:[
+    {name:"Biais cognitifs (mots)", words:["ANCRAGE","CONFIRMATION","DISPONIBILITÉ","CADRAGE"]},
+    {name:"Méthode scientifique", words:["HYPOTHÈSE","VARIABLE","PROTOCOLE","RÉSULTAT"]},
+    {name:"Rhétorique", words:["ETHOS","PATHOS","LOGOS","DIALECTIQUE"]},
+    {name:"Statistique", words:["MOYENNE","MÉDIANE","ÉCART-TYPE","CORRÉLATION"]},
+  ]},
+  { id:"E20", age:"14–16", groups:[
+    {name:"Philosophie (notions)", words:["LIBERTÉ","VÉRITÉ","JUSTICE","CONSCIENCE"]},
+    {name:"Linguistique", words:["SYNTAXE","SÉMANTIQUE","PRAGMATIQUE","MORPHOLOGIE"]},
+    {name:"Économie (macro)", words:["INFLATION","CROISSANCE","CHÔMAGE","TAUX"]},
+    {name:"Droit (termes)", words:["NORME","JURISPRUDENCE","CONTRAT","RESPONSABILITÉ"]},
+  ]},
+  { id:"E21", age:"14–16", groups:[
+    {name:"Épistémologie", words:["THÉORIE","MODÈLE","PREUVE","RÉFUTATION"]},
+    {name:"Logique formelle", words:["PRÉMISSE","CONCLUSION","VALIDITÉ","COHÉRENCE"]},
+    {name:"Psychométrie", words:["NORME","ÉTALONNAGE","FIABILITÉ","VALIDITÉ"]},
+    {name:"Neuro (mots)", words:["SYNAPSE","CORTEX","NEURONE","MYÉLINE"]},
+  ]},
 
-  // mesures
-  t0:null,
-  firstActionAt:null,
-  clicks:0,
-  submits:0,
-  errors:0,
+  // 22–30 : “difficiles” (ambiguïtés contrôlées : un mot pourrait “presque” aller ailleurs)
+  { id:"F22", age:"14–16", groups:[
+    {name:"Mesures", words:["VITESSE","DISTANCE","TEMPS","MASSE"]},
+    {name:"Unités", words:["MÈTRE","SECONDE","KILO","LITRE"]},
+    {name:"Énergie", words:["CINÉTIQUE","POTENTIELLE","THERMIQUE","ÉLECTRIQUE"]},
+    {name:"Graphiques", words:["AXE","COURBE","POINT","LÉGENDE"]},
+  ]},
+  { id:"F23", age:"14–16", groups:[
+    {name:"Argumentation", words:["THÈSE","ANTITHÈSE","EXEMPLE","CONCLUSION"]},
+    {name:"Texte", words:["PARAGRAPHE","ALINÉA","TITRE","CHAPITRE"]},
+    {name:"Musique", words:["HARMONIE","TIMBRE","RHYTHME","TEMPO"]},
+    {name:"Arts", words:["PERSPECTIVE","COMPOSITION","CONTRASTE","LUMIÈRE"]},
+  ]},
+  { id:"F24", age:"14–16", groups:[
+    {name:"Décision", words:["CHOIX","ARBITRAGE","CRITÈRE","PRIORITÉ"]},
+    {name:"Probabilité", words:["HASARD","RISQUE","CHANCE","INCERTITUDE"]},
+    {name:"Mémoire", words:["ENCODAGE","STOCKAGE","RAPPEL","INDICE"]},
+    {name:"Attention", words:["FOCUS","DISTRACTION","VIGILANCE","SÉLECTION"]},
+  ]},
+  { id:"F25", age:"14–16", groups:[
+    {name:"Éthique", words:["DEVOIR","VALEUR","DILEMME","CONSÉQUENCE"]},
+    {name:"Sociologie", words:["NORME","RÔLE","STATUT","GROUPE"]},
+    {name:"École", words:["COURS","EXAMEN","NOTe","PROGRAMME"]},
+    {name:"Travail", words:["MISSION","OBJECTIF","DÉLAI","RÉSULTAT"]},
+  ]},
+  { id:"F26", age:"14–16", groups:[
+    {name:"Langage", words:["SENS","RÉFÉRENT","SIGNIFIANT","SIGNIFIÉ"]},
+    {name:"Communication", words:["CANAL","CODE","BRUIT","MESSAGE"]},
+    {name:"Informatique", words:["RÉSEAU","SERVEUR","CLIENT","PROTOCOLE"]},
+    {name:"Sécurité", words:["CHIFFREMENT","CLÉ","AUTHENTIFICATION","PARE-FEU"]},
+  ]},
+  { id:"F27", age:"14–16", groups:[
+    {name:"Émotion / cognition", words:["PEUR","BIAIS","DOUTE","CONFIANCE"]},
+    {name:"Temps psychologique", words:["ATTENTE","URGENCE","RUMINER","PROJECTION"]},
+    {name:"Motivation", words:["BUT","ENVIE","EFFORT","PERSÉVÉRANCE"]},
+    {name:"Apprentissage", words:["RÉPÉTITION","FEEDBACK","ERREUR","MAÎTRISE"]},
+  ]},
+  { id:"F28", age:"14–16", groups:[
+    {name:"Évaluation", words:["SCORE","BARÈME","CRITÈRE","NIVEAU"]},
+    {name:"Mesure", words:["PRÉCISION","ERREUR","BIAIS","VARIANCE"]},
+    {name:"Expérimentation", words:["TÉMOIN","CONDITION","RANDOMISATION","MANIPULATION"]},
+    {name:"Résultats", words:["SIGNIFICATIF","EFFET","INTERVALLE","PUISSANCE"]},
+  ]},
+  { id:"F29", age:"14–16", groups:[
+    {name:"Raisonnement", words:["ANALOGIE","INFÉRENCE","DÉDUCTION","INDUCTION"]},
+    {name:"Métacognition", words:["STRATÉGIE","SURVEILLANCE","AJUSTEMENT","CONTRÔLE"]},
+    {name:"Langue", words:["POLYSÉMIE","CONTEXTE","IMPLICITE","AMBIGUÏTÉ"]},
+    {name:"Cognition sociale", words:["INTENTION","CROYANCE","EMPATHIE","ATTRIBUTION"]},
+  ]},
+  { id:"F30", age:"14–16", groups:[
+    {name:"Complexité", words:["SYSTÈME","ÉMERGENCE","FEEDBACK","NON-LINÉARITÉ"]},
+    {name:"Organisation", words:["RÈGLE","PROCESSUS","GOUVERNANCE","COORDINATION"]},
+    {name:"Décision", words:["HEURISTIQUE","OPTIMUM","CONTRAINTE","COMPROMIS"]},
+    {name:"Étalonnage", words:["NORME","PERCENTILE","ÉCHELLE","STANDARDISATION"]},
+  ]},
+];
 
-  // logs (multi séries)
-  sessionLogs: [] // objets
-};
-
+/* =========================================================
+   UTILITAIRES
+   ========================================================= */
 const $ = (id)=>document.getElementById(id);
 
-const ui = {
-  grid:$("grid"),
-  msg:$("msg"),
-  foundList:$("foundList"),
-  foundCount:$("foundCount"),
-  errCount:$("errCount"),
-  seriesIdx:$("seriesIdx"),
-  answerHint:$("answerHint"),
+function nowMs(){ return performance.now(); }
 
-  // metrics
-  mInitiation:$("mInitiation"),
-  mTotal:$("mTotal"),
-  mClicks:$("mClicks"),
-  mSubmits:$("mSubmits"),
-
-  // inputs
-  subjectId:$("subjectId"),
-  age:$("age"),
-  mode:$("mode"),
-  level:$("level"),
-
-  // buttons
-  startBtn:$("startBtn"),
-  newBtn:$("newBtn"),
-  resetBtn:$("resetBtn"),
-  validateBtn:$("validateBtn"),
-  clearSelBtn:$("clearSelBtn"),
-  revealBtn:$("revealBtn"),
-  exportBtn:$("exportBtn"),
-
-  log:$("log"),
-};
-
-function nowMs(){ return Date.now(); }
-function fmtMs(ms){
-  if(ms==null) return "—";
-  const s = Math.max(0, Math.round(ms/100)/10); // 0.1s
-  return `${s.toFixed(1)} s`;
-}
 function shuffle(arr){
   const a = arr.slice();
   for(let i=a.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
-    [a[i], a[j]] = [a[j], a[i]];
+    [a[i],a[j]]=[a[j],a[i]];
   }
   return a;
 }
-function setMsg(text, kind=""){
-  ui.msg.textContent = text;
-  ui.msg.className = "msg " + (kind||"");
+function sameSet(a,b){
+  if(a.length!==b.length) return false;
+  const sa=[...a].sort().join("|");
+  const sb=[...b].sort().join("|");
+  return sa===sb;
 }
-function updateButtons(){
-  const selCount = state.selected.size;
-  ui.validateBtn.disabled = !state.running || selCount !== 4;
-  ui.clearSelBtn.disabled = !state.running || selCount === 0;
-  ui.resetBtn.disabled = !state.running;
-  ui.newBtn.disabled = !state.running;
-  ui.revealBtn.disabled = !state.running || state.mode !== "train";
+function safeId(){
+  return "S_" + Math.random().toString(16).slice(2,8).toUpperCase();
 }
-function updateMetrics(){
-  ui.mClicks.textContent = String(state.clicks);
-  ui.mSubmits.textContent = String(state.submits);
-  ui.errCount.textContent = String(state.errors);
-
-  const initiation = (state.firstActionAt && state.t0) ? (state.firstActionAt - state.t0) : null;
-  ui.mInitiation.textContent = fmtMs(initiation);
-
-  const total = (state.t0) ? (nowMs() - state.t0) : null;
-  ui.mTotal.textContent = state.running ? fmtMs(total) : "—";
+function fmtMs(ms){
+  if(ms==null) return "—";
+  const s = Math.max(0, ms)/1000;
+  if(s<10) return s.toFixed(2)+"s";
+  if(s<60) return s.toFixed(1)+"s";
+  const m = Math.floor(s/60);
+  const r = s - m*60;
+  return m+"m "+r.toFixed(0)+"s";
 }
-function tick(){
-  if(state.running){
-    updateMetrics();
-    requestAnimationFrame(tick);
-  }
-}
-
-/** =========================
- *  CHARGEMENT D'UN ITEM
- *  ========================= */
-function pickItem(level){
-  const bank = ITEM_BANK[level] || [];
-  if(bank.length === 0) return null;
-  // on évite de répéter tout de suite si possible
-  const shuffled = shuffle(bank);
-  return shuffled[0];
-}
-
-function buildTilesFromItem(item){
-  const tiles = [];
-  item.groups.forEach((g, gi)=>{
-    g.words.forEach(w=>{
-      tiles.push({ word:w, groupIdx:gi, locked:false });
-    });
-  });
-  return shuffle(tiles);
-}
-
-function resetSeriesMeasures(){
-  state.t0 = nowMs();
-  state.firstActionAt = null;
-  state.clicks = 0;
-  state.submits = 0;
-  state.errors = 0;
-  state.selected = new Set();
-  state.foundGroups = [];
-  ui.foundList.innerHTML = "";
-  ui.foundCount.textContent = "0";
-  ui.answerHint.textContent = "—";
-  setMsg("Sélectionnez 4 mots puis validez.", "");
-}
-
-function startSeries(){
-  const level = ui.level.value;
-  const mode = ui.mode.value;
-
-  state.mode = mode;
-  state.level = level;
-
-  const item = pickItem(level);
-  if(!item){
-    setMsg("Aucun item disponible pour ce niveau (banque vide).", "warn");
-    return;
-  }
-
-  state.currentItem = item;
-  state.seriesNumber += 1;
-  state.running = true;
-
-  state.tiles = buildTilesFromItem(item);
-  resetSeriesMeasures();
-
-  ui.seriesIdx.textContent = `${state.seriesNumber} (${item.id})`;
-  render();
-  updateButtons();
-  updateMetrics();
-  tick();
-}
-
-function resetSeriesOnly(){
-  if(!state.currentItem) return;
-  state.tiles = buildTilesFromItem(state.currentItem);
-  resetSeriesMeasures();
-  render();
-  updateButtons();
-}
-
-/** =========================
- *  RENDU
- *  ========================= */
-function render(){
-  ui.grid.innerHTML = "";
-  state.tiles.forEach((t, idx)=>{
-    const btn = document.createElement("button");
-    btn.className = "tile";
-    btn.type = "button";
-    btn.textContent = t.word;
-
-    const selected = state.selected.has(idx);
-    if(selected) btn.classList.add("selected");
-    if(t.locked) btn.classList.add("locked");
-
-    btn.disabled = !state.running || t.locked;
-    btn.addEventListener("click", ()=>onTileClick(idx));
-    ui.grid.appendChild(btn);
-  });
-
-  ui.foundCount.textContent = String(state.foundGroups.length);
-}
-
-function onTileClick(idx){
-  if(!state.running) return;
-  const tile = state.tiles[idx];
-  if(tile.locked) return;
-
-  state.clicks += 1;
-  if(!state.firstActionAt) state.firstActionAt = nowMs();
-
-  if(state.selected.has(idx)){
-    state.selected.delete(idx);
-  }else{
-    if(state.selected.size >= 4){
-      // si on clique un 5e, on ignore (ou on pourrait remplacer le plus ancien)
-      setMsg("Déjà 4 mots sélectionnés. Validez ou effacez.", "warn");
-      updateButtons();
-      return;
-    }
-    state.selected.add(idx);
-  }
-  setMsg("…", "");
-  render();
-  updateButtons();
-}
-
-/** =========================
- *  VALIDATION
- *  ========================= */
-function selectedWords(){
-  return [...state.selected].map(i=>state.tiles[i].word);
-}
-function selectedGroupIdx(){
-  const idxs = [...state.selected];
-  const g = state.tiles[idxs[0]].groupIdx;
-  return idxs.every(i=>state.tiles[i].groupIdx === g) ? g : null;
-}
-function lockGroup(groupIdx){
-  state.tiles.forEach(t=>{
-    if(t.groupIdx === groupIdx) t.locked = true;
-  });
-}
-function addFoundCard(groupIdx){
-  const g = state.currentItem.groups[groupIdx];
-  const div = document.createElement("div");
-  div.className = "catCard";
-  div.innerHTML = `
-    <div class="catName">✓ ${g.name}</div>
-    <div class="catWords">${g.words.join(" · ")}</div>
-  `;
-  ui.foundList.appendChild(div);
-}
-function finishSeries(){
-  const tEnd = nowMs();
-  const total = tEnd - state.t0;
-  const initiation = state.firstActionAt ? (state.firstActionAt - state.t0) : null;
-
-  // log
-  const subj = ui.subjectId.value.trim();
-  const age = ui.age.value.trim();
-  const logEntry = {
-    timestampISO: new Date().toISOString(),
-    subjectId: subj || "",
-    age: age || "",
-    mode: state.mode,
-    level: state.level,
-    itemId: state.currentItem?.id || "",
-    seriesNumber: state.seriesNumber,
-    initiationMs: initiation ?? "",
-    totalMs: total,
-    clicks: state.clicks,
-    submits: state.submits,
-    errors: state.errors
-  };
-  state.sessionLogs.push(logEntry);
-  renderLog();
-
-  state.running = false;
-  updateButtons();
-  updateMetrics();
-  setMsg("Série terminée ✅ (log ajouté)", "good");
-}
-
-function renderLog(){
-  if(state.sessionLogs.length === 0){
-    ui.log.textContent = "";
-    return;
-  }
-  const lines = state.sessionLogs.slice().reverse().map(e=>{
-    const ini = (e.initiationMs === "" ? "—" : fmtMs(Number(e.initiationMs)));
-    const tot = fmtMs(Number(e.totalMs));
-    return `[${e.timestampISO}] sujet=${e.subjectId||"—"} age=${e.age||"—"} mode=${e.mode} niveau=${e.level} item=${e.itemId} | init=${ini} total=${tot} clics=${e.clicks} val=${e.submits} err=${e.errors}`;
-  });
-  ui.log.textContent = lines.join("\n");
-}
-
-function validate(){
-  if(!state.running) return;
-  if(state.selected.size !== 4) return;
-
-  state.submits += 1;
-
-  const grp = selectedGroupIdx();
-  if(grp == null){
-    state.errors += 1;
-    if(state.mode === "train"){
-      setMsg("✗ Mauvaise combinaison", "bad");
-    }else{
-      setMsg("✗", "bad");
-    }
-    state.selected.clear();
-    render();
-    updateButtons();
-    return;
-  }
-
-  // déjà trouvé ?
-  if(state.foundGroups.includes(grp)){
-    setMsg("Déjà trouvé.", "warn");
-    state.selected.clear();
-    render();
-    updateButtons();
-    return;
-  }
-
-  // bon !
-  state.foundGroups.push(grp);
-  lockGroup(grp);
-  addFoundCard(grp);
-
-  if(state.mode === "train"){
-    setMsg(`✓ Catégorie trouvée : ${state.currentItem.groups[grp].name}`, "good");
-  }else{
-    setMsg("✓", "good");
-  }
-
-  state.selected.clear();
-  render();
-  updateButtons();
-
-  if(state.foundGroups.length === 4){
-    // en mode entraînement, afficher aussi les catégories
-    if(state.mode === "train"){
-      ui.answerHint.textContent = state.currentItem.groups
-        .map(g=>`${g.name} : ${g.words.join(", ")}`).join(" — ");
-    }
-    finishSeries();
-  }
-}
-
-/** =========================
- *  CORRECTION (train)
- *  ========================= */
-function reveal(){
-  if(!state.running) return;
-  if(state.mode !== "train") return;
-  ui.answerHint.textContent = state.currentItem.groups
-    .map(g=>`${g.name} : ${g.words.join(", ")}`).join(" — ");
-  setMsg("Correction affichée (panneau de droite).", "warn");
-}
-
-/** =========================
- *  EXPORT CSV
- *  ========================= */
-function toCSV(rows){
-  const headers = [
-    "timestampISO","subjectId","age","mode","level","itemId","seriesNumber",
-    "initiationMs","totalMs","clicks","submits","errors"
-  ];
-  const esc = (v)=>{
-    const s = String(v ?? "");
-    if(/[",\n]/.test(s)) return `"${s.replace(/"/g,'""')}"`;
-    return s;
-  };
-  const out = [headers.join(",")];
-  for(const r of rows){
-    out.push(headers.map(h=>esc(r[h])).join(","));
-  }
-  return out.join("\n");
-}
-function exportCSV(){
-  const csv = toCSV(state.sessionLogs);
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
+function downloadJson(obj, filename){
+  const blob = new Blob([JSON.stringify(obj,null,2)], {type:"application/json"});
   const a = document.createElement("a");
-  a.href = url;
-  a.download = "connections_logs.csv";
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 250);
 }
 
-/** =========================
- *  UX: démarrage / validation
- *  ========================= */
-ui.startBtn.onclick = ()=>{
-  // si mode test, exiger un ID sujet
-  if(ui.mode.value === "test"){
-    const subj = ui.subjectId.value.trim();
-    if(!subj){
-      setMsg("En mode test, merci de renseigner l’ID du sujet.", "warn");
-      ui.subjectId.focus();
-      return;
+/* =========================================================
+   ÉTAT + PERSISTENCE (localStorage)
+   ========================================================= */
+const STORE_KEY = "connections_fr_battery_v1";
+
+function defaultState(){
+  return {
+    subjectId: "",
+    mode: "training", // "training" | "test"
+    itemIndex: 0,     // 0..ITEMS.length-1
+    itemsDone: 0,
+    // données brutes (session)
+    trials: [] // un objet par item administré
+  };
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return defaultState();
+    const st = JSON.parse(raw);
+    return {...defaultState(), ...st};
+  }catch(e){
+    return defaultState();
+  }
+}
+function saveState(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+/* =========================================================
+   RUNTIME (item courant)
+   ========================================================= */
+let state = loadState();
+
+let runtime = {
+  started: false,
+  itemStartMs: null,
+  firstSelectMs: null,
+  selectionCount: 0,
+  validationCount: 0,
+  errorCount: 0,
+  failGateCount: 0, // erreurs cumulées vers le seuil “3”
+  foundGroups: [],  // array of group indices solved
+  foundWords: new Set(),
+  selected: [],
+  tileOrder: [], // array of words shuffled
+  log: [],
+  finished: false
+};
+
+function resetRuntimeForItem(){
+  runtime = {
+    started: true,
+    itemStartMs: nowMs(),
+    firstSelectMs: null,
+    selectionCount: 0,
+    validationCount: 0,
+    errorCount: 0,
+    failGateCount: 0,
+    foundGroups: [],
+    foundWords: new Set(),
+    selected: [],
+    tileOrder: [],
+    log: [],
+    finished: false
+  };
+}
+
+/* =========================================================
+   UI HELPERS
+   ========================================================= */
+function setMessage(text, kind=""){
+  const box = $("messageBox");
+  box.className = "message" + (kind ? " "+kind : "");
+  box.textContent = text;
+}
+function addLog(text){
+  runtime.log.unshift({t: new Date().toISOString(), text});
+  renderLog();
+}
+function renderLog(){
+  const el = $("log");
+  el.innerHTML = runtime.log.map(x=>{
+    const time = x.t.split("T")[1].replace("Z","");
+    return `<div class="logItem"><span class="muted">${time}</span> — ${escapeHtml(x.text)}</div>`;
+  }).join("");
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, (c)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+function currentItem(){
+  return ITEMS[Math.min(Math.max(state.itemIndex,0), ITEMS.length-1)];
+}
+
+/* =========================================================
+   CONSTRUIRE LE PLATEAU
+   ========================================================= */
+function buildTileOrder(){
+  const item = currentItem();
+  const words = item.groups.flatMap(g=>g.words);
+  runtime.tileOrder = shuffle(words);
+}
+
+function render(){
+  const item = currentItem();
+  $("itemLabel").textContent = item.id;
+  $("ageLabel").textContent = item.age;
+  $("modeLabel").textContent = (state.mode==="training") ? "Entraînement" : "Test";
+  $("kpiItemsDone").textContent = state.itemsDone;
+  $("kpiItemIndex").textContent = (state.itemIndex+1) + "/" + ITEMS.length;
+
+  // KPIs item
+  $("kpiSelections").textContent = runtime.selectionCount;
+  $("kpiValidations").textContent = runtime.validationCount;
+  $("kpiErrors").textContent = runtime.errorCount;
+  $("kpiFound").textContent = runtime.foundGroups.length + "/4";
+
+  const initiation = runtime.firstSelectMs ? (runtime.firstSelectMs - runtime.itemStartMs) : null;
+  $("kpiInitiation").textContent = fmtMs(initiation);
+
+  const completion = runtime.finished ? (nowMs() - runtime.itemStartMs) : null;
+  $("kpiCompletion").textContent = runtime.finished ? fmtMs(completion) : "—";
+
+  // solved area
+  const solvedArea = $("solvedArea");
+  const showNames = (state.mode==="training") || runtime.finished;
+  solvedArea.innerHTML = runtime.foundGroups.map(idx=>{
+    const g = item.groups[idx];
+    const title = showNames ? g.name : "Catégorie trouvée";
+    const words = g.words.map(w=>`<span class="tileMini">${escapeHtml(w)}</span>`).join("");
+    return `
+      <div class="solvedRow">
+        <span class="solvedBadge">✓ ${escapeHtml(title)}</span>
+        <div class="tileList">${words}</div>
+      </div>
+    `;
+  }).join("");
+
+  // tiles
+  const tiles = $("tiles");
+  tiles.innerHTML = runtime.tileOrder.map(word=>{
+    const isDone = runtime.foundWords.has(word);
+    const isSel = runtime.selected.includes(word);
+    const cls = ["tile"];
+    if(isDone) cls.push("done");
+    if(isSel) cls.push("selected");
+    return `<div class="${cls.join(" ")}" data-word="${escapeHtml(word)}">${escapeHtml(word)}</div>`;
+  }).join("");
+
+  // buttons
+  $("validateBtn").disabled = runtime.selected.length!==4 || runtime.finished;
+  $("validateBtn").textContent = `Valider (${runtime.selected.length}/4)`;
+  $("clearSelBtn").disabled = runtime.selected.length===0 || runtime.finished;
+  $("shuffleBtn").disabled = runtime.finished;
+  $("giveUpBtn").disabled = runtime.finished;
+
+  $("prevItemBtn").disabled = state.itemIndex<=0;
+  $("nextItemBtn").disabled = state.itemIndex>=ITEMS.length-1;
+
+  $("statusLabel").textContent = runtime.finished ? "terminé" : "en cours";
+  $("hintLine").textContent = runtime.finished
+    ? "Item terminé. Tu peux passer au suivant."
+    : "Sélectionne 4 mots, puis Valider.";
+}
+
+function wireTileClicks(){
+  $("tiles").addEventListener("click", (e)=>{
+    const t = e.target.closest(".tile");
+    if(!t) return;
+    const w = t.getAttribute("data-word");
+    if(runtime.finished) return;
+    if(runtime.foundWords.has(w)) return;
+
+    if(!runtime.firstSelectMs){
+      runtime.firstSelectMs = nowMs();
+      addLog("Début sélection (initiation mesurée).");
+    }
+
+    const idx = runtime.selected.indexOf(w);
+    if(idx>=0){
+      runtime.selected.splice(idx,1);
+      addLog(`Désélection : ${w}`);
+    }else{
+      if(runtime.selected.length>=4){
+        // tactile: petit feedback
+        setMessage("Tu as déjà 4 mots. Annule un mot avant.", "bad");
+        return;
+      }
+      runtime.selected.push(w);
+      runtime.selectionCount++;
+      addLog(`Sélection : ${w}`);
+    }
+    render();
+  });
+}
+
+/* =========================================================
+   VALIDATION + RÈGLE DES 3 ERREURS
+   ========================================================= */
+function validateSelection(){
+  const item = currentItem();
+  if(runtime.selected.length!==4 || runtime.finished) return;
+
+  runtime.validationCount++;
+  addLog("Validation : " + runtime.selected.join(", "));
+
+  // check match against any unsolved group
+  let matchedIndex = -1;
+  for(let i=0;i<item.groups.length;i++){
+    if(runtime.foundGroups.includes(i)) continue;
+    if(sameSet(runtime.selected, item.groups[i].words)){
+      matchedIndex = i;
+      break;
     }
   }
-  startSeries();
-  ui.newBtn.disabled = false;
-  ui.resetBtn.disabled = false;
-};
 
-ui.newBtn.onclick = ()=>{
-  if(ui.mode.value === "test"){
-    const subj = ui.subjectId.value.trim();
-    if(!subj){
-      setMsg("En mode test, merci de renseigner l’ID du sujet.", "warn");
-      ui.subjectId.focus();
-      return;
+  if(matchedIndex>=0){
+    // success
+    const g = item.groups[matchedIndex];
+    runtime.foundGroups.push(matchedIndex);
+    g.words.forEach(w=>runtime.foundWords.add(w));
+    const title = (state.mode==="training") ? g.name : "Catégorie trouvée";
+    setMessage("✓ " + title, "good");
+    addLog(`Groupe trouvé (${g.name})`);
+
+    // keep selection visible? -> we "freeze" found tiles in solved area,
+    // and clear selection so the board is ready for next group.
+    runtime.selected = [];
+
+    // finished item ?
+    if(runtime.foundGroups.length===4){
+      runtime.finished = true;
+      addLog("Item terminé.");
+      setMessage("Bravo ! Item terminé.", "good");
+      persistTrial("completed");
+      state.itemsDone = Math.max(state.itemsDone, countCompletedItems());
+      saveState();
     }
+    render();
+    return;
   }
-  startSeries();
-};
 
-ui.resetBtn.onclick = ()=>{
-  resetSeriesOnly();
-};
-
-ui.validateBtn.onclick = validate;
-
-ui.clearSelBtn.onclick = ()=>{
-  state.selected.clear();
+  // wrong
+  runtime.errorCount++;
+  runtime.failGateCount++;
+  setMessage("✗ Mauvaise combinaison", "bad");
+  addLog("Erreur (mauvaise combinaison).");
+  runtime.selected = [];
   render();
-  updateButtons();
-  setMsg("Sélection effacée.", "");
-};
 
-ui.revealBtn.onclick = reveal;
+  if(runtime.failGateCount>=3){
+    openModal();
+  }
+}
 
-ui.exportBtn.onclick = exportCSV;
+function openModal(){
+  $("modalBackdrop").style.display = "flex";
+  $("modalTitle").textContent = "Seuil atteint";
+  $("modalText").textContent = "Vous avez atteint 3 validations erronées sur cet item. Continuer (tests aux limites) ou arrêter ?";
+}
+function closeModal(){
+  $("modalBackdrop").style.display = "none";
+}
 
-ui.mode.onchange = ()=>{
-  // en test : bouton correction désactivé, feedback minimal
-  updateButtons();
-};
+$("modalContinueBtn").addEventListener("click", ()=>{
+  closeModal();
+  runtime.failGateCount = 0; // on repart pour un nouveau “bloc” de 3
+  addLog("Continue après seuil (tests aux limites).");
+  setMessage("Continue : nouvel essai.", "");
+});
+$("modalStopBtn").addEventListener("click", ()=>{
+  closeModal();
+  addLog("Arrêt demandé après seuil.");
+  setMessage("Arrêt de l’item.", "bad");
+  runtime.finished = true;
+  persistTrial("stopped_after_threshold");
+  saveState();
+  render();
+});
 
-document.addEventListener("keydown", (e)=>{
-  if(e.key === "Enter"){
-    if(!ui.validateBtn.disabled) validate();
+/* =========================================================
+   EXPORT / TRIALS
+   ========================================================= */
+function countCompletedItems(){
+  // items terminés = trials avec status "completed"
+  return state.trials.filter(t=>t.status==="completed").length;
+}
+
+function persistTrial(status){
+  const item = currentItem();
+
+  const endMs = nowMs();
+  const initiation = runtime.firstSelectMs ? (runtime.firstSelectMs - runtime.itemStartMs) : null;
+  const duration = endMs - runtime.itemStartMs;
+
+  const trial = {
+    timestamp: new Date().toISOString(),
+    subjectId: state.subjectId,
+    mode: state.mode,
+    itemId: item.id,
+    ageBand: item.age,
+    status, // completed | abandoned | stopped_after_threshold
+    initiation_ms: initiation,
+    duration_ms: duration,
+    selection_count: runtime.selectionCount,
+    validation_count: runtime.validationCount,
+    error_count: runtime.errorCount,
+    found_groups: runtime.foundGroups.map(i=>item.groups[i].name),
+    // en mode test on peut décider de ne PAS exporter les noms ; ici on exporte tout pour la recherche
+    groups: item.groups.map(g=>({name:g.name, words:g.words})),
+    // trace simplifiée
+    log: runtime.log.slice().reverse()
+  };
+
+  // remplace si même itemId+timestamp? on append (session longitudinale)
+  state.trials.push(trial);
+  saveState();
+}
+
+/* =========================================================
+   COMMANDES
+   ========================================================= */
+function startOrResume(){
+  if(!state.subjectId || !state.subjectId.trim()){
+    state.subjectId = safeId();
+    $("subjectId").value = state.subjectId;
+  }else{
+    state.subjectId = state.subjectId.trim();
+  }
+  saveState();
+
+  resetRuntimeForItem();
+  buildTileOrder();
+  setMessage("Item prêt. Sélectionne 4 mots.", "");
+  addLog(`Démarrage item ${currentItem().id} (mode=${state.mode}).`);
+  render();
+}
+
+function newSession(){
+  state = defaultState();
+  state.subjectId = safeId();
+  $("subjectId").value = state.subjectId;
+  saveState();
+  resetRuntimeForItem();
+  buildTileOrder();
+  setMessage("Nouvelle session créée.", "");
+  addLog("Nouvelle session.");
+  render();
+}
+
+function goToItem(index){
+  state.itemIndex = Math.min(Math.max(index,0), ITEMS.length-1);
+  saveState();
+  startOrResume();
+}
+
+function abandonItem(){
+  if(runtime.finished) return;
+  runtime.finished = true;
+  setMessage("Item abandonné.", "bad");
+  addLog("Abandon item.");
+  persistTrial("abandoned");
+  saveState();
+  render();
+}
+
+function clearSelection(){
+  if(runtime.finished) return;
+  runtime.selected = [];
+  setMessage("Sélection annulée.", "");
+  addLog("Sélection annulée.");
+  render();
+}
+
+function shuffleBoard(){
+  if(runtime.finished) return;
+  runtime.tileOrder = shuffle(runtime.tileOrder);
+  setMessage("Damier mélangé.", "");
+  addLog("Mélange du damier.");
+  render();
+}
+
+/* =========================================================
+   BINDINGS
+   ========================================================= */
+$("startBtn").addEventListener("click", ()=>{
+  state.subjectId = $("subjectId").value || state.subjectId;
+  startOrResume();
+});
+
+$("newSessionBtn").addEventListener("click", ()=>{
+  newSession();
+});
+
+$("toggleModeBtn").addEventListener("click", ()=>{
+  state.mode = (state.mode==="training") ? "test" : "training";
+  saveState();
+  setMessage("Mode : " + (state.mode==="training" ? "Entraînement" : "Test"), "");
+  render();
+});
+
+$("validateBtn").addEventListener("click", validateSelection);
+$("clearSelBtn").addEventListener("click", clearSelection);
+$("shuffleBtn").addEventListener("click", shuffleBoard);
+$("giveUpBtn").addEventListener("click", abandonItem);
+
+$("prevItemBtn").addEventListener("click", ()=>goToItem(state.itemIndex-1));
+$("nextItemBtn").addEventListener("click", ()=>goToItem(state.itemIndex+1));
+
+$("exportBtn").addEventListener("click", ()=>{
+  const payload = {
+    exported_at: new Date().toISOString(),
+    subjectId: state.subjectId,
+    mode: state.mode,
+    itemIndex: state.itemIndex,
+    itemsDone: countCompletedItems(),
+    trials: state.trials
+  };
+  downloadJson(payload, `connections_battery_${state.subjectId || "session"}.json`);
+});
+
+$("clearDataBtn").addEventListener("click", ()=>{
+  if(confirm("Effacer toutes les données locales (trials) ?")){
+    localStorage.removeItem(STORE_KEY);
+    state = defaultState();
+    $("subjectId").value = "";
+    resetRuntimeForItem();
+    buildTileOrder();
+    setMessage("Données locales effacées.", "");
+    render();
   }
 });
 
-/** init */
-setMsg("Prêt. Cliquez sur Démarrer.", "");
-updateButtons();
-renderLog();
+/* =========================================================
+   INIT
+   ========================================================= */
+function init(){
+  $("subjectId").value = state.subjectId || "";
+  resetRuntimeForItem();
+  buildTileOrder();
+  wireTileClicks();
+  setMessage("Prêt. Clique “Démarrer / Reprendre”.", "");
+  render();
+}
+init();
 </script>
 </body>
 </html>
