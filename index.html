@@ -2,941 +2,1002 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Similitudes — Catégories (6–16 ans)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catégories — 4x4 (mode tablette)</title>
   <style>
     :root{
-      --bg:#0b0f17;
-      --panel:#111827;
-      --panel2:#0f172a;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --line:#243044;
-      --good:#22c55e;
-      --bad:#ef4444;
-      --warn:#f59e0b;
+      --bg:#0b1220;
+      --card:#111a2e;
+      --card2:#0f172a;
+      --text:#e8eefc;
+      --muted:#a9b7da;
       --accent:#60a5fa;
-      --tile:#0b1220;
-      --tileHover:#111c33;
-      --tileSel:#1f3b7a;
-      --tileTried:#1f2937;
-      --tileSolved:#14532d;
+      --good:#34d399;
+      --bad:#fb7185;
+      --warn:#fbbf24;
+      --tile:#1a2540;
+      --tile2:#22305a;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius: 18px;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 30% 0%, #182444 0%, var(--bg) 55%);
+      background: radial-gradient(1200px 700px at 20% 0%, #13224a 0%, var(--bg) 55%) fixed;
       color:var(--text);
     }
     .wrap{
-      max-width: 980px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 18px 14px 28px;
+      padding: 18px 14px 40px;
     }
     header{
       display:flex;
       gap:12px;
+      align-items:stretch;
       flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      padding: 10px 12px;
-      background: rgba(17,24,39,.72);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
+      margin-bottom:14px;
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.08);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
+      border-radius: var(--radius);
+      padding: 12px 14px;
     }
-    .title{
-      display:flex; flex-direction:column; gap:2px;
-      min-width: 220px;
-    }
-    .title h1{
-      margin:0;
+    .panel h1{
       font-size: 18px;
+      margin:0 0 6px 0;
       letter-spacing:.2px;
-      font-weight: 700;
     }
-    .title .sub{
-      margin:0;
-      font-size: 12.5px;
+    .row{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .row label{
+      font-size: 13px;
       color: var(--muted);
-    }
-    .controls{
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      gap:8px;
       align-items:center;
-      justify-content:flex-end;
+      background: rgba(255,255,255,.04);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.07);
     }
-    .field{
-      display:flex; flex-direction:column; gap:4px;
+    input[type="text"], select{
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      outline:none;
       min-width: 140px;
     }
-    .field label{
-      font-size: 11px;
-      color: var(--muted);
-    }
-    input[type="text"]{
-      height: 40px;
-      padding: 0 10px;
-      border-radius: 12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(15,23,42,.8);
-      color: var(--text);
-      outline:none;
-      font-size: 14px;
-    }
-    .toggle{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(15,23,42,.8);
-      height: 40px;
-      user-select:none;
-    }
-    .toggle input{transform: scale(1.2)}
+    input[type="checkbox"]{ transform: scale(1.2); }
     .btn{
-      height: 40px;
-      padding: 0 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(96,165,250,.18), rgba(96,165,250,.08));
+      background: rgba(96,165,250,.18);
+      border: 1px solid rgba(96,165,250,.45);
       color: var(--text);
-      font-weight: 700;
-      letter-spacing:.2px;
+      padding: 10px 12px;
+      border-radius: 14px;
       cursor:pointer;
+      font-weight: 650;
+      letter-spacing:.2px;
+      user-select:none;
       touch-action: manipulation;
     }
+    .btn:active{ transform: translateY(1px); }
     .btn.secondary{
-      background: rgba(15,23,42,.8);
-      font-weight: 650;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
     }
     .btn.danger{
-      background: linear-gradient(180deg, rgba(239,68,68,.20), rgba(239,68,68,.10));
+      background: rgba(251,113,133,.16);
+      border: 1px solid rgba(251,113,133,.40);
     }
-    .btn:active{transform: translateY(1px)}
-    .main{
-      margin-top: 14px;
+
+    main{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 14px;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
     }
-    @media (max-width: 860px){
-      .main{grid-template-columns: 1fr}
+    @media (max-width: 900px){
+      main{ grid-template-columns: 1fr; }
     }
-    .card{
-      background: rgba(17,24,39,.72);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+
+    .gridCard{ padding: 14px; }
+    .statsCard{ padding: 14px; }
+
+    .topline{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-bottom:10px;
     }
-    .cardHead{
-      padding: 12px 12px 10px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .meta{
-      display:flex; flex-direction:column; gap:4px;
-    }
-    .meta .line{
+    .kpi{
+      display:flex; gap:10px; flex-wrap:wrap;
       font-size: 13px;
       color: var(--muted);
     }
-    .meta strong{color:var(--text)}
-    .scoreRow{
-      display:flex;
-      flex-direction:column;
-      align-items:flex-end;
-      gap:4px;
-      min-width: 180px;
-    }
-    .pillRow{
-      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
-    }
+    .kpi b{ color: var(--text); font-weight: 750; }
     .pill{
-      font-size: 12px;
-      padding: 6px 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
       border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(15,23,42,.8);
-      color: var(--muted);
-      white-space:nowrap;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
     }
-    .pill.good{border-color: rgba(34,197,94,.35); color:#bbf7d0}
-    .pill.bad{border-color: rgba(239,68,68,.35); color:#fecaca}
-    .pill.warn{border-color: rgba(245,158,11,.40); color:#fde68a}
-    .gridArea{
-      padding: 12px;
+    .pill .dot{
+      width:10px; height:10px; border-radius: 50%;
+      background: rgba(255,255,255,.25);
     }
+    .pill.good .dot{ background: var(--good); }
+    .pill.bad .dot{ background: var(--bad); }
+    .pill.warn .dot{ background: var(--warn); }
+
     .grid{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      user-select:none;
-      touch-action: manipulation;
+      margin-top: 10px;
     }
     .tile{
-      position:relative;
-      min-height: 74px;
-      padding: 12px 10px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.65));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: .2px;
-      cursor:pointer;
-      transition: transform .06s ease, background .12s ease, border-color .12s ease;
-    }
-    .tile:active{transform: scale(.99)}
-    .tile:hover{background: linear-gradient(180deg, rgba(17,28,51,.95), rgba(17,28,51,.70))}
-    .tile.selected{
-      border-color: rgba(96,165,250,.65);
-      background: linear-gradient(180deg, rgba(31,59,122,.95), rgba(31,59,122,.65));
-    }
-    .tile.tried::after{
-      content:"";
-      position:absolute; inset:0;
-      border-radius: 16px;
-      background: rgba(148,163,184,.18);
-      pointer-events:none;
-    }
-    .tile.solved{
-      border-color: rgba(34,197,94,.60);
-      background: linear-gradient(180deg, rgba(20,83,45,.92), rgba(20,83,45,.62));
-    }
-    .tile .tiny{
-      position:absolute;
-      top:8px; right:10px;
-      font-size: 11px;
-      color: rgba(255,255,255,.55);
-      font-weight: 700;
-    }
-    .actions{
-      display:flex;
-      gap:10px;
-      padding: 0 12px 12px;
-    }
-    .actions .btn{flex:1; height: 48px; border-radius: 16px; font-size: 15px;}
-    .help{
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .msg{
-      padding: 12px 12px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(15,23,42,.72);
-      color: var(--muted);
-      line-height:1.35;
-      font-size: 13px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 16px 10px;
       min-height: 64px;
       display:flex;
       align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-size: clamp(16px, 2.4vw, 20px);
+      font-weight: 800;
+      letter-spacing:.2px;
+      user-select:none;
+      cursor:pointer;
+      touch-action: manipulation;
+      position:relative;
+      transition: transform .06s ease, border-color .15s ease, background .15s ease, opacity .15s ease;
     }
-    .msg strong{color:var(--text)}
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+    .tile:active{ transform: scale(.99); }
+    .tile.selected{
+      outline: 3px solid rgba(96,165,250,.85);
+      border-color: rgba(96,165,250,.85);
+      background: linear-gradient(180deg, rgba(96,165,250,.18), rgba(96,165,250,.10));
     }
-    .cat{
-      padding: 10px 10px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(15,23,42,.60);
+    /* "Utilisé" = grisé MAIS toujours cliquable */
+    .tile.used{
+      opacity: .55;
+      filter: grayscale(.3);
+    }
+
+    .hint{
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+    .bigMsg{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      font-size: 14px;
+      color: var(--text);
+      min-height: 44px;
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .bigMsg .tag{
+      font-weight: 850;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+    .bigMsg .tag.good{ color: #052e1b; background: rgba(52,211,153,.85); border-color: rgba(52,211,153,.2); }
+    .bigMsg .tag.bad{ color: #3b0a12; background: rgba(251,113,133,.9); border-color: rgba(251,113,133,.2); }
+    .list{
+      margin-top: 10px;
+      display:flex;
+      flex-direction:column;
       gap:10px;
     }
-    .cat .name{
-      font-weight: 800;
-      font-size: 13.5px;
-      color: var(--text);
+    .catLine{
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
     }
-    .cat .status{
+    .catLine .left{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight: 800;
+    }
+    .badge .n{
+      width: 26px; height: 26px; border-radius: 10px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(96,165,250,.22);
+      border: 1px solid rgba(96,165,250,.35);
+      font-weight: 900;
+    }
+    .ok{
+      color: var(--good);
+      font-weight: 900;
+    }
+    .muted{ color: var(--muted); }
+
+    dialog{
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      background: rgba(16,24,44,.96);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      padding: 0;
+      max-width: 560px;
+      width: calc(100% - 28px);
+    }
+    dialog::backdrop{ background: rgba(0,0,0,.55); }
+    .dlg{
+      padding: 16px 16px 14px;
+    }
+    .dlg h2{ margin:0 0 8px 0; font-size: 18px; }
+    .dlg p{ margin:0 0 12px 0; color: var(--muted); line-height:1.35; }
+    .dlg .actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      padding-top: 8px;
+    }
+    .small{
       font-size: 12px;
       color: var(--muted);
     }
-    .cat.solved{
-      border-color: rgba(34,197,94,.35);
-      background: rgba(20,83,45,.30);
-    }
-    .cat.solved .status{color:#bbf7d0}
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.08);
-      margin: 6px 0;
-    }
-    .modalBack{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
-    }
-    .modal{
-      width: min(520px, 100%);
-      background: rgba(17,24,39,.92);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .modal h2{margin:0; font-size: 16px; padding: 14px 14px 8px;}
-    .modal p{margin:0; padding: 0 14px 14px; color: var(--muted); line-height:1.4; font-size: 13px;}
-    .modal .row{
-      display:flex; gap:10px; padding: 12px 14px 14px;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-    .modal .row .btn{flex:1; height: 46px;}
-    .footerNote{
-      margin-top: 12px;
-      color: rgba(255,255,255,.45);
-      font-size: 11.5px;
-      text-align:center;
-    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
+
     <header>
-      <div class="title">
-        <h1>Similitudes — Catégories</h1>
-        <div class="sub">16 mots (4×4). Trouver 4 catégories (4 mots chacune). Tablette/tactile OK.</div>
+      <div class="panel" style="flex:1 1 520px;">
+        <h1>Jeu de catégorisation — 4×4 (mode tablette)</h1>
+        <div class="row">
+          <label>ID sujet
+            <input id="subjectId" type="text" placeholder="ex. S-001" />
+          </label>
+          <label>Mode entraînement
+            <input id="trainingMode" type="checkbox" />
+          </label>
+          <button class="btn secondary" id="btnRestartLevel">Recommencer le niveau</button>
+          <button class="btn danger" id="btnResetAll">Réinitialiser session</button>
+        </div>
+        <div class="hint">
+          Règle : sélectionnez <b>4 mots</b> puis validez. Chaque niveau = <b>4 validations max</b>.
+          On passe automatiquement au niveau suivant (juste ou faux). <br/>
+          Score : +1 par catégorie correctement détectée (nouvelle). Badge : 1 badge si les 4 catégories sont trouvées.
+        </div>
       </div>
 
-      <div class="controls">
-        <div class="field">
-          <label for="subjectId">ID sujet</label>
-          <input id="subjectId" type="text" placeholder="ex: HGL-001" />
+      <div class="panel" style="flex:1 1 320px;">
+        <h1>Export données</h1>
+        <div class="row">
+          <button class="btn" id="btnExportCsv">Télécharger CSV</button>
+          <button class="btn secondary" id="btnCopyJson">Copier JSON</button>
         </div>
-
-        <label class="toggle" title="En entraînement : feedback plus explicite. En test : plus neutre.">
-          <input id="trainingMode" type="checkbox" />
-          <span>Entraînement</span>
-        </label>
-
-        <button id="btnDownload" class="btn secondary" title="Télécharger les données brutes (CSV)">Télécharger CSV</button>
-        <button id="btnReset" class="btn danger" title="Réinitialiser la session">Reset</button>
+        <div class="small" style="margin-top:10px;">
+          Les données restent sur l’appareil (pas d’envoi serveur). Le CSV contient les mesures par niveau.
+        </div>
       </div>
     </header>
 
-    <div class="main">
-      <section class="card">
-        <div class="cardHead">
-          <div class="meta">
-            <div class="line"><strong id="levelLabel">Niveau</strong> <span id="levelSpan"></span></div>
-            <div class="line">Validations grille : <strong id="attemptsSpan">0</strong>/4 · Catégories trouvées : <strong id="foundSpan">0</strong>/4</div>
+    <main>
+      <section class="panel gridCard">
+        <div class="topline">
+          <div class="kpi">
+            <span class="pill"><span class="dot"></span> Niveau <b id="lvlLabel">1</b>/<span id="lvlTotal">30</span></span>
+            <span class="pill"><span class="dot"></span> Validations <b id="triesLabel">0</b>/4</span>
+            <span class="pill"><span class="dot"></span> Catégories trouvées <b id="foundLabel">0</b>/4</span>
           </div>
-          <div class="scoreRow">
-            <div class="pillRow">
-              <div class="pill good">Points: <strong id="pointsSpan">0</strong></div>
-              <div class="pill warn">Badges: <strong id="badgesSpan">0</strong></div>
-              <div class="pill">Échecs suite: <strong id="failsSpan">0</strong>/3</div>
-            </div>
-            <div class="pillRow">
-              <div class="pill">Init: <strong id="initSpan">—</strong></div>
-              <div class="pill">Temps: <strong id="timeSpan">—</strong></div>
-            </div>
+          <div class="kpi">
+            <span class="pill good"><span class="dot"></span> Score <b id="scoreLabel">0</b></span>
+            <span class="pill warn"><span class="dot"></span> Badges <b id="badgeLabel">0</b></span>
+            <span class="pill bad"><span class="dot"></span> Niveaux échoués <b id="failLabel">0</b>/3</span>
           </div>
         </div>
 
-        <div class="gridArea">
-          <div id="grid" class="grid"></div>
+        <div class="bigMsg" id="messageBox">
+          <span class="tag">Info</span>
+          <span id="messageText">Sélectionnez 4 mots, puis validez.</span>
         </div>
 
-        <div class="actions">
-          <button id="btnValidate" class="btn">Valider (4 mots)</button>
-          <button id="btnNext" class="btn secondary">Suivant</button>
+        <div class="row" style="margin-top:10px;">
+          <button class="btn" id="btnValidate">Valider les 4 mots</button>
+          <button class="btn secondary" id="btnClear">Effacer sélection</button>
+          <span class="muted" id="selCount">0/4</span>
         </div>
+
+        <div class="grid" id="grid"></div>
       </section>
 
-      <aside class="card">
-        <div class="cardHead">
-          <div class="meta">
-            <div class="line"><strong>Catégories de la grille</strong></div>
-            <div class="line">En test, elles restent cachées (sauf après réussite / en entraînement).</div>
-          </div>
+      <aside class="panel statsCard">
+        <h1>Résultats du niveau</h1>
+        <div class="list" id="catsList"></div>
+
+        <div class="hint" style="margin-top:12px;">
+          <b>Mesures</b> (automatiques) : délai d’initiation, temps total, nb de validations, erreurs, etc.
         </div>
-
-        <div class="help">
-          <div id="message" class="msg">
-            Sélectionne <strong>exactement 4 mots</strong>, puis <strong>Valider</strong>.
+        <div class="list" style="margin-top:10px;">
+          <div class="catLine">
+            <div class="left"><span class="badge"><span class="n">⏱</span> Délai d’initiation</span></div>
+            <div><b id="initDelay">—</b></div>
           </div>
-
-          <div class="divider"></div>
-
-          <div id="catList" class="list"></div>
-
-          <div class="divider"></div>
-
-          <div class="msg">
-            Astuce tactile : vise les cases, pas le texte 😉
+          <div class="catLine">
+            <div class="left"><span class="badge"><span class="n">⌛</span> Temps total niveau</span></div>
+            <div><b id="totalTime">—</b></div>
+          </div>
+          <div class="catLine">
+            <div class="left"><span class="badge"><span class="n">🧩</span> Validations</span></div>
+            <div><b id="valCount">0</b></div>
+          </div>
+          <div class="catLine">
+            <div class="left"><span class="badge"><span class="n">⚠</span> Erreurs</span></div>
+            <div><b id="errCount">0</b></div>
           </div>
         </div>
       </aside>
-    </div>
+    </main>
 
-    <div class="footerNote">
-      Données stockées en mémoire (dans le navigateur). Pense à “Télécharger CSV” à la fin.
-    </div>
-  </div>
-
-  <!-- Modal 3 échecs -->
-  <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h2>3 grilles sans badge</h2>
-      <p>
-        Le sujet n’a pas trouvé les 4 catégories sur 3 grilles consécutives.
-        Voulez-vous <strong>continuer</strong> (test aux limites) ou <strong>arrêter</strong> ?
-      </p>
-      <div class="row">
-        <button id="btnStop" class="btn danger">Arrêter</button>
-        <button id="btnContinue" class="btn">Continuer</button>
+    <dialog id="dlgStop">
+      <div class="dlg">
+        <h2>Stop (3 niveaux échoués)</h2>
+        <p>
+          Vous avez atteint <b>3 niveaux échoués</b>. Voulez-vous continuer (tests aux limites) ou arrêter la session ?
+        </p>
+        <div class="actions">
+          <button class="btn secondary" id="btnStopNow">Arrêter</button>
+          <button class="btn" id="btnContinue">Continuer</button>
+        </div>
       </div>
-    </div>
+    </dialog>
+
+    <dialog id="dlgEnd">
+      <div class="dlg">
+        <h2>Session terminée</h2>
+        <p id="endSummary"></p>
+        <div class="actions">
+          <button class="btn" id="btnCloseEnd">Fermer</button>
+        </div>
+      </div>
+    </dialog>
+
   </div>
 
 <script>
-/**
- * BANQUE DE 30 CATÉGORIES (croissance grossière de complexité).
- * Chaque catégorie fournit exactement 4 mots "corrects" (pour construire une grille 4x4 propre).
- * Les niveaux utilisent une fenêtre glissante : niveau 1 = cat[0..3], niveau 2 = cat[1..4], etc.
- * => 27 niveaux au total.
- */
-const CATEGORY_BANK = [
-  // 6–7 ans (très concret / fréquent)
-  {name:"Animaux de la ferme", words:["vache","poule","mouton","cheval"]},
-  {name:"Fruits",            words:["pomme","banane","poire","orange"]},
-  {name:"Couleurs",          words:["rouge","bleu","jaune","vert"]},
-  {name:"Vêtements",         words:["pull","pantalon","chaussure","manteau"]},
-  {name:"Meubles",           words:["table","chaise","lit","armoire"]},
-  {name:"Véhicules",         words:["voiture","bus","train","vélo"]},
-  {name:"Parties du corps",  words:["main","pied","nez","oreille"]},
-  {name:"À l’école",         words:["crayon","cahier","gomme","règle"]},
+/* =========================
+   30 NIVEAUX (exemples)
+   - Chaque niveau : 4 catégories, 4 mots chacune
+   - Ordre supposé croissant (à affiner avec vous)
+   ========================= */
+const LEVELS = [
+  // 1-6 : 6-7 ans (très simple)
+  {cats:[
+    {name:"Animaux", words:["chat","chien","lapin","poisson"]},
+    {name:"Fruits", words:["pomme","banane","poire","orange"]},
+    {name:"Couleurs", words:["rouge","bleu","vert","jaune"]},
+    {name:"Vêtements", words:["pull","pantalon","chaussette","manteau"]}
+  ]},
+  {cats:[
+    {name:"École", words:["crayon","gomme","cahier","règle"]},
+    {name:"Cuisine", words:["assiette","cuillère","fourchette","verre"]},
+    {name:"Transports", words:["bus","train","vélo","voiture"]},
+    {name:"Corps", words:["main","pied","nez","oreille"]}
+  ]},
+  {cats:[
+    {name:"Météo", words:["pluie","neige","vent","soleil"]},
+    {name:"Boissons", words:["eau","lait","jus","thé"]},
+    {name:"Meubles", words:["chaise","table","lit","armoire"]},
+    {name:"Jeux", words:["puzzle","ballon","lego","cartes"]}
+  ]},
+  {cats:[
+    {name:"Lieux", words:["école","maison","parc","magasin"]},
+    {name:"Insectes", words:["fourmi","abeille","mouche","papillon"]},
+    {name:"Formes", words:["rond","carré","triangle","rectangle"]},
+    {name:"Saisons", words:["été","hiver","printemps","automne"]}
+  ]},
+  {cats:[
+    {name:"Petit-déjeuner", words:["pain","beurre","céréales","confiture"]},
+    {name:"Jardin", words:["fleur","herbe","arbre","feuille"]},
+    {name:"Bruits", words:["cloche","sirène","tambour","sifflet"]},
+    {name:"Sports", words:["foot","tennis","natation","judo"]}
+  ]},
+  {cats:[
+    {name:"Contraires (adjectifs)", words:["grand","petit","chaud","froid"]},
+    {name:"Animaux de ferme", words:["vache","poule","cochon","mouton"]},
+    {name:"Outils simples", words:["marteau","scie","clou","vis"]},
+    {name:"Goûts", words:["sucré","salé","amer","acide"]}
+  ]},
 
-  // 8–9 ans (catégories plus “scolaires” / regroupements usuels)
-  {name:"Outils",            words:["marteau","scie","tournevis","pince"]},
-  {name:"Instruments de musique", words:["piano","guitare","violon","flûte"]},
-  {name:"Sports",            words:["football","tennis","natation","basket"]},
-  {name:"Légumes",           words:["carotte","tomate","courgette","poireau"]},
-  {name:"Animaux sauvages",  words:["lion","tigre","zèbre","girafe"]},
-  {name:"Saisons",           words:["printemps","été","automne","hiver"]},
-  {name:"Formes",            words:["cercle","carré","triangle","rectangle"]},
-  {name:"Pièces de la maison",words:["cuisine","salon","chambre","salle de bain"]},
+  // 7-12 : 8-10 ans (un cran)
+  {cats:[
+    {name:"Verbes d’action", words:["courir","sauter","lire","écrire"]},
+    {name:"Planètes", words:["mars","vénus","terre","jupiter"]},
+    {name:"Instruments", words:["piano","guitare","flûte","violon"]},
+    {name:"Émotions", words:["joie","peur","colère","tristesse"]}
+  ]},
+  {cats:[
+    {name:"Matériaux", words:["bois","métal","verre","plastique"]},
+    {name:"Unités de temps", words:["seconde","minute","heure","jour"]},
+    {name:"Mer", words:["vague","marée","algue","coquillage"]},
+    {name:"Montagne", words:["sommet","piste","neige","vallée"]}
+  ]},
+  {cats:[
+    {name:"Synonymes de parler", words:["dire","raconter","annoncer","expliquer"]},
+    {name:"Énergie", words:["soleil","vent","eau","pétrole"]},
+    {name:"Lecture", words:["roman","conte","poème","bande dessinée"]},
+    {name:"Mesures", words:["mètre","litre","kilo","degré"]}
+  ]},
+  {cats:[
+    {name:"Sports avec ballon", words:["basket","hand","rugby","volley"]},
+    {name:"Oiseaux", words:["aigle","pigeon","moineau","hibou"]},
+    {name:"Rivières", words:["source","courant","berge","pont"]},
+    {name:"Maison (pièces)", words:["cuisine","salon","chambre","salle de bain"]}
+  ]},
+  {cats:[
+    {name:"Mots de politesse", words:["bonjour","merci","pardon","s’il vous plaît"]},
+    {name:"Outils numériques", words:["clavier","souris","écran","imprimante"]},
+    {name:"Géométrie", words:["angle","segment","cercle","symétrie"]},
+    {name:"Cuisine (cuisson)", words:["bouillir","griller","frire","cuire"]}
+  ]},
+  {cats:[
+    {name:"Écosystème forêt", words:["tronc","mousse","renard","champignon"]},
+    {name:"État de la matière", words:["solide","liquide","gaz","vapeur"]},
+    {name:"Langage", words:["syllabe","phrase","verbe","nom"]},
+    {name:"Armes médiévales", words:["épée","arc","lance","bouclier"]}
+  ]},
 
-  // 10–11 ans (catégories plus abstraites / critères)
-  {name:"Synonymes de “content”", words:["heureux","joyeux","ravi","satisfait"]},
-  {name:"Moyens de communication",words:["email","téléphone","lettre","message"]},
-  {name:"Mesures (unités)",   words:["mètre","litre","kilo","seconde"]},
-  {name:"Métiers de soin",    words:["médecin","infirmier","dentiste","kiné"]},
-  {name:"Verbes de mouvement",words:["courir","marcher","sauter","ramper"]},
-  {name:"Émotions",           words:["peur","colère","joie","tristesse"]},
-  {name:"Matériaux",          words:["bois","métal","verre","plastique"]},
-  {name:"Nature (éléments)",  words:["rivière","montagne","forêt","plage"]},
+  // 13-20 : 11-13 ans (abstractions)
+  {cats:[
+    {name:"Causes/conséquences", words:["donc","car","puisque","ainsi"]},
+    {name:"Valeurs", words:["courage","justice","respect","honnêteté"]},
+    {name:"Électricité", words:["ampoule","pile","courant","circuit"]},
+    {name:"Grammaire (fonctions)", words:["sujet","COD","COI","complément"]}
+  ]},
+  {cats:[
+    {name:"Économie", words:["prix","budget","épargne","dépense"]},
+    {name:"Statut juridique", words:["loi","contrat","tribunal","droit"]},
+    {name:"Probabilité", words:["hasard","chance","risque","aléatoire"]},
+    {name:"Astronomie", words:["orbite","étoile","galaxie","comète"]}
+  ]},
+  {cats:[
+    {name:"Métaphores courantes", words:["cœur","racine","lumière","chemin"]},
+    {name:"Santé", words:["symptôme","diagnostic","traitement","prévention"]},
+    {name:"Cartographie", words:["échelle","légende","boussole","latitude"]},
+    {name:"Musique (théorie)", words:["tempo","rythme","accord","mélodie"]}
+  ]},
+  {cats:[
+    {name:"Rhétorique", words:["argument","exemple","conclusion","objection"]},
+    {name:"Sciences (démarche)", words:["hypothèse","mesure","résultat","variable"]},
+    {name:"Énergie (transfo)", words:["chimique","mécanique","thermique","électrique"]},
+    {name:"Biologie", words:["cellule","organe","tissu","espèce"]}
+  ]},
+  {cats:[
+    {name:"Temps historique", words:["siècle","époque","antiquité","révolution"]},
+    {name:"Géopolitique", words:["frontière","allié","conflit","traité"]},
+    {name:"Logique", words:["si","alors","sinon","nécessaire"]},
+    {name:"Maths (proportions)", words:["ratio","pourcentage","fraction","échelle"]}
+  ]},
+  {cats:[
+    {name:"Psychologie", words:["attention","mémoire","émotion","motivation"]},
+    {name:"Littérature", words:["narrateur","intrigue","personnage","style"]},
+    {name:"Informatique", words:["algorithme","donnée","réseau","programme"]},
+    {name:"Chimie", words:["atome","molécule","réaction","solution"]}
+  ]},
+  {cats:[
+    {name:"Société", words:["norme","culture","tradition","identité"]},
+    {name:"Éthique", words:["devoir","bien","mal","responsabilité"]},
+    {name:"Philo (connaissance)", words:["preuve","opinion","vérité","doute"]},
+    {name:"Communication", words:["message","canal","contexte","intention"]}
+  ]},
+  {cats:[
+    {name:"Statistiques", words:["moyenne","médiane","écart","fréquence"]},
+    {name:"Narration (temps)", words:["flashback","ellipse","chronologie","point de vue"]},
+    {name:"Écologie", words:["biodiversité","pollution","climat","ressource"]},
+    {name:"Conflit", words:["tension","enjeu","négociation","compromis"]}
+  ]},
 
-  // 12–13 ans (relations sémantiques, fonctions)
-  {name:"Ce qui coupe",       words:["couteau","ciseaux","lame","scalpel"]},
-  {name:"Ce qui éclaire",     words:["lampe","bougie","phare","lanterne"]},
-  {name:"Ce qui protège",     words:["casque","gants","bouclier","masque"]},
-  {name:"Genres littéraires", words:["roman","poème","théâtre","conte"]},
-  {name:"Raisonnement (opérations)",words:["déduire","comparer","classer","inférer"]},
-  {name:"Connecteurs logiques",words:["donc","car","mais","pourtant"]},
-
-  // 14–16 ans (catégories plus “méta”, proches du vocabulaire scolaire avancé)
-  {name:"Figures de style",   words:["métaphore","hyperbole","ironie","oxymore"]},
-  {name:"Registres de langue",words:["familier","courant","soutenu","argotique"]},
-  {name:"Types d’arguments",  words:["exemple","analogie","autorité","conséquence"]},
-  {name:"Notions de temps",   words:["durée","fréquence","simultanéité","chronologie"]},
-  {name:"Biais cognitifs",    words:["confirmation","ancrage","disponibilité","sunk cost"]},
-  {name:"Épistémologie (mots-clés)",words:["hypothèse","preuve","théorie","falsification"]}
+  // 21-30 : 14-16 ans (plus complexe)
+  {cats:[
+    {name:"Épistémologie", words:["modèle","théorie","falsifiable","paradigme"]},
+    {name:"Droit du travail", words:["contrat","licenciement","prud’hommes","préavis"]},
+    {name:"Économie (macro)", words:["inflation","croissance","déficit","chômage"]},
+    {name:"Logique formelle", words:["implication","contradiction","axiome","validité"]}
+  ]},
+  {cats:[
+    {name:"Sémantique", words:["sens","référence","ambiguïté","connotation"]},
+    {name:"Méthodo recherche", words:["échantillon","normes","validité","fiabilité"]},
+    {name:"Neuropsy", words:["inhibition","flexibilité","planification","mémoire de travail"]},
+    {name:"Argumentation", words:["thèse","antithèse","synthèse","dialectique"]}
+  ]},
+  {cats:[
+    {name:"Histoire (processus)", words:["colonisation","industrialisation","sécularisation","globalisation"]},
+    {name:"Politique", words:["souveraineté","légitimité","institution","citoyenneté"]},
+    {name:"Économie (micro)", words:["incitation","coût marginal","offre","demande"]},
+    {name:"Modélisation", words:["variable latente","paramètre","prédiction","ajustement"]}
+  ]},
+  {cats:[
+    {name:"Cognition sociale", words:["théorie de l’esprit","empathie","biais","attribution"]},
+    {name:"Évaluation", words:["étalonnage","score brut","percentile","z-score"]},
+    {name:"Texte (structure)", words:["implicite","présupposé","cohérence","inférence"]},
+    {name:"Raisonnement", words:["analogie","abstraction","catégorisation","généralisation"]}
+  ]},
+  {cats:[
+    {name:"Philo morale", words:["utilitarisme","déontologie","vertu","conséquentialisme"]},
+    {name:"Science data", words:["feature","overfitting","validation croisée","distribution"]},
+    {name:"Langage", words:["métaphore","métonymie","polysémie","pragmatique"]},
+    {name:"Systèmes", words:["rétroaction","émergence","complexité","stabilité"]}
+  ]},
+  {cats:[
+    {name:"Psychométrie", words:["alpha","item","variance","standardisation"]},
+    {name:"Mémoire", words:["encodage","consolidation","récupération","interférence"]},
+    {name:"Décision", words:["heuristique","aversion","bénéfice","probabilité"]},
+    {name:"Philo (esprit)", words:["intentionnalité","conscience","qualia","représentation"]}
+  ]},
+  {cats:[
+    {name:"Économie comportementale", words:["nudge","biais d’ancrage","prospect","rationalité limitée"]},
+    {name:"Éthique (soin)", words:["vulnérabilité","sollicitude","relation","dépendance"]},
+    {name:"Méthodes stats", words:["régression","corrélation","p-valeur","intervalle"]},
+    {name:"Sociologie", words:["habitus","champ","capital","reproduction"]}
+  ]},
+  {cats:[
+    {name:"Histoire (sources)", words:["archive","témoignage","historiographie","critique"]},
+    {name:"Logique (preuves)", words:["induction","déduction","abduction","contre-exemple"]},
+    {name:"Neurosciences", words:["synapse","plasticité","réseau","myéline"]},
+    {name:"Analyse texte", words:["thème","motif","registre","énonciation"]}
+  ]},
+  {cats:[
+    {name:"Théorie des systèmes", words:["entropie","bifurcation","attracteur","non-linéaire"]},
+    {name:"Philo (science)", words:["réalisme","instrumentalisme","cumulativité","rupture"]},
+    {name:"Mesure", words:["invariance","étalonnage","biais","erreur"]},
+    {name:"Cognition", words:["chunking","schéma","charge cognitive","automatisation"]}
+  ]},
+  {cats:[
+    {name:"Meta-cognition", words:["monitoring","contrôle","confiance","calibration"]},
+    {name:"Validité", words:["contenu","construct","critère","écologique"]},
+    {name:"Raisonnement avancé", words:["transfert","isomorphisme","contraste","hiérarchie"]},
+    {name:"Éthique (données)", words:["consentement","anonymisation","finalité","proportionnalité"]}
+  ]},
 ];
 
-// Construire les niveaux (fenêtre glissante de 4 catégories)
-const LEVELS = [];
-for(let i=0;i<=CATEGORY_BANK.length-4;i++){
-  LEVELS.push({
-    idx: i+1,
-    cats: [CATEGORY_BANK[i], CATEGORY_BANK[i+1], CATEGORY_BANK[i+2], CATEGORY_BANK[i+3]]
-  });
-}
+// --- util ---
+const $ = (id)=>document.getElementById(id);
+const fmtMs = (ms)=>{
+  if(ms==null) return "—";
+  const s = Math.max(0, Math.round(ms/100)/10); // 0.1s
+  return `${s.toFixed(1)} s`;
+};
+const now = ()=>performance.now();
 
-const $ = sel => document.querySelector(sel);
-
-const gridEl = $("#grid");
-const catListEl = $("#catList");
-const msgEl = $("#message");
-const trainingEl = $("#trainingMode");
-
-const levelSpan = $("#levelSpan");
-const attemptsSpan = $("#attemptsSpan");
-const foundSpan = $("#foundSpan");
-const pointsSpan = $("#pointsSpan");
-const badgesSpan = $("#badgesSpan");
-const failsSpan = $("#failsSpan");
-const initSpan = $("#initSpan");
-const timeSpan = $("#timeSpan");
-
-const btnValidate = $("#btnValidate");
-const btnNext = $("#btnNext");
-const btnReset = $("#btnReset");
-const btnDownload = $("#btnDownload");
-
-const modalBack = $("#modalBack");
-const btnStop = $("#btnStop");
-const btnContinue = $("#btnContinue");
-
-let state = {
-  sessionId: crypto.randomUUID(),
-  startedAt: Date.now(),
-  levelIndex: 0,                // 0..LEVELS-1
-  points: 0,
+// --- état session ---
+let session = {
+  subjectId: "",
+  trainingMode: false,
+  startedAt: new Date().toISOString(),
+  score: 0,
   badges: 0,
-  consecutiveFails: 0,
-
-  // niveau courant
-  gridStartAt: 0,
-  firstClickAt: null,
-  clickCount: 0,
-  validateCount: 0,
-  errorCount: 0,
-  foundCats: new Set(),         // indices 0..3 des catégories trouvées
-  triedWordSet: new Set(),      // mots essayés (pour griser)
-  selected: new Set(),          // indices des tuiles sélectionnées
-  tiles: [],                    // {word, catIndex}
-  ended: false,
-
-  // logs détaillés
-  logs: [] // {sessionId, subjectId, level, levelAbs, timestamp, event, data...}
+  failedLevels: 0,
+  currentLevelIndex: 0, // 0-based
+  logs: [] // one object per level
 };
 
-function nowISO(){
-  return new Date().toISOString();
-}
-function subjectId(){
-  return ($("#subjectId").value || "").trim();
-}
-function log(event, data={}){
-  state.logs.push({
-    sessionId: state.sessionId,
-    subjectId: subjectId(),
-    ts: nowISO(),
-    level: state.levelIndex+1,
-    levelAbs: LEVELS[state.levelIndex]?.idx ?? null,
-    event,
-    ...data
-  });
-}
+let levelState = null;
 
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
+function newLevelState(levelIdx){
+  const lvl = LEVELS[levelIdx];
+  const words = lvl.cats.flatMap(c=>c.words).slice();
+  // Shuffle
+  for(let i=words.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
-}
-
-function fmtMs(ms){
-  if(ms==null) return "—";
-  const s = Math.max(0, Math.round(ms/1000));
-  const m = Math.floor(s/60);
-  const r = s%60;
-  return (m>0) ? `${m}m${String(r).padStart(2,'0')}s` : `${r}s`;
-}
-
-function openModal(){
-  modalBack.style.display = "flex";
-}
-function closeModal(){
-  modalBack.style.display = "none";
-}
-
-function buildLevel(){
-  const L = LEVELS[state.levelIndex];
-  if(!L){
-    // Fin
-    msgEl.innerHTML = `Fin des niveaux. Pense à <strong>Télécharger CSV</strong>.`;
-    btnValidate.disabled = true;
-    btnNext.disabled = true;
-    gridEl.innerHTML = "";
-    catListEl.innerHTML = "";
-    return;
+    [words[i],words[j]]=[words[j],words[i]];
   }
 
-  state.gridStartAt = Date.now();
-  state.firstClickAt = null;
-  state.clickCount = 0;
-  state.validateCount = 0;
-  state.errorCount = 0;
-  state.foundCats = new Set();
-  state.triedWordSet = new Set();
-  state.selected = new Set();
-  state.tiles = [];
-  state.ended = false;
-
-  // Construire 16 mots = 4 mots * 4 catégories (pas de doublons attendus dans nos listes)
-  const tiles = [];
-  L.cats.forEach((cat, catIndex)=>{
-    cat.words.forEach(w=>{
-      tiles.push({word:w, catIndex});
-    });
-  });
-
-  state.tiles = shuffle(tiles);
-
-  // UI
-  levelSpan.textContent = `${L.idx}/${LEVELS.length}`;
-  attemptsSpan.textContent = "0";
-  foundSpan.textContent = "0";
-  initSpan.textContent = "—";
-  timeSpan.textContent = "—";
-
-  renderGrid();
-  renderCatList();
-
-  msgEl.innerHTML = `Sélectionne <strong>4 mots</strong> puis <strong>Valider</strong>.`;
-  btnValidate.disabled = false;
-  btnNext.disabled = false;
-
-  log("level_start", {
-    categories: L.cats.map(c=>c.name),
-    words: state.tiles.map(t=>t.word)
-  });
-
-  tickTime();
+  return {
+    levelIdx,
+    levelStartPerf: now(),
+    firstTapPerf: null,
+    totalValidations: 0,
+    errors: 0,
+    foundCats: new Set(),
+    // for "new category only" scoring
+    foundCatsByName: new Set(),
+    // keep track of submitted groups for logs
+    submissions: [],
+    // UI state
+    tiles: words.map((w, i)=>({ id:i, word:w, selected:false, used:false }))
+  };
 }
 
-function renderGrid(){
-  gridEl.innerHTML = "";
-  state.tiles.forEach((t, idx)=>{
-    const tile = document.createElement("div");
-    tile.className = "tile";
-    tile.setAttribute("data-idx", String(idx));
-    tile.setAttribute("role","button");
-    tile.setAttribute("tabindex","0");
-    tile.innerHTML = `<span class="tiny">${idx+1}</span>${t.word}`;
-
-    // états visuels
-    if(state.selected.has(idx)) tile.classList.add("selected");
-    if(state.triedWordSet.has(t.word)) tile.classList.add("tried");
-    if(state.foundCats.has(t.catIndex)) tile.classList.add("solved");
-
-    tile.addEventListener("click", ()=> onTileTap(idx));
-    tile.addEventListener("keydown", (e)=>{
-      if(e.key==="Enter" || e.key===" "){
-        e.preventDefault();
-        onTileTap(idx);
-      }
-    });
-    gridEl.appendChild(tile);
-  });
+function setMessage(type, text, tagText){
+  const box = $("messageBox");
+  const tag = box.querySelector(".tag");
+  const msg = $("messageText");
+  tag.classList.remove("good","bad");
+  tag.textContent = tagText || "Info";
+  if(type==="good") tag.classList.add("good");
+  if(type==="bad") tag.classList.add("bad");
+  msg.textContent = text;
 }
 
-function renderCatList(){
-  const L = LEVELS[state.levelIndex];
-  catListEl.innerHTML = "";
+function render(){
+  // header stats
+  $("lvlLabel").textContent = (session.currentLevelIndex+1);
+  $("lvlTotal").textContent = LEVELS.length;
+  $("triesLabel").textContent = levelState.totalValidations;
+  $("foundLabel").textContent = levelState.foundCatsByName.size;
+  $("scoreLabel").textContent = session.score;
+  $("badgeLabel").textContent = session.badges;
+  $("failLabel").textContent = session.failedLevels;
 
-  L.cats.forEach((cat, i)=>{
-    const row = document.createElement("div");
-    const solved = state.foundCats.has(i);
+  // measures
+  const initDelay = levelState.firstTapPerf ? (levelState.firstTapPerf - levelState.levelStartPerf) : null;
+  $("initDelay").textContent = fmtMs(initDelay);
+  $("valCount").textContent = levelState.totalValidations;
+  $("errCount").textContent = levelState.errors;
+  const elapsed = now() - levelState.levelStartPerf;
+  $("totalTime").textContent = fmtMs(elapsed);
 
-    row.className = "cat" + (solved ? " solved" : "");
-    const showNames = trainingEl.checked || solved; // caché en test tant que non trouvé
-    const label = showNames ? cat.name : `Catégorie ${i+1}`;
-
-    row.innerHTML = `
-      <div class="name">${label}</div>
-      <div class="status">${solved ? "Trouvée ✅" : "À trouver"}</div>
+  // cats list (progress)
+  const lvl = LEVELS[levelState.levelIdx];
+  const list = $("catsList");
+  list.innerHTML = "";
+  lvl.cats.forEach((c, idx)=>{
+    const ok = levelState.foundCatsByName.has(c.name);
+    const div = document.createElement("div");
+    div.className = "catLine";
+    div.innerHTML = `
+      <div class="left">
+        <span class="badge"><span class="n">${idx+1}</span> ${c.name}</span>
+        ${ok ? `<span class="ok">✔ trouvé</span>` : `<span class="muted">—</span>`}
+      </div>
+      <div class="muted">${session.trainingMode ? c.words.join(" · ") : ""}</div>
     `;
-    catListEl.appendChild(row);
+    list.appendChild(div);
   });
+
+  // grid
+  const grid = $("grid");
+  grid.innerHTML = "";
+  levelState.tiles.forEach(t=>{
+    const btn = document.createElement("div");
+    btn.className = "tile";
+    if(t.selected) btn.classList.add("selected");
+    if(t.used) btn.classList.add("used");
+    btn.textContent = t.word;
+    btn.addEventListener("click", ()=>toggleTile(t.id));
+    grid.appendChild(btn);
+  });
+
+  // selection count
+  const sel = levelState.tiles.filter(x=>x.selected).length;
+  $("selCount").textContent = `${sel}/4`;
 }
 
-function onTileTap(idx){
-  if(state.ended) return;
+function toggleTile(id){
+  if(!levelState.firstTapPerf) levelState.firstTapPerf = now();
 
-  if(state.firstClickAt == null){
-    state.firstClickAt = Date.now();
-    initSpan.textContent = fmtMs(state.firstClickAt - state.gridStartAt);
-    log("first_click", {ms: state.firstClickAt - state.gridStartAt});
+  const tile = levelState.tiles.find(t=>t.id===id);
+  if(!tile) return;
+
+  const selCount = levelState.tiles.filter(t=>t.selected).length;
+  if(!tile.selected && selCount>=4){
+    setMessage("bad","Vous avez déjà 4 mots. Validez ou désélectionnez-en un.","Limite");
+    render();
+    return;
   }
+  tile.selected = !tile.selected;
+  render();
+}
 
-  state.clickCount++;
-  const wasSelected = state.selected.has(idx);
+function clearSelection(){
+  levelState.tiles.forEach(t=>t.selected=false);
+  setMessage("","Sélectionnez 4 mots, puis validez.","Info");
+  render();
+}
 
-  if(wasSelected){
-    state.selected.delete(idx);
-  }else{
-    if(state.selected.size >= 4){
-      // Limite: 4 max
-      msgEl.innerHTML = `Tu as déjà <strong>4 mots</strong>. Désélectionne-en un.`;
-      return;
+function evaluateSelection(selectedWords){
+  const lvl = LEVELS[levelState.levelIdx];
+  // Find matching category (exact set)
+  for(const cat of lvl.cats){
+    const catSet = new Set(cat.words);
+    let ok = true;
+    for(const w of selectedWords){
+      if(!catSet.has(w)) { ok=false; break; }
     }
-    state.selected.add(idx);
+    if(ok && selectedWords.length===4){
+      // also ensure cat has exactly these 4 (it does)
+      return {match:true, catName: cat.name};
+    }
   }
-
-  renderGrid();
-  log("tile_toggle", {idx, word: state.tiles[idx].word, selected: !wasSelected});
+  return {match:false, catName:null};
 }
 
-function selectedWords(){
-  return Array.from(state.selected).map(i=>state.tiles[i].word);
-}
-function selectedCatIndices(){
-  return Array.from(state.selected).map(i=>state.tiles[i].catIndex);
-}
+/* ---- BUG FIX PRINCIPAL ----
+   - On NE PASSE PAS au niveau suivant après 3 catégories trouvées.
+   - Un niveau se termine :
+       a) si 4 catégories sont trouvées (badge, fin immédiate)
+       b) sinon après 4 validations (grille "complète" justes ou fausses)
+*/
+function maybeEndLevel(){
+  const found = levelState.foundCatsByName.size;
 
-function validateSelection(){
-  if(state.ended) return;
-
-  if(state.selected.size !== 4){
-    msgEl.innerHTML = `Il faut sélectionner <strong>exactement 4 mots</strong>.`;
+  // Fin immédiate si les 4 catégories sont trouvées
+  if(found >= 4){
+    session.badges += 1;
+    setMessage("good","Bravo : les 4 catégories sont trouvées ! Badge gagné. Passage au niveau suivant…","Badge");
+    finalizeLevel(true);
     return;
   }
 
-  const L = LEVELS[state.levelIndex];
-  const words = selectedWords();
-  const cats = selectedCatIndices();
-
-  // Marquer ces mots "essayés" -> grisés (mais réutilisables)
-  words.forEach(w=>state.triedWordSet.add(w));
-
-  // Vérifier si les 4 mots appartiennent à une même catégorie
-  const uniqueCats = new Set(cats);
-  let correct = false;
-  let solvedCatIndex = null;
-
-  if(uniqueCats.size === 1){
-    const ci = cats[0];
-    const targetSet = new Set(L.cats[ci].words);
-    const ok = words.every(w=>targetSet.has(w));
-    if(ok){
-      correct = true;
-      solvedCatIndex = ci;
+  // Sinon, fin du niveau après 4 validations
+  if(levelState.totalValidations >= 4){
+    const success = (found === 4);
+    if(!success){
+      session.failedLevels += 1;
+      setMessage("bad","Niveau terminé (4 validations). Passage au niveau suivant…","Fin niveau");
     }
-  }
-
-  state.validateCount++;
-
-  if(correct){
-    if(!state.foundCats.has(solvedCatIndex)){
-      state.foundCats.add(solvedCatIndex);
-      state.points += 1;
-      pointsSpan.textContent = String(state.points);
-    }
-    msgEl.innerHTML = trainingEl.checked
-      ? `✅ Bonne catégorie : <strong>${L.cats[solvedCatIndex].name}</strong>.`
-      : `✅ Correct.`;
-    log("validate", {result:"correct", words, catIndex: solvedCatIndex, catName: L.cats[solvedCatIndex].name});
-
-  }else{
-    state.errorCount++;
-    msgEl.innerHTML = trainingEl.checked
-      ? `❌ Pas une catégorie. Essaie autrement.`
-      : `❌ Incorrect.`;
-    log("validate", {result:"wrong", words});
-  }
-
-  // Mise à jour UI
-  attemptsSpan.textContent = String(state.validateCount);
-  foundSpan.textContent = String(state.foundCats.size);
-  failsSpan.textContent = String(state.consecutiveFails);
-
-  // Désélectionner après validation (mais conserver le grisé)
-  state.selected.clear();
-
-  renderGrid();
-  renderCatList();
-
-  // Fin de grille si 4 validations OU badge (4 catégories trouvées)
-  const badgeNow = (state.foundCats.size === 4);
-  if(badgeNow || state.validateCount >= 4){
-    endGrid(badgeNow);
+    finalizeLevel(success);
   }
 }
 
-function endGrid(badgeNow){
-  if(state.ended) return;
-  state.ended = true;
+function finalizeLevel(success){
+  // log level data
+  const initDelay = levelState.firstTapPerf ? (levelState.firstTapPerf - levelState.levelStartPerf) : null;
+  const totalTime = now() - levelState.levelStartPerf;
 
-  const elapsed = Date.now() - state.gridStartAt;
-  timeSpan.textContent = fmtMs(elapsed);
-
-  const L = LEVELS[state.levelIndex];
-
-  if(badgeNow){
-    state.badges += 1;
-    state.consecutiveFails = 0;
-    badgesSpan.textContent = String(state.badges);
-    msgEl.innerHTML = `🏅 Badge ! Les <strong>4 catégories</strong> ont été trouvées. (Suivant automatique)`;
-  }else{
-    state.consecutiveFails += 1;
-    msgEl.innerHTML = `Grille terminée. Catégories trouvées : <strong>${state.foundCats.size}/4</strong>. (Suivant automatique)`;
-  }
-  failsSpan.textContent = String(state.consecutiveFails);
-
-  log("level_end", {
-    badge: badgeNow,
-    found: state.foundCats.size,
-    validateCount: state.validateCount,
-    errors: state.errorCount,
-    clicks: state.clickCount,
-    initMs: state.firstClickAt ? (state.firstClickAt - state.gridStartAt) : null,
-    totalMs: elapsed,
-    categories: L.cats.map(c=>c.name)
+  session.logs.push({
+    ts: new Date().toISOString(),
+    subjectId: session.subjectId,
+    trainingMode: session.trainingMode,
+    levelNumber: levelState.levelIdx + 1,
+    levelSuccessAll4: success,
+    scoreAfter: session.score,
+    badgesAfter: session.badges,
+    failedLevelsAfter: session.failedLevels,
+    initDelayMs: initDelay,
+    totalTimeMs: totalTime,
+    validations: levelState.totalValidations,
+    errors: levelState.errors,
+    categoriesFoundCount: levelState.foundCatsByName.size,
+    categoriesFound: Array.from(levelState.foundCatsByName),
+    submissions: levelState.submissions
   });
 
-  // Règle 3 échecs
-  if(state.consecutiveFails >= 3){
-    openModal();
+  // stop rule: after 3 failed levels ask to continue/stop
+  if(session.failedLevels >= 3){
+    $("dlgStop").showModal();
     return;
   }
 
-  // auto next
-  setTimeout(()=> nextLevel(), 900);
+  // next level
+  goNextLevel();
 }
 
-function nextLevel(){
-  closeModal();
-  if(state.levelIndex < LEVELS.length-1){
-    state.levelIndex++;
-    buildLevel();
-  }else{
-    // fin
-    state.levelIndex++;
-    buildLevel();
+function goNextLevel(){
+  // if last level -> end
+  if(session.currentLevelIndex >= LEVELS.length-1){
+    endSession();
+    return;
   }
+  session.currentLevelIndex += 1;
+  levelState = newLevelState(session.currentLevelIndex);
+  setMessage("","Nouveau niveau : sélectionnez 4 mots, puis validez.","Info");
+  render();
 }
 
-function tickTime(){
-  if(!LEVELS[state.levelIndex]) return;
-  if(!state.gridStartAt) return;
-  const elapsed = Date.now() - state.gridStartAt;
-  timeSpan.textContent = fmtMs(elapsed);
-  requestAnimationFrame(tickTime);
+function endSession(){
+  const summary = `Score brut : ${session.score} — Badges : ${session.badges} — Niveaux échoués : ${session.failedLevels}.
+Vous pouvez exporter le CSV pour l’étalonnage.`;
+  $("endSummary").textContent = summary;
+  $("dlgEnd").showModal();
+}
+
+function validate(){
+  const selected = levelState.tiles.filter(t=>t.selected);
+  if(selected.length !== 4){
+    setMessage("bad","Il faut sélectionner exactement 4 mots.","Erreur");
+    render();
+    return;
+  }
+  if(!levelState.firstTapPerf) levelState.firstTapPerf = now();
+
+  const words = selected.map(t=>t.word);
+  const evalRes = evaluateSelection(words);
+
+  // mark used (grisé) BUT keep clickable (réutilisable)
+  selected.forEach(t=>{
+    t.used = true;
+    t.selected = false;
+  });
+
+  const submission = {
+    tMs: now() - levelState.levelStartPerf,
+    words
+  };
+
+  levelState.totalValidations += 1;
+
+  if(evalRes.match){
+    submission.correct = true;
+    submission.category = evalRes.catName;
+
+    // points only if category not already found this level
+    if(!levelState.foundCatsByName.has(evalRes.catName)){
+      levelState.foundCatsByName.add(evalRes.catName);
+      session.score += 1;
+      setMessage("good",`Correct ✅ Catégorie : ${evalRes.catName} (+1 point).`,`Correct`);
+    }else{
+      // Already found, no new point
+      setMessage("good",`Correct ✅ (catégorie déjà trouvée) : ${evalRes.catName}.`,`Correct`);
+    }
+  }else{
+    submission.correct = false;
+    levelState.errors += 1;
+    setMessage("bad","Incorrect ❌ Ce groupe ne correspond à aucune catégorie du niveau.","Erreur");
+  }
+
+  levelState.submissions.push(submission);
+
+  render();
+  maybeEndLevel();
+}
+
+function restartLevel(){
+  levelState = newLevelState(session.currentLevelIndex);
+  setMessage("","Niveau recommencé. Sélectionnez 4 mots, puis validez.","Info");
+  render();
 }
 
 function resetAll(){
-  if(!confirm("Réinitialiser la session ? (les données en mémoire seront perdues si non téléchargées)")) return;
-  state = {
-    sessionId: crypto.randomUUID(),
-    startedAt: Date.now(),
-    levelIndex: 0,
-    points: 0,
+  session = {
+    subjectId: "",
+    trainingMode: false,
+    startedAt: new Date().toISOString(),
+    score: 0,
     badges: 0,
-    consecutiveFails: 0,
-    gridStartAt: 0,
-    firstClickAt: null,
-    clickCount: 0,
-    validateCount: 0,
-    errorCount: 0,
-    foundCats: new Set(),
-    triedWordSet: new Set(),
-    selected: new Set(),
-    tiles: [],
-    ended: false,
+    failedLevels: 0,
+    currentLevelIndex: 0,
     logs: []
   };
-  pointsSpan.textContent = "0";
-  badgesSpan.textContent = "0";
-  failsSpan.textContent = "0";
-  log("session_reset");
-  buildLevel();
+  $("subjectId").value = "";
+  $("trainingMode").checked = false;
+  levelState = newLevelState(0);
+  setMessage("","Sélectionnez 4 mots, puis validez.","Info");
+  render();
 }
 
-function downloadCSV(){
-  // CSV simple : logs détaillés (événements)
-  const rows = state.logs.slice();
-  if(rows.length === 0){
-    alert("Aucune donnée à télécharger pour l’instant.");
-    return;
+function exportCsv(){
+  // Level-level CSV
+  const rows = [];
+  const header = [
+    "ts","subjectId","trainingMode","levelNumber","levelSuccessAll4",
+    "scoreAfter","badgesAfter","failedLevelsAfter",
+    "initDelayMs","totalTimeMs","validations","errors","categoriesFoundCount",
+    "categoriesFound","submissionsJson"
+  ];
+  rows.push(header.join(","));
+
+  for(const log of session.logs){
+    const line = [
+      log.ts,
+      csvSafe(log.subjectId),
+      log.trainingMode ? "1":"0",
+      log.levelNumber,
+      log.levelSuccessAll4 ? "1":"0",
+      log.scoreAfter,
+      log.badgesAfter,
+      log.failedLevelsAfter,
+      numOrEmpty(log.initDelayMs),
+      numOrEmpty(log.totalTimeMs),
+      log.validations,
+      log.errors,
+      log.categoriesFoundCount,
+      csvSafe(log.categoriesFound.join("|")),
+      csvSafe(JSON.stringify(log.submissions))
+    ];
+    rows.push(line.join(","));
   }
 
-  // En-têtes = union des clés
-  const keys = new Set();
-  rows.forEach(r => Object.keys(r).forEach(k => keys.add(k)));
-  const header = Array.from(keys);
-
-  function esc(v){
-    if(v === null || v === undefined) return "";
-    if(Array.isArray(v)) v = JSON.stringify(v);
-    if(typeof v === "object") v = JSON.stringify(v);
-    const s = String(v);
-    if(/[",\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
-    return s;
-  }
-
-  const csv = [
-    header.join(","),
-    ...rows.map(r => header.map(k => esc(r[k])).join(","))
-  ].join("\n");
-
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const blob = new Blob([rows.join("\n")], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  const sid = (subjectId() || "sujet").replace(/[^a-zA-Z0-9_-]/g,"_");
-  a.download = `similitudes_${sid}_${state.sessionId.slice(0,8)}.csv`;
+  a.href = url;
+  const sid = (session.subjectId || "session").replace(/[^\w-]+/g,"_");
+  a.download = `categories_${sid}_${new Date().toISOString().slice(0,10)}.csv`;
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(a.href);
+  URL.revokeObjectURL(url);
 }
 
-btnValidate.addEventListener("click", validateSelection);
-btnNext.addEventListener("click", ()=>{
-  // Permet d’avancer même si la grille n’est pas “terminée”
-  log("manual_next");
-  nextLevel();
-});
-btnReset.addEventListener("click", resetAll);
-btnDownload.addEventListener("click", downloadCSV);
+function csvSafe(v){
+  const s = (v ?? "").toString();
+  const needs = /[",\n]/.test(s);
+  const esc = s.replaceAll('"','""');
+  return needs ? `"${esc}"` : esc;
+}
+function numOrEmpty(n){
+  if(n==null || Number.isNaN(n)) return "";
+  return Math.round(n);
+}
 
-trainingEl.addEventListener("change", ()=>{
-  renderCatList();
-  log("training_toggle", {training: trainingEl.checked});
+async function copyJson(){
+  const payload = JSON.stringify(session, null, 2);
+  try{
+    await navigator.clipboard.writeText(payload);
+    setMessage("good","JSON copié dans le presse-papiers.","Export");
+  }catch(e){
+    setMessage("bad","Impossible de copier automatiquement. Essayez l’export CSV.","Export");
+  }
+  render();
+}
+
+// --- hooks ---
+$("btnValidate").addEventListener("click", validate);
+$("btnClear").addEventListener("click", clearSelection);
+$("btnRestartLevel").addEventListener("click", restartLevel);
+$("btnResetAll").addEventListener("click", resetAll);
+$("btnExportCsv").addEventListener("click", exportCsv);
+$("btnCopyJson").addEventListener("click", copyJson);
+
+$("subjectId").addEventListener("input", (e)=>{
+  session.subjectId = e.target.value.trim();
+});
+$("trainingMode").addEventListener("change", (e)=>{
+  session.trainingMode = !!e.target.checked;
+  render();
 });
 
-// Modal: stop/continue
-btnStop.addEventListener("click", ()=>{
-  closeModal();
-  log("stop_after_3fails");
-  msgEl.innerHTML = `Arrêt. Pense à <strong>Télécharger CSV</strong>.`;
-  btnValidate.disabled = true;
-  btnNext.disabled = true;
+// stop modal
+$("btnContinue").addEventListener("click", ()=>{
+  $("dlgStop").close();
+  // allow continuing beyond 3 failed levels
+  goNextLevel();
 });
-btnContinue.addEventListener("click", ()=>{
-  closeModal();
-  log("continue_after_3fails");
-  state.consecutiveFails = 0;
-  failsSpan.textContent = "0";
-  setTimeout(()=> nextLevel(), 200);
+$("btnStopNow").addEventListener("click", ()=>{
+  $("dlgStop").close();
+  endSession();
 });
 
-// Init
-log("session_start");
-buildLevel();
+// end modal
+$("btnCloseEnd").addEventListener("click", ()=>{
+  $("dlgEnd").close();
+});
+
+// init
+levelState = newLevelState(0);
+setMessage("","Sélectionnez 4 mots, puis validez.","Info");
+render();
 </script>
 </body>
 </html>
